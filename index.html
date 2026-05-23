@@ -464,6 +464,203 @@ animation:floatRune 4s ease-in-out infinite;
 0%,100%{transform:translateY(0)}
 50%{transform:translateY(-8px)}
 }
+  /* ===== RUNE ROOM ===== */
+
+.runeRoomBody{
+display:flex;
+justify-content:center;
+align-items:center;
+padding:18px;
+background:
+radial-gradient(circle at center,
+#1d0f33 0%,
+#080510 60%,
+#02040c 100%);
+}
+
+.runeTemple{
+position:relative;
+width:100%;
+max-width:420px;
+padding:24px;
+border-radius:30px;
+overflow:hidden;
+background:
+linear-gradient(180deg,
+rgba(14,8,26,.95),
+rgba(3,2,10,.96));
+border:1px solid rgba(168,85,247,.2);
+box-shadow:
+0 0 70px rgba(124,58,237,.25);
+}
+
+.fog{
+position:absolute;
+inset:0;
+background:
+radial-gradient(circle,
+rgba(168,85,247,.14),
+transparent 70%);
+filter:blur(40px);
+pointer-events:none;
+}
+
+.candle{
+position:absolute;
+bottom:20px;
+width:18px;
+height:90px;
+border-radius:10px;
+background:
+linear-gradient(180deg,#f8e7c5,#a18458);
+}
+
+.candle::before{
+content:'';
+position:absolute;
+top:-16px;
+left:50%;
+transform:translateX(-50%);
+width:16px;
+height:24px;
+border-radius:50%;
+background:
+radial-gradient(circle,
+#ffd166 0%,
+#ff7b00 70%,
+transparent 100%);
+filter:blur(2px);
+animation:fire 1.6s infinite alternate;
+}
+
+.left{
+left:18px;
+}
+
+.right{
+right:18px;
+}
+
+@keyframes fire{
+from{
+transform:translateX(-50%) scale(1);
+}
+to{
+transform:translateX(-50%) scale(1.15);
+}
+}
+
+.runeCircle{
+position:absolute;
+left:50%;
+top:170px;
+transform:translateX(-50%);
+width:240px;
+height:240px;
+border-radius:50%;
+border:1px solid rgba(168,85,247,.3);
+box-shadow:
+0 0 40px rgba(168,85,247,.25);
+}
+
+#bigRuneWrap{
+position:relative;
+margin:30px auto 0;
+width:220px;
+height:280px;
+display:flex;
+justify-content:center;
+align-items:center;
+background:
+radial-gradient(circle at top,
+#342416 0%,
+#18110d 50%,
+#070707 100%);
+clip-path:polygon(
+30% 0%,
+70% 0%,
+100% 24%,
+95% 78%,
+68% 100%,
+32% 100%,
+5% 78%,
+0% 24%
+);
+box-shadow:
+0 0 60px rgba(168,85,247,.3);
+}
+
+#bigRune{
+font-size:120px;
+color:#ffd166;
+text-shadow:
+0 0 18px rgba(255,209,102,.9),
+0 0 50px rgba(255,209,102,.45);
+}
+
+#runeNameBig{
+margin-top:18px;
+text-align:center;
+font-size:38px;
+font-weight:700;
+color:#f8d58d;
+}
+
+#runeDescBig{
+margin-top:14px;
+line-height:1.8;
+font-size:15px;
+color:#ddd6fe;
+padding:18px;
+border-radius:18px;
+background:rgba(255,255,255,.04);
+border:1px solid rgba(168,85,247,.14);
+}
+
+#runeTimer{
+margin-top:16px;
+text-align:center;
+font-size:14px;
+color:#c084fc;
+}
+
+#pullRuneBtn{
+width:100%;
+margin-top:18px;
+padding:16px;
+border:none;
+border-radius:18px;
+font-size:16px;
+font-weight:700;
+color:#fff;
+cursor:pointer;
+background:
+linear-gradient(135deg,
+#6d28d9,
+#9333ea);
+box-shadow:
+0 0 30px rgba(168,85,247,.4);
+}
+
+#allRunesGrid{
+margin-top:26px;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px;
+}
+
+.smallRune{
+padding:12px 6px;
+border-radius:16px;
+text-align:center;
+background:
+linear-gradient(135deg,
+rgba(91,33,182,.16),
+rgba(17,24,39,.7));
+border:1px solid rgba(168,85,247,.14);
+font-size:24px;
+color:#e9d5ff;
+}
 </style>
 </head>
 <body>
@@ -552,13 +749,69 @@ animation:floatRune 4s ease-in-out infinite;
 </div>
 </div>
 
+<!-- ===== RUNES ROOM ===== -->
+
 <div class="modal" id="runeModal">
+
 <div class="mtop">
+
 <div>
-<div style="font-size:20px">🎲 Комната Рун</div>
-<div style="font-size:12px;color:#a855f7;margin-top:4px">Мистическое предсказание</div>
+<div style="font-size:22px">
+🎲 Мешочек Рун
 </div>
-<button class="close" id="closeRune">✕</button>
+
+<div style="font-size:12px;color:#a855f7;margin-top:4px">
+24 скандинавские руны
+</div>
+</div>
+
+<button class="close" id="closeRune">
+✕
+</button>
+
+</div>
+
+<div class="mbody runeRoomBody">
+
+<div class="runeTemple">
+
+<div class="fog"></div>
+
+<div class="candle left"></div>
+<div class="candle right"></div>
+
+<div class="runeCircle"></div>
+
+<div id="bigRuneWrap">
+
+<div id="bigRune">
+ᚠ
+</div>
+
+</div>
+
+<div id="runeNameBig">
+Fehu
+</div>
+
+<div id="runeDescBig">
+Руна богатства и денежного потока.
+</div>
+
+<div id="runeTimer">
+Новая руна будет доступна завтра
+</div>
+
+<button id="pullRuneBtn">
+ВЫТАЩИТЬ РУНУ
+</button>
+
+<div id="allRunesGrid"></div>
+
+</div>
+
+</div>
+
 </div>
 
 <div class="mbody room">
@@ -594,12 +847,31 @@ document.getElementById('stars').appendChild(s);
 }
 
 const RUNES=[
-['ᚠ','Феху','Руна богатства открывает денежный поток вокруг BTC.'],
-['ᚢ','Уруз','Сила рынка накапливается перед импульсом.'],
-['ᚦ','Турисаз','Осторожно: рынок входит в зону турбулентности.'],
-['ᚨ','Ансуз','Информация станет главным источником прибыли.'],
-['ᚱ','Райдо','Тренд готовится изменить направление.'],
-['ᚲ','Кеназ','Появляется скрытая возможность роста.']
+const RUNES=[
+['ᚠ','Fehu','Богатство, прибыль, финансовый поток.'],
+['ᚢ','Uruz','Сила, энергия, мощный импульс.'],
+['ᚦ','Thurisaz','Осторожность и защита от ошибок.'],
+['ᚨ','Ansuz','Информация и скрытые знания.'],
+['ᚱ','Raidho','Путь и изменение направления.'],
+['ᚲ','Kenaz','Озарение и новые возможности.'],
+['ᚷ','Gebo','Подарок судьбы и союз.'],
+['ᚹ','Wunjo','Радость и гармония.'],
+['ᚺ','Hagalaz','Разрушение старого.'],
+['ᚾ','Nauthiz','Испытания и терпение.'],
+['ᛁ','Isa','Замедление и пауза.'],
+['ᛃ','Jera','Награда за усилия.'],
+['ᛇ','Eihwaz','Трансформация и защита.'],
+['ᛈ','Perthro','Тайны судьбы.'],
+['ᛉ','Algiz','Сильная защита.'],
+['ᛋ','Sowilo','Победа и успех.'],
+['ᛏ','Tiwaz','Лидерство и решимость.'],
+['ᛒ','Berkano','Рост и обновление.'],
+['ᛖ','Ehwaz','Движение вперёд.'],
+['ᛗ','Mannaz','Саморазвитие и разум.'],
+['ᛚ','Laguz','Интуиция и поток.'],
+['ᛜ','Ingwaz','Накопление силы.'],
+['ᛞ','Dagaz','Прорыв и новый этап.'],
+['ᛟ','Othala','Дом, наследие и стабильность.']
 ];
 
 const COINS=[
@@ -804,11 +1076,35 @@ showRune(rune);
 }
 
 function showRune(r){
-G('runeSymbol').textContent=r[0];
-G('runeName').textContent=r[1];
-G('runeText').textContent=r[2];
+
+G('bigRune').textContent=r[0];
+
+G('runeNameBig').textContent=r[1];
+
+G('runeDescBig').textContent=r[2];
+
+}
+function renderAllRunes(){
+
+const grid=G('allRunesGrid');
+
+grid.innerHTML='';
+
+RUNES.forEach(r=>{
+
+const d=document.createElement('div');
+
+d.className='smallRune';
+
+d.textContent=r[0];
+
+grid.appendChild(d);
+
+});
+
 }
 
+renderAllRunes();
 async function shareApp(){
 const data={
 title:'Крипто Нострадамус',
@@ -880,7 +1176,292 @@ G('changeKey').onclick=()=>{
 G('setup').style.display='flex';
 G('app').style.display='none';
 };
+/* ===== RUNE ROOM ===== */
 
+const FULL_RUNES=[
+
+['ᚠ','Феху','Богатство','Денежный поток усиливается вокруг твоих решений.'],
+['ᚢ','Уруз','Сила','Скрытая энергия готовит мощный рывок.'],
+['ᚦ','Турисаз','Прорыв','Опасность и возможность идут рядом.'],
+['ᚨ','Ансуз','Знание','Информация станет главным оружием.'],
+['ᚱ','Райдо','Путь','Тренд скоро сменит направление.'],
+['ᚲ','Кеназ','Огонь','Рынок раскрывает скрытый потенциал.'],
+['ᚷ','Гебо','Дар','Появится неожиданная возможность.'],
+['ᚹ','Вуньо','Радость','Удача начинает сопровождать сделки.'],
+['ᚺ','Хагалаз','Хаос','Волатильность разрушит слабые позиции.'],
+['ᚾ','Наутиз','Нужда','Нужно терпение перед ростом.'],
+['ᛁ','Иса','Лёд','Рынок временно замирает.'],
+['ᛃ','Йера','Урожай','Старые действия принесут прибыль.'],
+['ᛇ','Эйваз','Защита','Избегай эмоциональных решений.'],
+['ᛈ','Перт','Тайна','Скрытый сигнал скоро проявится.'],
+['ᛉ','Альгиз','Щит','Высшие силы оберегают капитал.'],
+['ᛋ','Соулу','Солнце','Энергия роста усиливается.'],
+['ᛏ','Тейваз','Победа','Смелость приведёт к результату.'],
+['ᛒ','Беркана','Рост','Начинается новый цикл прибыли.'],
+['ᛖ','Эваз','Движение','Изменения уже близко.'],
+['ᛗ','Манназ','Разум','Доверяй холодному анализу.'],
+['ᛚ','Лагуз','Поток','Интуиция сейчас особенно сильна.'],
+['ᛜ','Ингуз','Завершение','Один цикл заканчивается.'],
+['ᛞ','Дагаз','Свет','Наступает переломный момент.'],
+['ᛟ','Одал','Наследие','Старые активы снова станут ценными.']
+
+];
+
+function openRuneRoom(){
+
+const modal=document.createElement('div');
+
+modal.className='modal';
+
+modal.style.display='flex';
+
+modal.innerHTML=`
+
+<div class="mtop">
+
+<div>
+<div style="font-size:22px">
+🪔 Комната Рун
+</div>
+
+<div style="font-size:12px;color:#a855f7;margin-top:4px">
+24 древние скандинавские руны
+</div>
+</div>
+
+<button class="close" id="closeRuneRoom">
+✕
+</button>
+
+</div>
+
+<div class="mbody">
+
+<div
+style="
+position:relative;
+min-height:100%;
+border-radius:30px;
+overflow:hidden;
+padding:20px;
+background:
+radial-gradient(circle at top,
+rgba(91,33,182,.35),
+rgba(5,8,16,.96) 70%);
+border:1px solid rgba(168,85,247,.2);
+"
+>
+
+<div
+style="
+position:absolute;
+inset:0;
+background:
+radial-gradient(circle at center,
+rgba(168,85,247,.18),
+transparent 60%);
+pointer-events:none;
+"
+></div>
+
+<div
+style="
+text-align:center;
+font-size:18px;
+margin-bottom:20px;
+color:#ddd6fe;
+letter-spacing:3px;
+"
+>
+⚔ ВЫБЕРИТЕ РУНУ ⚔
+</div>
+
+<div
+id="runeRoomGrid"
+style="
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px;
+"
+></div>
+
+<div
+id="runeResultBox"
+style="
+display:none;
+margin-top:25px;
+padding:25px;
+border-radius:24px;
+text-align:center;
+background:
+linear-gradient(135deg,
+rgba(91,33,182,.25),
+rgba(17,24,39,.9));
+border:1px solid rgba(168,85,247,.2);
+"
+>
+
+<div
+id="bigRune"
+style="
+font-size:80px;
+margin-bottom:14px;
+text-shadow:0 0 30px #a855f7;
+"
+>
+ᚠ
+</div>
+
+<div
+id="bigRuneName"
+style="
+font-size:28px;
+font-weight:700;
+"
+>
+Феху
+</div>
+
+<div
+id="bigRuneTitle"
+style="
+margin-top:8px;
+color:#c084fc;
+letter-spacing:3px;
+font-size:12px;
+"
+>
+БОГАТСТВО
+</div>
+
+<div
+id="bigRuneText"
+style="
+margin-top:20px;
+line-height:1.9;
+color:#ddd6fe;
+font-size:15px;
+"
+>
+...
+</div>
+
+</div>
+
+</div>
+
+</div>
+`;
+
+document.body.appendChild(modal);
+
+document.getElementById('closeRuneRoom').onclick=()=>{
+modal.remove();
+};
+
+const grid=document.getElementById('runeRoomGrid');
+
+const today=new Date().toDateString();
+
+const pulled=localStorage.getItem('daily_rune_day');
+
+const saved=localStorage.getItem('daily_rune_data');
+
+FULL_RUNES.forEach((r,index)=>{
+
+const b=document.createElement('button');
+
+b.style.cssText=`
+height:74px;
+border:none;
+border-radius:20px;
+font-size:32px;
+cursor:pointer;
+color:#fff;
+background:
+linear-gradient(135deg,
+rgba(91,33,182,.35),
+rgba(17,24,39,.92));
+border:1px solid rgba(168,85,247,.25);
+box-shadow:0 0 18px rgba(0,0,0,.35);
+`;
+
+b.innerHTML='❖';
+
+if(pulled===today && saved){
+
+const data=JSON.parse(saved);
+
+if(data.index===index){
+
+b.innerHTML=r[0];
+
+}
+
+b.onclick=()=>{
+
+showRuneResult(data.rune);
+
+};
+
+}else{
+
+b.onclick=()=>{
+
+const data={
+index:index,
+rune:r
+};
+
+localStorage.setItem(
+'daily_rune_day',
+today
+);
+
+localStorage.setItem(
+'daily_rune_data',
+JSON.stringify(data)
+);
+
+showRuneResult(r);
+
+b.innerHTML=r[0];
+
+};
+
+}
+
+grid.appendChild(b);
+
+});
+
+function showRuneResult(r){
+
+document.getElementById(
+'runeResultBox'
+).style.display='block';
+
+document.getElementById(
+'bigRune'
+).textContent=r[0];
+
+document.getElementById(
+'bigRuneName'
+).textContent=r[1];
+
+document.getElementById(
+'bigRuneTitle'
+).textContent=r[2];
+
+document.getElementById(
+'bigRuneText'
+).textContent=r[3];
+
+}
+
+}
+
+G('runeBtn').onclick=openRuneRoom; 
 if(getKey()){
 start();
 }
