@@ -495,17 +495,6 @@ animation:runeRotate 40s linear infinite;
 opacity:.7
 }
 
-#runeModal::after{
-content:'✶';
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-font-size:380px;
-color:rgba(168,85,247,.03);
-pointer-events:none
-}
-
 #runeCard{
 position:relative;
 padding:40px 24px;
@@ -608,9 +597,117 @@ transform:translate(-50%,-50%) scale(1.15);
 
 <div id="stars"></div>
 
-<!-- остальная часть твоего HTML остаётся без изменений -->
+<div id="setup">
 
-<!-- ===== RUNES ===== -->
+<div style="font-size:70px">🔮</div>
+
+<h2>Крипто Нострадамус</h2>
+
+<p>
+Введите API ключ Groq.<br>
+Ключ начинается с <b>gsk_</b>
+</p>
+
+<input
+id="keyInput"
+class="inp"
+placeholder="gsk_..."
+type="password"
+>
+
+<div id="err"></div>
+
+<button class="btn" id="saveBtn">
+✦ Войти в Оракул
+</button>
+
+</div>
+
+<div id="app">
+
+<div id="top">
+
+<div id="logo">
+
+<div id="orb">🔮</div>
+
+<div>
+
+<div id="ttl">
+Крипто Нострадамус
+</div>
+
+<div id="sub">
+ОНЛАЙН • ПРОРОЧЕСТВА
+</div>
+
+</div>
+
+</div>
+
+<div id="topBtns">
+
+<button class="sbtn" id="shareTop">
+📤
+</button>
+
+<button class="sbtn" id="installBtn">
+📲
+</button>
+
+<button class="sbtn" id="changeKey">
+🔑
+</button>
+
+</div>
+
+</div>
+
+<div id="prices"></div>
+
+<div id="sign">
+
+<div id="signTitle">
+✨ ЗНАК ДНЯ
+</div>
+
+<div id="signText">
+Нострадамус изучает движение звёзд...
+</div>
+
+</div>
+
+<div id="feed"></div>
+
+<div id="actions">
+
+<button
+class="abtn"
+id="horoscopeBtn"
+>
+⭐ Криптогороскоп
+</button>
+
+<button
+class="abtn"
+id="runeBtn"
+>
+🎲 Мешочек Рун
+</button>
+
+</div>
+
+<div id="coinsWrap">
+
+<div id="coinsTitle">
+✦ ВЫБЕРИТЕ МОНЕТУ ✦
+</div>
+
+<div id="coins"></div>
+
+</div>
+
+</div>
 
 <div class="modal" id="runeModal">
 
@@ -634,13 +731,7 @@ transform:translate(-50%,-50%) scale(1.15);
 
 <div
 class="mbody"
-style="
-display:flex;
-justify-content:center;
-align-items:center;
-position:relative;
-overflow:hidden
-"
+style="display:flex;justify-content:center;align-items:center"
 >
 
 <div id="runeCard">
@@ -653,36 +744,24 @@ overflow:hidden
 
 <div
 id="runeName"
-style="
-font-size:26px;
-font-weight:bold;
-position:relative;
-z-index:2
-"
+style="font-size:24px"
 >
 Феху
 </div>
 
 <div
-style="
-margin-top:10px;
-color:#c084fc;
-letter-spacing:2px;
-position:relative;
-z-index:2
-"
+style="margin-top:10px;color:#c084fc"
+id="runeTitle"
 >
-РУНА ПРОРОЧЕСТВА
+РУНА БОГАТСТВА
 </div>
 
 <div
 style="
-margin-top:20px;
+margin-top:18px;
 line-height:1.8;
 color:#ddd6fe;
-max-width:280px;
-position:relative;
-z-index:2
+max-width:280px
 "
 id="runeText"
 >
@@ -699,39 +778,85 @@ id="runeText"
 
 'use strict';
 
-/* твой существующий JS остаётся */
+/* ===== STARS ===== */
+
+for(let i=0;i<60;i++){
+
+const s=document.createElement('div');
+
+s.className='star';
+
+const size=Math.random()*2+1;
+
+s.style.width=size+'px';
+s.style.height=size+'px';
+
+s.style.left=Math.random()*100+'%';
+s.style.top=Math.random()*100+'%';
+
+s.style.animationDelay=
+Math.random()*5+'s';
+
+document.getElementById('stars')
+.appendChild(s);
+
+}
 
 /* ===== RUNES ===== */
 
 const RUNES=[
-['ᚠ','Феху','Руна богатства открывает денежный поток вокруг BTC.'],
-['ᚢ','Уруз','Сила рынка накапливается перед импульсом.'],
-['ᚦ','Турисаз','Осторожно: рынок входит в зону турбулентности.'],
-['ᚨ','Ансуз','Информация станет главным источником прибыли.'],
-['ᚱ','Райдо','Тренд готовится изменить направление.'],
-['ᚲ','Кеназ','Появляется скрытая возможность роста.']
+
+{
+symbol:'ᚠ',
+name:'Феху',
+title:'РУНА БОГАТСТВА',
+text:'Денежные потоки усиливаются. BTC получает энергию накопления.'
+},
+
+{
+symbol:'ᚢ',
+name:'Уруз',
+title:'РУНА СИЛЫ',
+text:'Рынок собирает мощь перед сильным движением.'
+},
+
+{
+symbol:'ᚦ',
+name:'Турисаз',
+title:'РУНА ПЕРЕЛОМА',
+text:'Впереди зона турбулентности и опасных колебаний.'
+},
+
+{
+symbol:'ᚨ',
+name:'Ансуз',
+title:'РУНА ЗНАНИЯ',
+text:'Информация станет главным источником прибыли.'
+},
+
+{
+symbol:'ᚱ',
+name:'Райдо',
+title:'РУНА ПУТИ',
+text:'Тренд начинает менять направление движения.'
+},
+
+{
+symbol:'ᚲ',
+name:'Кеназ',
+title:'РУНА ОГНЯ',
+text:'Скрытая возможность скоро откроет путь к росту.'
+}
+
 ];
 
-function loadRune(){
-
-const today=
-new Date().toDateString();
-
-const saved=
-localStorage.getItem('rune_day');
-
-if(saved===today){
-
-const data=
-JSON.parse(
-localStorage.getItem('rune_data')
-);
-
-showRune(data);
-
-return;
-
+function G(id){
+return document.getElementById(id);
 }
+
+/* ===== RUNES ===== */
+
+function loadRune(){
 
 const rune=
 RUNES[
@@ -740,29 +865,26 @@ Math.random()*RUNES.length
 )
 ];
 
-localStorage.setItem(
-'rune_day',
-today
-);
-
-localStorage.setItem(
-'rune_data',
-JSON.stringify(rune)
-);
-
-showRune(rune);
+G('runeSymbol').textContent=rune.symbol;
+G('runeName').textContent=rune.name;
+G('runeTitle').textContent=rune.title;
+G('runeText').textContent=rune.text;
 
 }
 
-function showRune(r){
+G('runeBtn').onclick=()=>{
 
-G('runeSymbol').textContent=r[0];
+loadRune();
 
-G('runeName').textContent=r[1];
+G('runeModal').style.display='flex';
 
-G('runeText').textContent=r[2];
+};
 
-}
+G('closeRune').onclick=()=>{
+
+G('runeModal').style.display='none';
+
+};
 
 </script>
 
