@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Крипто Нострадамус</title>
+<style>
+body{
+margin:0;
+background:#040712;
+font-family:Georgia,serif;
+color:#fff;
+overflow:hidden;
+}
+#room{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:radial-gradient(circle,#241046 0%,#050810 70%);
+}
+#card{
+width:320px;
+padding:30px;
+border-radius:28px;
+background:rgba(15,18,35,.88);
+border:1px solid rgba(168,85,247,.4);
+text-align:center;
+box-shadow:0 0 40px rgba(168,85,247,.35);
+}
+#rune{
+font-size:96px;
+text-shadow:0 0 30px #c084fc;
+animation:float 4s ease-in-out infinite;
+}
+@keyframes float{
+0%,100%{transform:translateY(0)}
+50%{transform:translateY(-12px)}
+}
+button{
+margin-top:20px;
+padding:14px 20px;
+border:none;
+border-radius:16px;
+background:linear-gradient(135deg,#5b21b6,#7c3aed);
+color:#fff;
+font-size:16px;
+}
+</style>
+</head>
+<body>
+
+<div id="room">
+<div id="card">
+<div id="rune">ᚠ</div>
+<h1>Феху</h1>
+<p id="text">
+Руна богатства открывает денежный поток вокруг BTC.
+</p>
+<button onclick="nextRune()">Новое пророчество</button>
+</div>
+</div>
+
+<script>
+const RUNES=[
+['ᚠ','Феху','Руна богатства открывает денежный поток вокруг BTC.'],
+['ᚢ','Уруз','Сила рынка накапливается перед импульсом.'],
+['ᚦ','Турисаз','Осторожно: рынок входит в зону турбулентности.'],
+['ᚨ','Ансуз','Информация станет главным источником прибыли.'],
+['ᚱ','Райдо','Тренд готовится изменить направление.'],
+['ᚲ','Кеназ','Появляется скрытая возможность роста.']
+];
+
+function nextRune(){
+const r=RUNES[Math.floor(Math.random()*RUNES.length)];
+document.getElementById('rune').textContent=r[0];
+document.querySelector('h1').textContent=r[1];
+document.getElementById('text').textContent=r[2];
+}
+</script>
+
+</body>
+</html>
