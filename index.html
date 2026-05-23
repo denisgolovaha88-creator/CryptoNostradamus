@@ -16,6 +16,7 @@ content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,vie
 <title>Крипто Нострадамус</title>
 
 <style>
+
 *{
 box-sizing:border-box;
 margin:0;
@@ -89,7 +90,8 @@ padding:24px;
 background:
 radial-gradient(circle at top,#1f1144 0%,#050810 55%);
 z-index:50;
-text-align:center
+text-align:center;
+overflow-y:auto
 }
 
 #setup h2{
@@ -140,6 +142,23 @@ margin-top:10px;
 min-height:16px
 }
 
+#groqHelp{
+margin-top:18px;
+font-size:12px;
+line-height:1.8;
+color:#c084fc;
+max-width:340px;
+text-align:left;
+padding:16px;
+border-radius:18px;
+background:rgba(255,255,255,.04);
+border:1px solid rgba(168,85,247,.18)
+}
+
+#groqHelp a{
+color:#fff
+}
+
 /* ===== TOP ===== */
 
 #top{
@@ -164,20 +183,20 @@ align-items:center
 }
 
 #orb{
-width:52px;
-height:52px;
+width:54px;
+height:54px;
 border-radius:50%;
 background:
 linear-gradient(135deg,#6d28d9,#9333ea);
 display:flex;
 justify-content:center;
 align-items:center;
-font-size:25px;
+font-size:26px;
 box-shadow:0 0 24px rgba(168,85,247,.45)
 }
 
 #ttl{
-font-size:15px;
+font-size:16px;
 font-weight:700
 }
 
@@ -185,7 +204,7 @@ font-weight:700
 font-size:10px;
 color:#a855f7;
 margin-top:2px;
-letter-spacing:2px
+letter-spacing:3px
 }
 
 #topBtns{
@@ -195,13 +214,15 @@ align-items:center
 }
 
 .sbtn{
+width:42px;
+height:42px;
 border:none;
-border-radius:12px;
-padding:10px 12px;
-font-size:12px;
+border-radius:50%;
 background:rgba(255,255,255,.06);
 color:#fff;
-cursor:pointer
+font-size:16px;
+cursor:pointer;
+box-shadow:0 0 20px rgba(168,85,247,.15)
 }
 
 /* ===== PRICES ===== */
@@ -216,10 +237,14 @@ padding:10px 12px;
 scrollbar-width:none
 }
 
+#prices::-webkit-scrollbar{
+display:none
+}
+
 .pc{
 min-width:92px;
 padding:10px;
-border-radius:16px;
+border-radius:18px;
 background:rgba(255,255,255,.04);
 border:1px solid rgba(168,85,247,.18);
 backdrop-filter:blur(12px)
@@ -246,8 +271,8 @@ font-size:12px
 position:relative;
 z-index:2;
 margin:0 12px;
-padding:12px;
-border-radius:18px;
+padding:14px;
+border-radius:22px;
 background:
 linear-gradient(135deg,
 rgba(109,40,217,.18),
@@ -257,14 +282,14 @@ border:1px solid rgba(168,85,247,.18)
 
 #signTitle{
 font-size:12px;
-letter-spacing:2px;
+letter-spacing:3px;
 color:#c084fc
 }
 
 #signText{
-margin-top:8px;
-line-height:1.6;
-font-size:13px;
+margin-top:10px;
+line-height:1.8;
+font-size:14px;
 color:#ddd6fe
 }
 
@@ -282,11 +307,15 @@ gap:12px;
 min-height:0
 }
 
+#feed::-webkit-scrollbar{
+width:0
+}
+
 .msg{
 max-width:88%;
 padding:14px;
 border-radius:22px;
-line-height:1.75;
+line-height:1.8;
 font-size:14px;
 white-space:pre-wrap;
 word-break:break-word
@@ -314,12 +343,12 @@ position:relative;
 z-index:2;
 display:flex;
 gap:10px;
-padding:10px 12px 0
+padding:8px 12px 0
 }
 
 .abtn{
 flex:1;
-padding:14px;
+padding:13px;
 border-radius:18px;
 border:1px solid rgba(168,85,247,.2);
 background:
@@ -336,18 +365,18 @@ cursor:pointer
 #coinsWrap{
 position:relative;
 z-index:2;
-padding:12px;
+padding:10px 12px;
 padding-bottom:
-max(12px,env(safe-area-inset-bottom));
+max(10px,env(safe-area-inset-bottom));
 border-top:1px solid rgba(255,255,255,.05)
 }
 
 #coinsTitle{
 font-size:11px;
 text-align:center;
-letter-spacing:3px;
+letter-spacing:4px;
 color:#9333ea;
-margin-bottom:10px
+margin-bottom:8px
 }
 
 #coins{
@@ -357,7 +386,8 @@ gap:8px
 }
 
 .cb{
-padding:15px 8px;
+padding:10px 6px;
+min-height:88px;
 border-radius:18px;
 border:1px solid rgba(168,85,247,.18);
 background:
@@ -373,12 +403,12 @@ transform:scale(.96)
 }
 
 .ci{
-font-size:24px
+font-size:20px
 }
 
 .cs{
-margin-top:8px;
-font-size:13px;
+margin-top:6px;
+font-size:12px;
 font-weight:700
 }
 
@@ -454,28 +484,10 @@ border:1px solid rgba(168,85,247,.18)
 }
 
 #runeSymbol{
-font-size:70px;
+font-size:72px;
 margin-bottom:10px
 }
 
-/* ===== SHARE ===== */
-
-#shareBtn{
-position:absolute;
-left:14px;
-bottom:
-max(90px,calc(env(safe-area-inset-bottom) + 90px));
-width:56px;
-height:56px;
-border-radius:50%;
-border:none;
-background:
-linear-gradient(135deg,#6d28d9,#9333ea);
-color:#fff;
-font-size:22px;
-z-index:3;
-box-shadow:0 0 24px rgba(168,85,247,.4)
-}
 </style>
 </head>
 
@@ -493,9 +505,7 @@ box-shadow:0 0 24px rgba(168,85,247,.4)
 
 <p>
 Введите API ключ Groq.<br>
-Ключ начинается с <b>gsk_</b><br><br>
-
-Звёзды откроют тайны крипторынка...
+Ключ начинается с <b>gsk_</b>
 </p>
 
 <input
@@ -510,6 +520,29 @@ type="password"
 <button class="btn" id="saveBtn">
 ✦ Войти в Оракул
 </button>
+
+<div id="groqHelp">
+
+🔑 Где взять ключ Groq:<br><br>
+
+1. Открой:<br>
+<a href="https://console.groq.com" target="_blank">
+console.groq.com
+</a><br><br>
+
+2. Войди через Google/GitHub<br><br>
+
+3. Перейди в API Keys<br><br>
+
+4. Нажми Create API Key<br><br>
+
+5. Скопируй ключ вида:<br><br>
+
+<b>gsk_xxxxxxxxx</b><br><br>
+
+✨ Бесплатный API для Крипто Нострадамуса
+
+</div>
 
 </div>
 
@@ -539,17 +572,15 @@ type="password"
 
 <div id="topBtns">
 
-<button
-class="sbtn"
-id="shareTop"
->
+<button class="sbtn" id="installBtn">
+📲
+</button>
+
+<button class="sbtn" id="shareTop">
 📤
 </button>
 
-<button
-class="sbtn"
-id="changeKey"
->
+<button class="sbtn" id="changeKey">
 🔑
 </button>
 
@@ -601,10 +632,6 @@ id="runeBtn"
 
 </div>
 
-<button id="shareBtn">
-📤
-</button>
-
 </div>
 
 <!-- ===== HOROSCOPE ===== -->
@@ -614,6 +641,7 @@ id="runeBtn"
 <div class="mtop">
 
 <div>
+
 <div style="font-size:20px">
 ⭐ Криптогороскоп
 </div>
@@ -621,6 +649,7 @@ id="runeBtn"
 <div style="font-size:12px;color:#a855f7;margin-top:4px">
 Выберите знак
 </div>
+
 </div>
 
 <button class="close" id="closeHoroscope">
@@ -644,6 +673,7 @@ id="runeBtn"
 <div class="mtop">
 
 <div>
+
 <div style="font-size:20px">
 🎲 Мешочек Рун
 </div>
@@ -651,6 +681,7 @@ id="runeBtn"
 <div style="font-size:12px;color:#a855f7;margin-top:4px">
 Скандинавские пророчества
 </div>
+
 </div>
 
 <button class="close" id="closeRune">
@@ -670,15 +701,19 @@ style="display:flex;justify-content:center;align-items:center"
 ᚠ
 </div>
 
-<div style="font-size:24px">
+<div id="runeName" style="font-size:24px">
 Феху
 </div>
 
-<div style="margin-top:10px;color:#c084fc">
+<div
+id="runeType"
+style="margin-top:10px;color:#c084fc"
+>
 РУНА БОГАТСТВА
 </div>
 
 <div
+id="runeText"
 style="
 margin-top:18px;
 line-height:1.8;
@@ -686,9 +721,7 @@ color:#ddd6fe;
 max-width:280px
 "
 >
-Руна Феху указывает на пробуждение
-денежной энергии. Сегодня звёзды
-благосклонны к накоплению BTC и ETH.
+...
 </div>
 
 </div>
@@ -698,6 +731,7 @@ max-width:280px
 </div>
 
 <script>
+
 'use strict';
 
 /* ===== STARS ===== */
@@ -723,6 +757,82 @@ document.getElementById('stars')
 .appendChild(s);
 
 }
+
+/* ===== HELPERS ===== */
+
+function G(id){
+return document.getElementById(id);
+}
+
+function saveKey(v){
+localStorage.setItem('groq_key',v);
+}
+
+function getKey(){
+return localStorage.getItem('groq_key')||'';
+}
+
+function addMsg(type,text){
+
+const d=document.createElement('div');
+
+d.className=
+'msg '+
+(type==='user'?'user':'bot');
+
+d.textContent=text;
+
+G('feed').appendChild(d);
+
+G('feed').scrollTop=
+G('feed').scrollHeight;
+
+}
+
+function fmt(v){
+
+if(v>=10000){
+
+return '$'+
+v.toLocaleString('en',{
+maximumFractionDigits:0
+});
+
+}
+
+if(v>=1){
+
+return '$'+v.toFixed(2);
+
+}
+
+return '$'+v.toFixed(4);
+
+}
+
+/* ===== INSTALL ===== */
+
+let deferredPrompt=null;
+
+window.addEventListener(
+'beforeinstallprompt',
+(e)=>{
+e.preventDefault();
+deferredPrompt=e;
+});
+
+G('installBtn').onclick=async()=>{
+
+if(!deferredPrompt){
+
+alert('Установка недоступна');
+return;
+
+}
+
+deferredPrompt.prompt();
+
+};
 
 /* ===== COINS ===== */
 
@@ -780,60 +890,47 @@ const ZODIAC=[
 '♓ Рыбы'
 ];
 
+const RUNES=[
+
+{
+symbol:'ᚠ',
+name:'Феху',
+title:'РУНА БОГАТСТВА',
+text:'Поток финансовой энергии усиливается. День благоприятен для накопления и укрепления позиций.'
+},
+
+{
+symbol:'ᚢ',
+name:'Уруз',
+title:'РУНА СИЛЫ',
+text:'Энергия рынка становится агрессивнее. Время действовать уверенно, но осторожно.'
+},
+
+{
+symbol:'ᚦ',
+name:'Турисаз',
+title:'РУНА БАРЬЕРА',
+text:'На пути возникает магическое сопротивление. Возможны резкие колебания.'
+},
+
+{
+symbol:'ᚨ',
+name:'Ансуз',
+title:'РУНА ЗНАНИЯ',
+text:'Скрытая информация выходит из тени. Следите за новостями рынка.'
+},
+
+{
+symbol:'ᚱ',
+name:'Райдо',
+title:'РУНА ПУТИ',
+text:'Рынок начинает движение. Возможен новый тренд.'
+}
+
+];
+
 let prices={};
 let busy=false;
-
-/* ===== HELPERS ===== */
-
-function G(id){
-return document.getElementById(id);
-}
-
-function saveKey(v){
-localStorage.setItem('groq_key',v);
-}
-
-function getKey(){
-return localStorage.getItem('groq_key')||'';
-}
-
-function addMsg(type,text){
-
-const d=document.createElement('div');
-
-d.className=
-'msg '+
-(type==='user'?'user':'bot');
-
-d.textContent=text;
-
-G('feed').appendChild(d);
-
-G('feed').scrollTop=
-G('feed').scrollHeight;
-
-}
-
-function fmt(v){
-
-if(v>=10000){
-
-return '$'+
-v.toLocaleString('en',{
-maximumFractionDigits:0
-});
-
-}
-
-if(v>=1){
-
-return '$'+v.toFixed(2);
-
-}
-
-return '$'+v.toFixed(4);
-
-}
 
 /* ===== PRICES ===== */
 
@@ -898,14 +995,6 @@ async function askAI(prompt){
 
 const key=getKey();
 
-if(!key){
-
-throw new Error(
-'Нет API ключа'
-);
-
-}
-
 const r=await fetch(
 'https://api.groq.com/openai/v1/chat/completions',
 {
@@ -922,7 +1011,7 @@ messages:[
 {
 role:'system',
 content:
-'Ты Крипто Нострадамус. Отвечай мистически, но давай реальные рыночные выводы. Используй магическую терминологию.'
+'Ты Крипто Нострадамус. Используй мистическую терминологию и реальный анализ.'
 },
 {
 role:'user',
@@ -930,28 +1019,12 @@ content:prompt
 }
 ],
 
-temperature:.8,
+temperature:.9,
 max_tokens:500
 
 })
 }
 );
-
-if(r.status===401){
-
-throw new Error(
-'Неверный ключ Groq'
-);
-
-}
-
-if(r.status===429){
-
-throw new Error(
-'Лимит запросов исчерпан'
-);
-
-}
 
 if(!r.ok){
 
@@ -981,7 +1054,7 @@ busy=true;
 
 addMsg(
 'user',
-'🔍 Пророчество для '+c.name
+'🔮 Пророчество для '+c.name
 );
 
 addMsg(
@@ -1002,20 +1075,19 @@ const txt=await askAI(
 ${c.name}
 
 Цена:
-${p?.usd || 0} USD
+${p?.usd || 0}
 
 Изменение:
 ${(p?.usd_24h_change || 0).toFixed(2)}%
 
-Сделай мистический криптоанализ.
+Создай мистический анализ рынка.
 
-Нужны:
-
-1. Энергия рынка
-2. Поддержка
-3. Сопротивление
-4. Риск
-5. Пророчество
+Используй:
+- зона силы
+- магический барьер
+- энергия рынка
+- истощение RSI
+- импульс звёзд
 
 До 120 слов.
 `
@@ -1088,12 +1160,11 @@ const txt=await askAI(
 Создай криптогороскоп
 для знака ${z}.
 
-Нужно:
-
-1. Энергия дня
-2. Лучшая монета
-3. Опасность
-4. Совет Нострадамуса
+Нужны:
+- энергия дня
+- лучшая монета
+- опасность
+- совет Нострадамуса
 
 До 120 слов.
 `
@@ -1116,6 +1187,61 @@ wrap.innerHTML=
 wrap.appendChild(b);
 
 });
+
+}
+
+/* ===== RUNES ===== */
+
+function openRune(){
+
+const today=
+new Date().toDateString();
+
+const last=
+localStorage.getItem('rune_day');
+
+let rune;
+
+if(last===today){
+
+rune=JSON.parse(
+localStorage.getItem('rune_data')
+);
+
+}else{
+
+rune=
+RUNES[
+Math.floor(
+Math.random()*RUNES.length
+)
+];
+
+localStorage.setItem(
+'rune_day',
+today
+);
+
+localStorage.setItem(
+'rune_data',
+JSON.stringify(rune)
+);
+
+}
+
+G('runeSymbol').textContent=
+rune.symbol;
+
+G('runeName').textContent=
+rune.name;
+
+G('runeType').textContent=
+rune.title;
+
+G('runeText').textContent=
+rune.text;
+
+G('runeModal').style.display='flex';
 
 }
 
@@ -1150,7 +1276,6 @@ alert(
 
 }
 
-G('shareBtn').onclick=shareApp;
 G('shareTop').onclick=shareApp;
 
 /* ===== MODALS ===== */
@@ -1167,11 +1292,7 @@ G('horoscopeModal').style.display='none';
 
 };
 
-G('runeBtn').onclick=()=>{
-
-G('runeModal').style.display='flex';
-
-};
+G('runeBtn').onclick=openRune;
 
 G('closeRune').onclick=()=>{
 
@@ -1197,9 +1318,9 @@ coin.name+
 coin.sym+
 '.';
 
-/* ===== START ===== */
-
 }
+
+/* ===== START ===== */
 
 function start(){
 
@@ -1219,7 +1340,7 @@ setInterval(loadPrices,30000);
 
 addMsg(
 'bot',
-'🔮 Добро пожаловать в Крипто Нострадамус.\n\nЯ анализирую движение рынка через древние знаки, энергию трендов и поведение звёзд.\n\nВыберите монету для пророчества.'
+'🔮 Добро пожаловать в Крипто Нострадамус.\n\nЯ анализирую рынок через древние символы, энергию трендов и поведение звёзд.\n\nВыберите монету для пророчества.'
 );
 
 }
@@ -1259,6 +1380,7 @@ if(getKey()){
 start();
 
 }
+
 </script>
 
 </body>
