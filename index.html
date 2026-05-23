@@ -2,10 +2,16 @@
 <html lang="ru" translate="no">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"
+>
+
 <meta name="theme-color" content="#6d28d9">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <title>Крипто Нострадамус</title>
 
@@ -17,11 +23,12 @@ padding:0;
 -webkit-tap-highlight-color:transparent
 }
 
-html,body{
+html,
+body{
 width:100%;
 height:100%;
 overflow:hidden;
-background:#050810;
+background:#040712;
 font-family:Georgia,serif;
 color:#fff
 }
@@ -32,6 +39,45 @@ justify-content:center;
 align-items:center
 }
 
+/* ===== APP ===== */
+
+#app{
+position:relative;
+width:100%;
+height:100dvh;
+overflow:hidden;
+display:none;
+flex-direction:column;
+background:
+radial-gradient(circle at top,#1d1040 0%,#050810 40%,#02040c 100%);
+padding-bottom:max(10px,env(safe-area-inset-bottom));
+}
+
+/* ===== STARS ===== */
+
+#stars{
+position:fixed;
+inset:0;
+overflow:hidden;
+pointer-events:none;
+z-index:0
+}
+
+.star{
+position:absolute;
+background:#fff;
+border-radius:50%;
+opacity:.4;
+animation:twinkle 4s infinite
+}
+
+@keyframes twinkle{
+0%,100%{opacity:.1}
+50%{opacity:.8}
+}
+
+/* ===== SETUP ===== */
+
 #setup{
 position:fixed;
 inset:0;
@@ -40,196 +86,647 @@ flex-direction:column;
 justify-content:center;
 align-items:center;
 padding:24px;
-background:#050810;
-gap:14px;
-z-index:10
+background:
+radial-gradient(circle at top,#1f1144 0%,#050810 55%);
+z-index:50;
+text-align:center
 }
 
-#app{
-display:none;
-width:100vw;
-height:100vh;
-flex-direction:column;
-background:#050810
+#setup h2{
+font-size:30px;
+margin-top:10px
+}
+
+#setup p{
+font-size:13px;
+line-height:1.8;
+color:#b794f4;
+margin-top:8px;
+max-width:320px
 }
 
 .inp{
 width:100%;
 max-width:340px;
-padding:14px;
-border-radius:14px;
-border:1px solid #7c3aed;
-background:#0f172a;
+padding:15px;
+border-radius:16px;
+border:1px solid rgba(168,85,247,.4);
+background:rgba(255,255,255,.05);
 color:#fff;
 outline:none;
-font-size:15px
+font-size:15px;
+margin-top:18px
 }
 
 .btn{
-padding:14px;
 border:none;
-border-radius:14px;
-background:linear-gradient(135deg,#6d28d9,#7c3aed);
-color:#fff;
-font-size:15px;
 cursor:pointer;
-width:100%;
-max-width:340px
-}
-
-#top{
-padding:14px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-border-bottom:1px solid rgba(255,255,255,.08)
-}
-
-#prices{
-display:flex;
-gap:8px;
-overflow-x:auto;
-padding:10px
-}
-
-.pc{
-min-width:90px;
-padding:10px;
-background:#111827;
-border-radius:12px;
-border:1px solid rgba(255,255,255,.08);
-font-size:12px;
-text-align:center
-}
-
-#feed{
-flex:1;
-overflow-y:auto;
-display:flex;
-flex-direction:column;
-gap:10px;
-padding:14px
-}
-
-.msg{
-padding:12px 14px;
 border-radius:16px;
-white-space:pre-wrap;
-line-height:1.6;
-font-size:14px
-}
-
-.u{
-background:#5b21b6;
-align-self:flex-end;
-max-width:84%
-}
-
-.b{
-background:#111827;
-border:1px solid rgba(255,255,255,.08);
-max-width:88%
-}
-
-#coins{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:8px;
-padding:12px;
-border-top:1px solid rgba(255,255,255,.08)
-}
-
-.cb{
-padding:14px 8px;
-border-radius:14px;
-border:1px solid rgba(124,58,237,.35);
-background:#111827;
+background:
+linear-gradient(135deg,#5b21b6,#7c3aed);
 color:#fff;
-cursor:pointer;
-font-size:13px
+padding:15px;
+font-size:15px;
+width:100%;
+max-width:340px;
+margin-top:12px;
+box-shadow:0 0 24px rgba(124,58,237,.35)
 }
 
 #err{
 font-size:12px;
 color:#ef4444;
+margin-top:10px;
 min-height:16px
+}
+
+/* ===== TOP ===== */
+
+#top{
+position:relative;
+z-index:2;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:
+max(14px,env(safe-area-inset-top))
+14px
+12px;
+border-bottom:1px solid rgba(255,255,255,.06);
+background:rgba(5,8,16,.82);
+backdrop-filter:blur(18px)
+}
+
+#logo{
+display:flex;
+gap:12px;
+align-items:center
+}
+
+#orb{
+width:52px;
+height:52px;
+border-radius:50%;
+background:
+linear-gradient(135deg,#6d28d9,#9333ea);
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:25px;
+box-shadow:0 0 24px rgba(168,85,247,.45)
+}
+
+#ttl{
+font-size:15px;
+font-weight:700
+}
+
+#sub{
+font-size:10px;
+color:#a855f7;
+margin-top:2px;
+letter-spacing:2px
+}
+
+#topBtns{
+display:flex;
+gap:8px;
+align-items:center
+}
+
+.sbtn{
+border:none;
+border-radius:12px;
+padding:10px 12px;
+font-size:12px;
+background:rgba(255,255,255,.06);
+color:#fff;
+cursor:pointer
+}
+
+/* ===== PRICES ===== */
+
+#prices{
+position:relative;
+z-index:2;
+display:flex;
+gap:8px;
+overflow-x:auto;
+padding:10px 12px;
+scrollbar-width:none
+}
+
+.pc{
+min-width:92px;
+padding:10px;
+border-radius:16px;
+background:rgba(255,255,255,.04);
+border:1px solid rgba(168,85,247,.18);
+backdrop-filter:blur(12px)
+}
+
+.ps{
+font-size:12px;
+font-weight:700
+}
+
+.pp{
+margin-top:6px;
+font-size:15px
+}
+
+.pch{
+margin-top:5px;
+font-size:12px
+}
+
+/* ===== SIGN ===== */
+
+#sign{
+position:relative;
+z-index:2;
+margin:0 12px;
+padding:12px;
+border-radius:18px;
+background:
+linear-gradient(135deg,
+rgba(109,40,217,.18),
+rgba(76,29,149,.08));
+border:1px solid rgba(168,85,247,.18)
+}
+
+#signTitle{
+font-size:12px;
+letter-spacing:2px;
+color:#c084fc
+}
+
+#signText{
+margin-top:8px;
+line-height:1.6;
+font-size:13px;
+color:#ddd6fe
+}
+
+/* ===== FEED ===== */
+
+#feed{
+position:relative;
+z-index:2;
+flex:1;
+overflow-y:auto;
+padding:14px;
+display:flex;
+flex-direction:column;
+gap:12px;
+min-height:0
+}
+
+.msg{
+max-width:88%;
+padding:14px;
+border-radius:22px;
+line-height:1.75;
+font-size:14px;
+white-space:pre-wrap;
+word-break:break-word
+}
+
+.user{
+align-self:flex-end;
+background:
+linear-gradient(135deg,#6d28d9,#7c3aed)
+}
+
+.bot{
+align-self:flex-start;
+background:
+linear-gradient(135deg,
+rgba(30,41,59,.88),
+rgba(17,24,39,.92));
+border:1px solid rgba(255,255,255,.06)
+}
+
+/* ===== ACTIONS ===== */
+
+#actions{
+position:relative;
+z-index:2;
+display:flex;
+gap:10px;
+padding:10px 12px 0
+}
+
+.abtn{
+flex:1;
+padding:14px;
+border-radius:18px;
+border:1px solid rgba(168,85,247,.2);
+background:
+linear-gradient(135deg,
+rgba(91,33,182,.16),
+rgba(30,41,59,.25));
+color:#fff;
+font-size:14px;
+cursor:pointer
+}
+
+/* ===== COINS ===== */
+
+#coinsWrap{
+position:relative;
+z-index:2;
+padding:12px;
+padding-bottom:
+max(12px,env(safe-area-inset-bottom));
+border-top:1px solid rgba(255,255,255,.05)
+}
+
+#coinsTitle{
+font-size:11px;
+text-align:center;
+letter-spacing:3px;
+color:#9333ea;
+margin-bottom:10px
+}
+
+#coins{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px
+}
+
+.cb{
+padding:15px 8px;
+border-radius:18px;
+border:1px solid rgba(168,85,247,.18);
+background:
+linear-gradient(135deg,
+rgba(91,33,182,.18),
+rgba(17,24,39,.65));
+color:#fff;
+cursor:pointer
+}
+
+.cb:active{
+transform:scale(.96)
+}
+
+.ci{
+font-size:24px
+}
+
+.cs{
+margin-top:8px;
+font-size:13px;
+font-weight:700
+}
+
+/* ===== MODAL ===== */
+
+.modal{
+position:fixed;
+inset:0;
+background:rgba(2,4,12,.92);
+backdrop-filter:blur(18px);
+z-index:90;
+display:none;
+flex-direction:column
+}
+
+.mtop{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:
+max(14px,env(safe-area-inset-top))
+14px
+14px
+}
+
+.mbody{
+flex:1;
+overflow-y:auto;
+padding:14px
+}
+
+.close{
+width:38px;
+height:38px;
+border-radius:50%;
+border:none;
+background:rgba(255,255,255,.08);
+color:#fff;
+font-size:18px
+}
+
+/* ===== ZODIAC ===== */
+
+#zodiacGrid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px
+}
+
+.zb{
+padding:14px 6px;
+border-radius:18px;
+background:
+linear-gradient(135deg,
+rgba(91,33,182,.18),
+rgba(17,24,39,.72));
+border:1px solid rgba(168,85,247,.15);
+text-align:center;
+color:#fff
+}
+
+/* ===== RUNE ===== */
+
+#runeCard{
+padding:24px;
+border-radius:26px;
+text-align:center;
+background:
+linear-gradient(135deg,
+rgba(91,33,182,.22),
+rgba(17,24,39,.82));
+border:1px solid rgba(168,85,247,.18)
+}
+
+#runeSymbol{
+font-size:70px;
+margin-bottom:10px
+}
+
+/* ===== SHARE ===== */
+
+#shareBtn{
+position:absolute;
+left:14px;
+bottom:
+max(90px,calc(env(safe-area-inset-bottom) + 90px));
+width:56px;
+height:56px;
+border-radius:50%;
+border:none;
+background:
+linear-gradient(135deg,#6d28d9,#9333ea);
+color:#fff;
+font-size:22px;
+z-index:3;
+box-shadow:0 0 24px rgba(168,85,247,.4)
 }
 </style>
 </head>
+
 <body>
+
+<div id="stars"></div>
+
+<!-- ===== SETUP ===== -->
 
 <div id="setup">
 
-<div style="font-size:56px">🔮</div>
+<div style="font-size:70px">🔮</div>
 
 <h2>Крипто Нострадамус</h2>
 
-<p style="font-size:13px;color:#a78bfa;text-align:center;line-height:1.7">
-Введите API ключ Groq<br>
-Ключ начинается с <b>gsk_</b>
+<p>
+Введите API ключ Groq.<br>
+Ключ начинается с <b>gsk_</b><br><br>
+
+Звёзды откроют тайны крипторынка...
 </p>
 
 <input
 id="keyInput"
 class="inp"
-type="password"
 placeholder="gsk_..."
+type="password"
 >
 
 <div id="err"></div>
 
 <button class="btn" id="saveBtn">
-✦ Войти
+✦ Войти в Оракул
 </button>
 
-<p style="font-size:11px;color:#64748b;text-align:center;line-height:1.8">
-1. Открой console.groq.com<br>
-2. API Keys → Create Key<br>
-3. Вставь ключ
-</p>
-
 </div>
+
+<!-- ===== APP ===== -->
 
 <div id="app">
 
 <div id="top">
 
+<div id="logo">
+
+<div id="orb">🔮</div>
+
 <div>
-<div style="font-weight:700">
-🔮 Крипто Нострадамус
+
+<div id="ttl">
+Крипто Нострадамус
 </div>
 
-<div style="font-size:11px;color:#a78bfa">
-Groq AI Oracle
+<div id="sub">
+ОНЛАЙН • ПРОРОЧЕСТВА
 </div>
+
 </div>
+
+</div>
+
+<div id="topBtns">
 
 <button
-id="changeKey"
-class="btn"
-style="width:auto;padding:10px 12px;font-size:12px"
+class="sbtn"
+id="shareTop"
 >
-🔑 Ключ
+📤
 </button>
+
+<button
+class="sbtn"
+id="changeKey"
+>
+🔑
+</button>
+
+</div>
 
 </div>
 
 <div id="prices"></div>
 
+<div id="sign">
+
+<div id="signTitle">
+✨ ЗНАК ДНЯ
+</div>
+
+<div id="signText">
+Нострадамус изучает движение звёзд...
+</div>
+
+</div>
+
 <div id="feed"></div>
 
+<div id="actions">
+
+<button
+class="abtn"
+id="horoscopeBtn"
+>
+⭐ Криптогороскоп
+</button>
+
+<button
+class="abtn"
+id="runeBtn"
+>
+🎲 Мешочек Рун
+</button>
+
+</div>
+
+<div id="coinsWrap">
+
+<div id="coinsTitle">
+✦ ВЫБЕРИТЕ МОНЕТУ ДЛЯ ПРОРОЧЕСТВА ✦
+</div>
+
 <div id="coins"></div>
+
+</div>
+
+<button id="shareBtn">
+📤
+</button>
+
+</div>
+
+<!-- ===== HOROSCOPE ===== -->
+
+<div class="modal" id="horoscopeModal">
+
+<div class="mtop">
+
+<div>
+<div style="font-size:20px">
+⭐ Криптогороскоп
+</div>
+
+<div style="font-size:12px;color:#a855f7;margin-top:4px">
+Выберите знак
+</div>
+</div>
+
+<button class="close" id="closeHoroscope">
+✕
+</button>
+
+</div>
+
+<div class="mbody">
+
+<div id="zodiacGrid"></div>
+
+</div>
+
+</div>
+
+<!-- ===== RUNES ===== -->
+
+<div class="modal" id="runeModal">
+
+<div class="mtop">
+
+<div>
+<div style="font-size:20px">
+🎲 Мешочек Рун
+</div>
+
+<div style="font-size:12px;color:#a855f7;margin-top:4px">
+Скандинавские пророчества
+</div>
+</div>
+
+<button class="close" id="closeRune">
+✕
+</button>
+
+</div>
+
+<div
+class="mbody"
+style="display:flex;justify-content:center;align-items:center"
+>
+
+<div id="runeCard">
+
+<div id="runeSymbol">
+ᚠ
+</div>
+
+<div style="font-size:24px">
+Феху
+</div>
+
+<div style="margin-top:10px;color:#c084fc">
+РУНА БОГАТСТВА
+</div>
+
+<div
+style="
+margin-top:18px;
+line-height:1.8;
+color:#ddd6fe;
+max-width:280px
+"
+>
+Руна Феху указывает на пробуждение
+денежной энергии. Сегодня звёзды
+благосклонны к накоплению BTC и ETH.
+</div>
+
+</div>
+
+</div>
 
 </div>
 
 <script>
 'use strict';
 
-/* =========================
-   COINS
-========================= */
+/* ===== STARS ===== */
 
-const COINS = [
+for(let i=0;i<60;i++){
+
+const s=document.createElement('div');
+
+s.className='star';
+
+const size=Math.random()*2+1;
+
+s.style.width=size+'px';
+s.style.height=size+'px';
+
+s.style.left=Math.random()*100+'%';
+s.style.top=Math.random()*100+'%';
+
+s.style.animationDelay=
+Math.random()*5+'s';
+
+document.getElementById('stars')
+.appendChild(s);
+
+}
+
+/* ===== COINS ===== */
+
+const COINS=[
 {
 id:'bitcoin',
 sym:'BTC',
@@ -243,16 +740,16 @@ name:'Ethereum',
 icon:'Ξ'
 },
 {
+id:'binancecoin',
+sym:'BNB',
+name:'BNB',
+icon:'◆'
+},
+{
 id:'solana',
 sym:'SOL',
 name:'Solana',
 icon:'◎'
-},
-{
-id:'ripple',
-sym:'XRP',
-name:'XRP',
-icon:'✕'
 },
 {
 id:'litecoin',
@@ -261,19 +758,32 @@ name:'Litecoin',
 icon:'Ł'
 },
 {
-id:'binancecoin',
-sym:'BNB',
-name:'BNB',
-icon:'◆'
+id:'ripple',
+sym:'XRP',
+name:'XRP',
+icon:'✕'
 }
 ];
 
-let prices = {};
-let busy = false;
+const ZODIAC=[
+'♈ Овен',
+'♉ Телец',
+'♊ Близнецы',
+'♋ Рак',
+'♌ Лев',
+'♍ Дева',
+'♎ Весы',
+'♏ Скорпион',
+'♐ Стрелец',
+'♑ Козерог',
+'♒ Водолей',
+'♓ Рыбы'
+];
 
-/* =========================
-   HELPERS
-========================= */
+let prices={};
+let busy=false;
+
+/* ===== HELPERS ===== */
 
 function G(id){
 return document.getElementById(id);
@@ -284,105 +794,96 @@ localStorage.setItem('groq_key',v);
 }
 
 function getKey(){
-return localStorage.getItem('groq_key') || '';
+return localStorage.getItem('groq_key')||'';
 }
 
 function addMsg(type,text){
 
-const d = document.createElement('div');
+const d=document.createElement('div');
 
-d.className =
-'msg ' + (type === 'user' ? 'u' : 'b');
+d.className=
+'msg '+
+(type==='user'?'user':'bot');
 
-d.textContent = text;
+d.textContent=text;
 
 G('feed').appendChild(d);
 
-G('feed').scrollTop =
+G('feed').scrollTop=
 G('feed').scrollHeight;
 
-return d;
 }
 
 function fmt(v){
 
-if(v >= 10000){
-return '$' + v.toLocaleString('en',{
+if(v>=10000){
+
+return '$'+
+v.toLocaleString('en',{
 maximumFractionDigits:0
 });
-}
-
-if(v >= 1){
-return '$' + v.toFixed(2);
-}
-
-return '$' + v.toFixed(4);
 
 }
 
-/* =========================
-   COINGECKO
-========================= */
+if(v>=1){
+
+return '$'+v.toFixed(2);
+
+}
+
+return '$'+v.toFixed(4);
+
+}
+
+/* ===== PRICES ===== */
 
 async function loadPrices(){
 
 try{
 
-const ids =
-COINS.map(c => c.id).join(',');
+const ids=
+COINS.map(c=>c.id).join(',');
 
-const r = await fetch(
-'https://api.coingecko.com/api/v3/simple/price?ids=' +
-ids +
+const r=await fetch(
+'https://api.coingecko.com/api/v3/simple/price?ids='+
+ids+
 '&vs_currencies=usd&include_24hr_change=true'
 );
 
-const data = await r.json();
-
-prices = data;
+prices=await r.json();
 
 renderPrices();
 
-}catch(e){
-console.log(e);
-}
+}catch(e){}
 
 }
 
 function renderPrices(){
 
-const wrap = G('prices');
+const wrap=G('prices');
 
-wrap.innerHTML = '';
+wrap.innerHTML='';
 
-COINS.forEach(c => {
+COINS.forEach(c=>{
 
-const p = prices[c.id];
+const p=prices[c.id];
 
-const price = p?.usd || 0;
+const price=p?.usd||0;
 
-const ch =
-p?.usd_24h_change || 0;
+const ch=p?.usd_24h_change||0;
 
-const el =
-document.createElement('div');
+const el=document.createElement('div');
 
-el.className = 'pc';
+el.className='pc';
 
-el.innerHTML =
-'<div style="font-weight:700">' +
-c.sym +
-'</div>' +
-
-'<div style="margin-top:5px">' +
-fmt(price) +
-'</div>' +
-
-'<div style="margin-top:5px;color:' +
-(ch >= 0 ? '#22c55e' : '#ef4444') +
-'">' +
-(ch >= 0 ? '▲ ' : '▼ ') +
-Math.abs(ch).toFixed(2) +
+el.innerHTML=
+'<div class="ps">'+c.sym+'</div>'+
+'<div class="pp">'+fmt(price)+'</div>'+
+'<div class="pch" style="color:'+
+(ch>=0?'#22c55e':'#ef4444')+
+'">'+
+(ch>=0?'▲ ':'▼ ')+
+Math.abs(ch).toFixed(2)+
 '%</div>';
 
 wrap.appendChild(el);
@@ -391,29 +892,37 @@ wrap.appendChild(el);
 
 }
 
-/* =========================
-   GROQ API
-========================= */
+/* ===== GROQ ===== */
 
-async function callAI(prompt){
+async function askAI(prompt){
 
-const key = getKey();
+const key=getKey();
 
 if(!key){
-throw new Error('Нет API ключа');
+
+throw new Error(
+'Нет API ключа'
+);
+
 }
 
-if(!key.startsWith('gsk_')){
-throw new Error('Ключ должен начинаться с gsk_');
-}
+const r=await fetch(
+'https://api.groq.com/openai/v1/chat/completions',
+{
+method:'POST',
+headers:{
+'Content-Type':'application/json',
+'Authorization':'Bearer '+key
+},
+body:JSON.stringify({
 
-const body = {
+model:'llama-3.1-8b-instant',
 
 messages:[
 {
 role:'system',
 content:
-'Ты Крипто Нострадамус. Отвечай только на русском языке. Давай краткий криптоанализ.'
+'Ты Крипто Нострадамус. Отвечай мистически, но давай реальные рыночные выводы. Используй магическую терминологию.'
 },
 {
 role:'user',
@@ -421,65 +930,38 @@ content:prompt
 }
 ],
 
-/*
-  ДЕШЁВАЯ И СТАБИЛЬНАЯ МОДЕЛЬ
-*/
+temperature:.8,
+max_tokens:500
 
-model:'llama-3.1-8b-instant',
-
-temperature:0.7,
-
-max_tokens:450
-
-};
-
-const r = await fetch(
-'https://api.groq.com/openai/v1/chat/completions',
-{
-method:'POST',
-headers:{
-'Content-Type':'application/json',
-'Authorization':'Bearer ' + key
-},
-body:JSON.stringify(body)
+})
 }
 );
 
-if(r.status === 401){
-throw new Error('Неверный API ключ');
-}
-
-if(r.status === 429){
-throw new Error('Лимит запросов исчерпан');
-}
-
-if(r.status === 400){
-
-const tx = await r.text();
-
-console.log(tx);
+if(r.status===401){
 
 throw new Error(
-'Ошибка 400. Проверь модель или ключ.'
+'Неверный ключ Groq'
+);
+
+}
+
+if(r.status===429){
+
+throw new Error(
+'Лимит запросов исчерпан'
 );
 
 }
 
 if(!r.ok){
+
 throw new Error(
-'Ошибка API: ' + r.status
+'Ошибка API '+r.status
 );
+
 }
 
-const data = await r.json();
-
-if(
-!data ||
-!data.choices ||
-!data.choices[0]
-){
-throw new Error('Пустой ответ');
-}
+const data=await r.json();
 
 return data
 .choices[0]
@@ -489,95 +971,90 @@ return data
 
 }
 
-/* =========================
-   ANALYZE
-========================= */
+/* ===== ANALYZE ===== */
 
-async function analyzeCoin(c){
+async function analyze(c){
 
 if(busy)return;
 
-busy = true;
+busy=true;
 
 addMsg(
 'user',
-'🔍 Анализ ' + c.name
+'🔍 Пророчество для '+c.name
 );
 
-const bot = addMsg(
+addMsg(
 'bot',
-'⏳ Нострадамус изучает графики...'
+'⏳ Нострадамус изучает движение звёзд...'
 );
+
+const bot=
+G('feed').lastChild;
 
 try{
 
-const p = prices[c.id];
+const p=prices[c.id];
 
-const result = await callAI(
+const txt=await askAI(
 `
 Монета:
-${c.name} (${c.sym})
+${c.name}
 
 Цена:
-${p?.usd || 'нет данных'} USD
+${p?.usd || 0} USD
 
-Изменение за 24ч:
+Изменение:
 ${(p?.usd_24h_change || 0).toFixed(2)}%
 
-Сделай краткий анализ.
+Сделай мистический криптоанализ.
 
-Структура:
+Нужны:
 
-1. Тренд
+1. Энергия рынка
 2. Поддержка
 3. Сопротивление
 4. Риск
-5. Вердикт
+5. Пророчество
 
-Максимум 120 слов.
+До 120 слов.
 `
 );
 
-bot.textContent = result;
+bot.textContent=txt;
 
 }catch(e){
 
-bot.textContent =
-'❌ ' + e.message;
+bot.textContent=
+'❌ '+e.message;
 
 }
 
-busy = false;
+busy=false;
 
 }
 
-/* =========================
-   BUTTONS
-========================= */
+/* ===== COINS ===== */
 
 function renderCoins(){
 
-const wrap = G('coins');
+const wrap=G('coins');
 
-wrap.innerHTML = '';
+COINS.forEach(c=>{
 
-COINS.forEach(c => {
+const b=document.createElement('button');
 
-const b =
-document.createElement('button');
+b.className='cb';
 
-b.className = 'cb';
-
-b.innerHTML =
-'<div style="font-size:20px">' +
-c.icon +
-'</div>' +
-
-'<div style="margin-top:6px">' +
-c.sym +
+b.innerHTML=
+'<div class="ci">'+
+c.icon+
+'</div>'+
+'<div class="cs">'+
+c.sym+
 '</div>';
 
-b.onclick = () => analyzeCoin(c);
+b.onclick=()=>analyze(c);
 
 wrap.appendChild(b);
 
@@ -585,19 +1062,156 @@ wrap.appendChild(b);
 
 }
 
-/* =========================
-   START
-========================= */
+/* ===== HOROSCOPE ===== */
+
+function renderZodiac(){
+
+const wrap=G('zodiacGrid');
+
+ZODIAC.forEach(z=>{
+
+const b=document.createElement('button');
+
+b.className='zb';
+
+b.textContent=z;
+
+b.onclick=async()=>{
+
+wrap.innerHTML=
+'<div style="padding:20px;color:#c084fc">⏳ Звёзды формируют пророчество...</div>';
+
+try{
+
+const txt=await askAI(
+`
+Создай криптогороскоп
+для знака ${z}.
+
+Нужно:
+
+1. Энергия дня
+2. Лучшая монета
+3. Опасность
+4. Совет Нострадамуса
+
+До 120 слов.
+`
+);
+
+wrap.innerHTML=
+'<div style="line-height:1.9;color:#ddd6fe">'+
+txt+
+'</div>';
+
+}catch(e){
+
+wrap.innerHTML=
+'❌ '+e.message;
+
+}
+
+};
+
+wrap.appendChild(b);
+
+});
+
+}
+
+/* ===== SHARE ===== */
+
+async function shareApp(){
+
+const data={
+title:'Крипто Нострадамус',
+text:
+'🔮 Магические криптопророчества и анализ рынка',
+url:location.href
+};
+
+if(navigator.share){
+
+try{
+await navigator.share(data);
+}catch(e){}
+
+}else{
+
+navigator.clipboard.writeText(
+location.href
+);
+
+alert(
+'Ссылка скопирована'
+);
+
+}
+
+}
+
+G('shareBtn').onclick=shareApp;
+G('shareTop').onclick=shareApp;
+
+/* ===== MODALS ===== */
+
+G('horoscopeBtn').onclick=()=>{
+
+G('horoscopeModal').style.display='flex';
+
+};
+
+G('closeHoroscope').onclick=()=>{
+
+G('horoscopeModal').style.display='none';
+
+};
+
+G('runeBtn').onclick=()=>{
+
+G('runeModal').style.display='flex';
+
+};
+
+G('closeRune').onclick=()=>{
+
+G('runeModal').style.display='none';
+
+};
+
+/* ===== SIGN ===== */
+
+function renderSign(){
+
+const coin=
+COINS[
+Math.floor(
+Math.random()*COINS.length
+)
+];
+
+G('signText').textContent=
+'Звёзды указывают на пробуждение энергии '+
+coin.name+
+'. Руна богатства открывает путь к движению капитала вокруг '+
+coin.sym+
+'.';
+
+/* ===== START ===== */
+
+}
 
 function start(){
 
-G('setup').style.display =
-'none';
+G('setup').style.display='none';
 
-G('app').style.display =
-'flex';
+G('app').style.display='flex';
 
 renderCoins();
+
+renderZodiac();
+
+renderSign();
 
 loadPrices();
 
@@ -605,26 +1219,25 @@ setInterval(loadPrices,30000);
 
 addMsg(
 'bot',
-'🔮 Добро пожаловать.\n\nВыберите монету для пророчества.'
+'🔮 Добро пожаловать в Крипто Нострадамус.\n\nЯ анализирую движение рынка через древние знаки, энергию трендов и поведение звёзд.\n\nВыберите монету для пророчества.'
 );
 
 }
 
-/* =========================
-   EVENTS
-========================= */
+/* ===== EVENTS ===== */
 
-G('saveBtn').onclick = () => {
+G('saveBtn').onclick=()=>{
 
-const v =
+const v=
 G('keyInput').value.trim();
 
-if(v.length < 20){
+if(!v.startsWith('gsk_')){
 
-G('err').textContent =
-'Введите корректный ключ Groq';
+G('err').textContent=
+'Ключ должен начинаться с gsk_';
 
 return;
+
 }
 
 saveKey(v);
@@ -633,16 +1246,11 @@ start();
 
 };
 
-G('changeKey').onclick = () => {
+G('changeKey').onclick=()=>{
 
-G('setup').style.display =
-'flex';
+G('setup').style.display='flex';
 
-G('app').style.display =
-'none';
-
-G('keyInput').value =
-getKey();
+G('app').style.display='none';
 
 };
 
