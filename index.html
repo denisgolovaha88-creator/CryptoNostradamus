@@ -814,23 +814,6 @@ Fehu
 
 </div>
 
-<div class="mbody room">
-<div class="candle left"><div class="flame"></div></div>
-<div class="candle right"><div class="flame"></div></div>
-
-<div id="runeCard">
-<div id="runeSymbol">ᚠ</div>
-<div id="runeName" style="font-size:28px">Феху</div>
-<div style="margin-top:10px;color:#c084fc;letter-spacing:2px">
-РУНИЧЕСКОЕ ПРОРОЧЕСТВО
-</div>
-<div id="runeText" style="margin-top:18px;line-height:1.8;color:#ddd6fe">
-Руна пробуждает денежные потоки.
-</div>
-</div>
-</div>
-</div>
-
 <script>
 'use strict';
 
@@ -846,7 +829,7 @@ s.style.animationDelay=Math.random()*5+'s';
 document.getElementById('stars').appendChild(s);
 }
 
-const RUNES=[
+
 const RUNES=[
 ['ᚠ','Fehu','Богатство, прибыль, финансовый поток.'],
 ['ᚢ','Uruz','Сила, энергия, мощный импульс.'],
@@ -1127,11 +1110,6 @@ G('zodiacGrid').style.display='grid';
 
 G('closeHoroscope').onclick=()=>{
 G('horoscopeModal').style.display='none';
-};
-
-G('runeBtn').onclick=()=>{
-loadRune();
-G('runeModal').style.display='flex';
 };
 
 G('closeRune').onclick=()=>{
