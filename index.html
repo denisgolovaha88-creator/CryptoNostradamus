@@ -12,7 +12,8 @@ content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,vie
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
+  
+<link rel="manifest" href="manifest.json">
 <title>Крипто Нострадамус</title>
 
 <style>
@@ -832,6 +833,8 @@ G('feed').scrollHeight;
 
 /* ===== INSTALL ===== */
 
+/* ===== INSTALL ===== */
+
 window.addEventListener(
 'beforeinstallprompt',
 (e)=>{
@@ -840,22 +843,26 @@ e.preventDefault();
 
 deferredPrompt=e;
 
+G('installBtn').style.display='block';
+
 }
 );
 
 G('installBtn').onclick=async()=>{
 
-if(!deferredPrompt){
+if(deferredPrompt){
 
-alert(
-'Установка пока недоступна в этом браузере'
-);
+deferredPrompt.prompt();
 
 return;
 
 }
 
-deferredPrompt.prompt();
+/* fallback */
+
+alert(
+'Откройте меню браузера и нажмите: "Добавить на главный экран"'
+);
 
 };
 
