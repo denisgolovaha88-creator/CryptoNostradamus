@@ -535,6 +535,9 @@ position:relative;
 padding:40px 24px;
 border-radius:34px;
 text-align:center;
+  
+min-width:320px;
+  
 background:
 linear-gradient(135deg,
 rgba(91,33,182,.12),
@@ -810,6 +813,44 @@ style="display:flex;justify-content:center;align-items:center"
 
 <div id="runeCard">
 
+<div id="runeAura"></div>
+#runeAura{
+position:absolute;
+width:240px;
+height:240px;
+border-radius:50%;
+background:
+radial-gradient(
+circle,
+rgba(168,85,247,.22) 0%,
+rgba(168,85,247,.08) 40%,
+transparent 70%
+);
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+filter:blur(20px);
+pointer-events:none;
+animation:auraPulse 4s ease-in-out infinite
+}
+
+@keyframes auraPulse{
+
+0%,100%{
+opacity:.6;
+transform:
+translate(-50%,-50%)
+scale(1);
+}
+
+50%{
+opacity:1;
+transform:
+translate(-50%,-50%)
+scale(1.15);
+}
+
+}
 <div id="runeSymbol">
 ᚠ
 </div>
