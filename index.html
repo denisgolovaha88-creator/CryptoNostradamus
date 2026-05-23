@@ -9,744 +9,586 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="CryptoNost">
+
+<link rel="manifest" href="manifest.json">
+
 <title>Крипто Нострадамус</title>
+
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;height:100%;overflow:hidden;background:#050810;font-family:Georgia,serif;color:#e2e8f0}
 body{display:flex;flex-direction:column;align-items:center;justify-content:center}
-
-/* Animations */
-@keyframes tw{0%,100%{opacity:.1}50%{opacity:.7}}
-@keyframes pu{0%,100%{opacity:.6}50%{opacity:1}}
-@keyframes bn{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
-@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-@keyframes sp{to{transform:rotate(360deg)}}
-@keyframes gl{0%,100%{box-shadow:0 0 30px rgba(80,30,180,.1)}50%{box-shadow:0 0 60px rgba(100,50,220,.2)}}
-
-::-webkit-scrollbar{width:2px}
-::-webkit-scrollbar-thumb{background:rgba(109,40,217,.4);border-radius:2px}
-
-/* Stars */
-#stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.st{position:absolute;border-radius:50%;background:#fff}
-
-/* Swirl */
-#swl{position:fixed;inset:0;pointer-events:none;z-index:9999}
-
-/* ══ SETUP ══ */
+#app{width:100vw;height:100vh;display:none;flex-direction:column;background:#050810}
 #setup{
-  position:fixed;inset:0;z-index:500;
-  background:linear-gradient(160deg,#06091a,#0c1228,#080f1e);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:24px 20px;gap:14px;text-align:center;
+position:fixed;inset:0;z-index:50;
+display:flex;flex-direction:column;
+align-items:center;justify-content:center;
+padding:24px;
+background:#050810;
+gap:12px;
+text-align:center
 }
-#setup h2{font-size:22px;font-weight:700;color:#e2e8f0}
-#setup .sub{font-size:13px;color:#a78bfa;line-height:1.6;max-width:300px}
 .inp{
-  width:100%;max-width:340px;padding:13px 15px;border-radius:12px;
-  background:rgba(255,255,255,.06);border:1.5px solid rgba(109,40,217,.4);
-  color:#e2e8f0;font-size:14px;font-family:monospace;outline:none;
+width:100%;
+max-width:340px;
+padding:14px;
+border-radius:14px;
+border:1px solid #7c3aed;
+background:#0f172a;
+color:#fff;
+outline:none;
+font-size:15px
 }
-.inp:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,.15)}
-.inp::placeholder{color:#4a5678}
-#errMsg{font-size:12px;color:#ef4444;min-height:16px}
-.btn-main{
-  width:100%;max-width:340px;padding:14px;border-radius:14px;border:none;
-  background:linear-gradient(135deg,#4c1d95,#7c3aed);
-  color:#fff;font-size:15px;font-family:Georgia,serif;cursor:pointer;
-  box-shadow:0 0 24px rgba(124,58,237,.4);
+.btn{
+padding:14px 18px;
+border:none;
+border-radius:14px;
+background:linear-gradient(135deg,#6d28d9,#7c3aed);
+color:#fff;
+cursor:pointer;
+font-size:15px;
+width:100%;
+max-width:340px
 }
-.btn-main:active{opacity:.8}
-.snote{font-size:11px;color:#4a5678;line-height:1.8}
-.snote a{color:#7c3aed;text-decoration:none}
-
-/* ══ APP ══ */
-#app{
-  position:relative;z-index:1;
-  width:100vw;height:100vh;
-  max-width:430px;max-height:860px;
-  display:none;flex-direction:column;
-  border-radius:clamp(0px,3vw,24px);overflow:hidden;
-  background:rgba(7,11,24,.97);
-  border:1px solid rgba(100,50,220,.15);
-  animation:gl 5s ease-in-out infinite;
+#feed{
+flex:1;
+overflow-y:auto;
+padding:14px;
+display:flex;
+flex-direction:column;
+gap:10px
 }
-
-/* Top bar */
-#top{
-  background:linear-gradient(135deg,rgba(10,14,28,.99),rgba(16,20,44,.99));
-  border-bottom:1px solid rgba(100,50,220,.12);
-  padding:10px 12px 8px;
-  display:flex;align-items:center;gap:9px;flex-shrink:0;
+.msg{
+padding:12px 14px;
+border-radius:16px;
+line-height:1.55;
+white-space:pre-wrap;
+font-size:14px
 }
-#tav{
-  width:38px;height:38px;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,#3b0f80,#7c3aed,#a855f7);
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;box-shadow:0 0 14px rgba(124,58,237,.5);
+.u{
+background:#4c1d95;
+align-self:flex-end;
+max-width:84%
 }
-#tinf{flex:1;overflow:hidden}
-#tinf h1{color:#e2e8f0;font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#tinf p{color:#6d28d9;font-size:9px;font-family:monospace;letter-spacing:.8px;margin-top:1px}
-#trt{display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex-shrink:0}
-#ibtn{display:none;align-items:center;gap:4px;padding:4px 8px;border-radius:8px;background:linear-gradient(135deg,#4c1d95,#7c3aed);border:none;color:#fff;font-size:9px;cursor:pointer;white-space:nowrap}
-#kbtn{background:none;border:none;color:#4a5678;font-size:9px;cursor:pointer;font-family:monospace;padding:0}
-#ltm{color:#64748b;font-size:9px;font-family:monospace;text-align:right;line-height:1.3}
-
-/* Prices */
-#pbar{
-  background:linear-gradient(135deg,rgba(10,14,26,.97),rgba(18,24,48,.97));
-  border-bottom:1px solid rgba(160,100,255,.18);
-  padding:6px 10px;flex-shrink:0;
+.b{
+background:#111827;
+border:1px solid rgba(255,255,255,.08);
+max-width:88%
 }
-#plbl{display:flex;align-items:center;gap:5px;margin-bottom:5px}
-#plbl span{font-size:9px;color:#a078ff;font-family:monospace;letter-spacing:1.5px;text-transform:uppercase}
-#ldot{width:5px;height:5px;border-radius:50%;background:#22c55e;box-shadow:0 0 6px #22c55e;animation:pu 2s ease-in-out infinite;flex-shrink:0}
-#prow{display:flex;gap:3px}
-.pc{
-  flex:1;padding:4px 3px;border-radius:7px;min-width:0;
-  background:var(--bg,rgba(255,255,255,.03));
-  border:1px solid var(--bd,rgba(255,255,255,.07));
-  text-align:center;overflow:hidden;
+#coins{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+padding:12px;
+border-top:1px solid rgba(255,255,255,.08)
 }
-.pc.act{box-shadow:0 0 8px var(--gl,transparent)}
-.psym{font-size:8px;font-family:monospace;font-weight:700;white-space:nowrap;overflow:hidden}
-.pval{font-size:9px;font-family:monospace;font-weight:600;color:#e2e8f0;white-space:nowrap;overflow:hidden}
-.pchg{font-size:8px;white-space:nowrap}
-
-/* Sign */
-#sgn{padding:6px 10px;border-bottom:1px solid rgba(255,255,255,.04);flex-shrink:0}
-#sgnr{display:flex;align-items:center;gap:5px;margin-bottom:2px}
-#sgnl{font-size:9px;font-family:monospace;letter-spacing:1px;font-weight:700;text-transform:uppercase}
-#sgnd{font-size:11px;color:#c4b5fd;line-height:1.45}
-
-/* Feed */
-#feed{flex:1;overflow-y:auto;padding:10px 9px;display:flex;flex-direction:column}
-.msg{display:flex;margin-bottom:9px;animation:fi .3s ease-out}
-.msg.u{justify-content:flex-end}
-.bav{
-  width:28px;height:28px;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,#4c1d95,#a855f7);
-  display:flex;align-items:center;justify-content:center;
-  font-size:13px;margin-right:6px;align-self:flex-end;
-  box-shadow:0 0 8px rgba(168,85,247,.4);
-}
-.bbl{max-width:80%;padding:8px 11px;font-size:12.5px;line-height:1.6;white-space:pre-wrap;color:#e2e8f0;word-break:break-word}
-.bbl.u{border-radius:14px 14px 3px 14px;background:linear-gradient(135deg,#5b21b6,#4338ca);box-shadow:0 3px 16px rgba(109,40,217,.3)}
-.bbl.b{border-radius:14px 14px 14px 3px;background:linear-gradient(135deg,rgba(20,26,48,.97),rgba(28,34,62,.97));border:1px solid rgba(150,100,255,.12)}
-.dts{display:flex;gap:4px;align-items:center;padding:3px 0}
-.dt{width:6px;height:6px;border-radius:50%;background:#a855f7;animation:bn 1.2s ease-in-out infinite}
-.dt:nth-child(2){animation-delay:.2s}.dt:nth-child(3){animation-delay:.4s}
-.dtx{margin-left:7px;color:#a78bfa;font-size:10px}
-
-/* Extra buttons */
-#erow{display:flex;gap:6px;padding:6px 9px 0;background:rgba(7,11,24,.99);flex-shrink:0}
-.eb{
-  flex:1;padding:9px 5px;border-radius:10px;
-  border:1px solid rgba(120,70,255,.3);
-  background:linear-gradient(135deg,rgba(75,15,165,.18),rgba(35,8,100,.12));
-  color:#d4b8ff;cursor:pointer;font-size:11.5px;font-family:Georgia,serif;
-  display:flex;align-items:center;justify-content:center;gap:5px;
-  -webkit-tap-highlight-color:transparent;
-}
-.eb:active{background:rgba(100,30,220,.28);transform:scale(.97)}
-
-/* Coin row */
-#crow{padding:6px 9px 10px;background:rgba(7,11,24,.99);border-top:1px solid rgba(100,50,220,.1);flex-shrink:0}
-#chnt{font-size:8px;color:#4c1d95;text-align:center;font-family:monospace;letter-spacing:1.5px;margin-bottom:5px;text-transform:uppercase}
-#cbtns{display:flex;gap:4px}
 .cb{
-  flex:1;padding:8px 2px;border-radius:10px;min-width:0;
-  border:1px solid var(--bd,rgba(255,255,255,.1));
-  background:var(--bg,rgba(255,255,255,.04));
-  color:#d4b8ff;cursor:pointer;
-  display:flex;flex-direction:column;align-items:center;gap:2px;
-  -webkit-tap-highlight-color:transparent;
+padding:14px 8px;
+border-radius:14px;
+border:1px solid rgba(124,58,237,.4);
+background:#111827;
+color:#fff;
+cursor:pointer;
+font-size:13px
 }
-.cb:active{transform:scale(.92)}
-.ci{font-size:15px}.cs{font-size:9px;font-weight:700;font-family:monospace;color:#e2e8f0}
-
-/* Modals */
-.mdl{position:absolute;inset:0;z-index:200;background:rgba(2,4,16,.93);backdrop-filter:blur(12px);display:flex;flex-direction:column;animation:fi .25s ease-out}
-.mhd{padding:11px 12px 9px;background:linear-gradient(135deg,rgba(10,5,26,.99),rgba(16,8,40,.99));border-bottom:1px solid rgba(120,70,255,.18);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.mhd h2{color:#e2e8f0;font-size:14px;font-weight:700}
-.mhd small{color:#6d28d9;font-size:9px;font-family:monospace;display:block;margin-top:2px}
-.xb{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:#94a3b8;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.mbd{flex:1;overflow-y:auto;padding:10px}
-
-/* Zodiac */
-#zgrd{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.zb{padding:10px 4px;border-radius:10px;cursor:pointer;background:linear-gradient(135deg,rgba(55,15,110,.14),rgba(18,10,40,.8));border:1px solid rgba(120,70,255,.18);display:flex;flex-direction:column;align-items:center;gap:3px;color:#e2e8f0;-webkit-tap-highlight-color:transparent}
-.zb:active{transform:scale(.95);border-color:#a855f7}
-.ze{font-size:20px}.zn{font-size:10px;font-weight:700;color:#c4b5fd}.zd{font-size:8px;color:#6d28d9;font-family:monospace}
-.zres{border-radius:12px;padding:12px;background:linear-gradient(135deg,rgba(16,8,40,.96),rgba(24,12,55,.96));border:1px solid rgba(150,100,255,.13);color:#e2e8f0;font-size:12.5px;line-height:1.62;white-space:pre-wrap;animation:fi .4s ease-out;word-break:break-word}
-.bkb{width:100%;margin-top:8px;padding:9px;border-radius:10px;background:rgba(109,40,217,.12);border:1px solid rgba(109,40,217,.28);color:#a78bfa;cursor:pointer;font-size:12px;font-family:Georgia,serif}
-
-/* Rune */
-#rscn{width:180px;height:180px;margin:0 auto 14px;position:relative}
-#rcrd{width:100%;height:100%;position:relative}
-.rf{position:absolute;inset:0;border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;transition:opacity .55s ease}
-#rfr{background:linear-gradient(145deg,#140630,#1e0a48);border:2px solid #4c1d95;box-shadow:0 0 24px rgba(76,29,149,.3);opacity:1;z-index:2}
-#rbk{background:linear-gradient(145deg,#0e0420,#180840);opacity:0;z-index:1}
-#rcrd.fl #rfr{opacity:0;z-index:1}
-#rcrd.fl #rbk{opacity:1;z-index:2}
-.rsm{font-size:54px;font-family:serif;animation:pu 2s ease-in-out infinite}
-.rnm{font-size:14px;font-weight:700;color:#e2e8f0}
-.rnrg{font-size:9px;font-family:monospace;letter-spacing:1px;font-weight:700}
-.rmn{font-size:10px;color:#a78bfa;opacity:.7}
-.rtxt{border-radius:14px;padding:12px;max-width:300px;width:100%;color:#d4c5f0;font-size:12.5px;line-height:1.65;animation:fi .4s ease-out;word-break:break-word}
-.drw{padding:12px 32px;border-radius:14px;border:none;font-size:14px;cursor:pointer;font-family:Georgia,serif;background:linear-gradient(135deg,#4c1d95,#7c3aed);color:#fff;box-shadow:0 0 20px rgba(124,58,237,.45)}
-.drw:active{opacity:.8}
-
-/* Prevent Samsung auto-translate */
-font[style],.goog-te-banner-frame,.skiptranslate{display:none!important}
-body{top:0!important}
+#top{
+padding:14px;
+border-bottom:1px solid rgba(255,255,255,.08);
+display:flex;
+justify-content:space-between;
+align-items:center
+}
+#prices{
+display:flex;
+gap:6px;
+overflow-x:auto;
+padding:10px
+}
+.pc{
+min-width:90px;
+padding:8px;
+border-radius:12px;
+background:#111827;
+font-size:12px;
+text-align:center;
+border:1px solid rgba(255,255,255,.06)
+}
+#err{
+font-size:12px;
+color:#ef4444;
+min-height:16px
+}
+.loading{
+opacity:.7
+}
 </style>
 </head>
-<body translate="no">
-<div id="stars"></div>
-<div id="swl"></div>
+<body>
 
-<!-- SETUP -->
-<div id="setup" translate="no">
-  <div style="font-size:52px">🔮</div>
-  <h2>Крипто Нострадамус</h2>
-  <p class="sub">Введите API ключ Grok (xAI).<br>При регистрации <b>$25 бесплатно</b>.<br>Хранится только на вашем устройстве.</p>
-  <input id="kin" class="inp" type="password" placeholder="xai-..." spellcheck="false" autocomplete="off">
-  <div id="errMsg"></div>
-  <button class="btn-main" id="sbtn">✦ Войти</button>
-  <p class="snote">
-    1. Открой <a href="https://console.x.ai" target="_blank">console.x.ai</a><br>
-    2. Войди через X (Twitter)<br>
-    3. API Keys → Create API Key<br>
-    4. Скопируй ключ (начинается с <b>xai-</b>)<br>
-    <span style="color:#22c55e">★ $25 бесплатно при регистрации</span>
-  </p>
+<div id="setup">
+<div style="font-size:52px">🔮</div>
+<h2>Крипто Нострадамус</h2>
+
+<p style="color:#a78bfa;font-size:13px;line-height:1.6">
+Введите API ключ Grok / xAI
+</p>
+
+<input id="keyInput" class="inp" placeholder="xai-..." type="password">
+
+<div id="err"></div>
+
+<button class="btn" id="saveBtn">
+✦ Войти
+</button>
+
+<p style="font-size:11px;color:#64748b;line-height:1.7">
+1. Открой console.x.ai<br>
+2. API Keys → Create API Key<br>
+3. Вставь ключ
+</p>
 </div>
 
-<!-- APP -->
-<div id="app" translate="no">
-  <div id="top">
-    <div id="tav">🔮</div>
-    <div id="tinf">
-      <h1>Крипто Нострадамус</h1>
-      <p>● ОНЛАЙН — Пророчества в реальном времени</p>
-    </div>
-    <div id="trt">
-      <button id="ibtn">⬇ Установить</button>
-      <button id="kbtn">🔑 Ключ</button>
-      <div id="ltm"></div>
-    </div>
-  </div>
+<div id="app">
 
-  <div id="pbar">
-    <div id="plbl"><span>📌 Live цены</span><div id="ldot"></div></div>
-    <div id="prow"></div>
-  </div>
+<div id="top">
+<div>
+<div style="font-weight:700">🔮 Крипто Нострадамус</div>
+<div style="font-size:11px;color:#a78bfa">Live AI Crypto Oracle</div>
+</div>
 
-  <div id="sgn">
-    <div id="sgnr"><span id="sgnl" style="color:#a078ff;font-size:9px;font-family:monospace;letter-spacing:1px;font-weight:700;text-transform:uppercase">⏳ Вычисляю знак дня...</span></div>
-    <div id="sgnd" style="font-size:10px;color:#6d28d9;font-family:monospace">Нострадамус смотрит в звёзды...</div>
-  </div>
+<button id="changeKey" class="btn" style="width:auto;padding:10px 12px;font-size:12px">
+🔑 Ключ
+</button>
+</div>
 
-  <div id="feed"></div>
+<div id="prices"></div>
 
-  <div id="erow">
-    <button class="eb" id="zbtn">⭐ Криптогороскоп</button>
-    <button class="eb" id="rbtn">🎲 Мешочек Рун</button>
-  </div>
+<div id="feed"></div>
 
-  <div id="crow">
-    <div id="chnt">✦ выберите монету для пророчества ✦</div>
-    <div id="cbtns"></div>
-  </div>
+<div id="coins"></div>
 
-  <!-- Zodiac modal -->
-  <div id="zmdl" class="mdl" style="display:none">
-    <div class="mhd">
-      <div><h2>⭐ Криптогороскоп</h2><small id="zsub">Выберите знак зодиака</small></div>
-      <button class="xb" id="zx">✕</button>
-    </div>
-    <div class="mbd" id="zbdy"></div>
-  </div>
-
-  <!-- Rune modal -->
-  <div id="rmdl" class="mdl" style="display:none">
-    <div class="mhd">
-      <div><h2>🎲 Мешочек Рун</h2><small>Скандинавское криптогадание</small></div>
-      <button class="xb" id="rx">✕</button>
-    </div>
-    <div class="mbd" id="rbdy" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px 12px"></div>
-  </div>
 </div>
 
 <script>
 'use strict';
-// ══ DATA ══
-var COINS=[
-  {id:'BTCUSDT',sym:'BTC',name:'Bitcoin', col:'#F7931A',glow:'rgba(247,147,26,.22)',icon:'₿'},
-  {id:'ETHUSDT',sym:'ETH',name:'Ethereum',col:'#627EEA',glow:'rgba(98,126,234,.22)', icon:'Ξ'},
-  {id:'BNBUSDT',sym:'BNB',name:'BNB',     col:'#F3BA2F',glow:'rgba(243,186,47,.22)', icon:'◆'},
-  {id:'SOLUSDT',sym:'SOL',name:'Solana',  col:'#9945FF',glow:'rgba(153,69,255,.22)', icon:'◎'},
-  {id:'LTCUSDT',sym:'LTC',name:'Litecoin',col:'#B8B8B8',glow:'rgba(184,184,184,.22)',icon:'Ł'},
-  {id:'XRPUSDT',sym:'XRP',name:'XRP',     col:'#00AAE4',glow:'rgba(0,170,228,.22)',  icon:'✕'},
-];
-var ZOD=[
-  {k:'aries',n:'Овен',e:'♈',d:'21.03–19.04'},{k:'taurus',n:'Телец',e:'♉',d:'20.04–20.05'},
-  {k:'gemini',n:'Близнецы',e:'♊',d:'21.05–20.06'},{k:'cancer',n:'Рак',e:'♋',d:'21.06–22.07'},
-  {k:'leo',n:'Лев',e:'♌',d:'23.07–22.08'},{k:'virgo',n:'Дева',e:'♍',d:'23.08–22.09'},
-  {k:'libra',n:'Весы',e:'♎',d:'23.09–22.10'},{k:'scorpio',n:'Скорпион',e:'♏',d:'23.10–21.11'},
-  {k:'sagittarius',n:'Стрелец',e:'♐',d:'22.11–21.12'},{k:'capricorn',n:'Козерог',e:'♑',d:'22.12–19.01'},
-  {k:'aquarius',n:'Водолей',e:'♒',d:'20.01–18.02'},{k:'pisces',n:'Рыбы',e:'♓',d:'19.02–20.03'},
-];
-var RUNES=[
-  {s:'ᚠ',n:'Феху',m:'Богатство',g:'ПРИБЫЛЬ',c:'#22c55e',t:'Звёзды дарят прибыль смелым. BTC и ETH — рассмотри вход сегодня. Зафиксируй прибыль до вечера.'},
-  {s:'ᚢ',n:'Уруз',m:'Сила',g:'ПРОРЫВ',c:'#22c55e',t:'Мощное движение неизбежно. Альткоины прорывают сопротивление. Следи за объёмами.'},
-  {s:'ᚦ',n:'Турисаз',m:'Опасность',g:'ОПАСНО',c:'#ef4444',t:'Не открывай позиции без стоп-лосса. Защита важнее атаки сегодня.'},
-  {s:'ᚨ',n:'Ансуз',m:'Мудрость',g:'ЗНАНИЕ',c:'#eab308',t:'День для изучения, не торговли. Знание сегодня — прибыль завтра.'},
-  {s:'ᚱ',n:'Райдо',m:'Движение',g:'ТРЕНД',c:'#22c55e',t:'Следуй тренду. SOL и BNB ведут рынок сегодня.'},
-  {s:'ᚲ',n:'Кеназ',m:'Возможность',g:'ШАНС',c:'#22c55e',t:'Скрытая возможность в альткоинах. Умные деньги уже входят.'},
-  {s:'ᚷ',n:'Гебо',m:'Дар',g:'ПАССИВ',c:'#a78bfa',t:'День пассивного дохода. Стейкинг принесёт больше трейдинга.'},
-  {s:'ᚹ',n:'Вуньо',m:'Радость',g:'УДАЧА',c:'#22c55e',t:'Звёзды благоволят! Высокая вероятность успешных сделок.'},
-  {s:'ᚺ',n:'Хагалаз',m:'Разрушение',g:'КРИЗИС',c:'#ef4444',t:'Возможен резкий обвал. Уберись в стейблы. Жди дна.'},
-  {s:'ᚾ',n:'Наутиз',m:'Ограничение',g:'ПАУЗА',c:'#ef4444',t:'Ликвидность иссыхает. Лучшая сделка — воздержаться.'},
-  {s:'ᛁ',n:'Иса',m:'Застой',g:'ШТИЛЬ',c:'#94a3b8',t:'Рынок заморожен. День для долгосрочного накопления.'},
-  {s:'ᛃ',n:'Йера',m:'Урожай',g:'ЦИКЛ',c:'#22c55e',t:'Конец коррекции близок. Собирай урожай с позиций.'},
-  {s:'ᛇ',n:'Эйваз',m:'Трансформация',g:'СМЕНА',c:'#a855f7',t:'Рынок меняет лидеров. Ищи трансформирующиеся проекты.'},
-  {s:'ᛈ',n:'Перто',m:'Тайна',g:'ЗАГАДКА',c:'#eab308',t:'Чёрный лебедь возможен. Мелкие позиции или отдых.'},
-  {s:'ᛉ',n:'Альгиз',m:'Защита',g:'СТРАЖ',c:'#38bdf8',t:'Защищай капитал. Выстави стоп-лоссы. Сохранение важнее прибыли.'},
-  {s:'ᛊ',n:'Совило',m:'Победа',g:'БЫЧЬЯ',c:'#22c55e',t:'Мощная бычья энергия! Bitcoin тянется к высотам. Держи лонги.'},
-  {s:'ᛏ',n:'Тиваз',m:'Баланс',g:'НЕЙТРАЛЬ',c:'#eab308',t:'Рынок ищет цену. Торгуй от уровней. Терпение.'},
-  {s:'ᛒ',n:'Беркано',m:'Рост',g:'НАЧАЛО',c:'#22c55e',t:'Новый цикл роста стартует! Горизонт 1-2 недели. Формируй позиции.'},
-  {s:'ᛖ',n:'Эваз',m:'Скорость',g:'СКАЛЬП',c:'#22c55e',t:'Быстрые движения сегодня. Скальпинг принесёт плоды.'},
-  {s:'ᛗ',n:'Манназ',m:'Стратегия',g:'РАЗУМ',c:'#a78bfa',t:'День стратега. Составь план и рассчитай риски.'},
-  {s:'ᛚ',n:'Лагуз',m:'Интуиция',g:'ПОТОК',c:'#38bdf8',t:'Доверяй внутреннему голосу. Если что-то не так — выходи.'},
-  {s:'ᛜ',n:'Ингваз',m:'Накопление',g:'DCA',c:'#22c55e',t:'Умные деньги накапливают. Лучший день для DCA-стратегии.'},
-  {s:'ᛞ',n:'Дагаз',m:'Рассвет',g:'ПРОРЫВ',c:'#22c55e',t:'Рассвет нового тренда! Следи за объёмами.'},
-  {s:'ᛟ',n:'Отала',m:'Наследие',g:'ДОЛГОСРОК',c:'#a78bfa',t:'День долгосрочных решений. Краткосрочная торговля невыгодна.'},
+
+/* =========================
+   CONFIG
+========================= */
+
+const COINS = [
+{
+id:'bitcoin',
+sym:'BTC',
+name:'Bitcoin',
+icon:'₿'
+},
+{
+id:'ethereum',
+sym:'ETH',
+name:'Ethereum',
+icon:'Ξ'
+},
+{
+id:'solana',
+sym:'SOL',
+name:'Solana',
+icon:'◎'
+},
+{
+id:'ripple',
+sym:'XRP',
+name:'XRP',
+icon:'✕'
+},
+{
+id:'litecoin',
+sym:'LTC',
+name:'Litecoin',
+icon:'Ł'
+},
+{
+id:'binancecoin',
+sym:'BNB',
+name:'BNB',
+icon:'◆'
+}
 ];
 
-// ══ STATE ══
-var prices={}, signCoin=null, busy=false, aiCache={};
+let prices = {};
+let busy = false;
 
-// ══ UTILS ══
-function G(id){return document.getElementById(id)}
-function dh(s){var d=new Date().toISOString().slice(0,10).replace(/-/g,'');var h=(parseInt(d,10)+((s||0)*997))>>>0;h=(((h>>>16)^h)*0x45d9f3b)>>>0;h=(((h>>>16)^h)*0x45d9f3b)>>>0;return((h>>>16)^h)>>>0}
-function today(){return new Date().toISOString().slice(0,10)}
-function getKey(){try{return localStorage.getItem('gnk')||''}catch(e){return''}}
-function setKey(v){try{localStorage.setItem('gnk',v)}catch(e){}}
-function getSignCoin(){return COINS[dh(7)%COINS.length]}
+/* =========================
+   HELPERS
+========================= */
 
-// ══ PWA INSTALL ══
-var _pr=null;
-window.addEventListener('beforeinstallprompt',function(e){
-  e.preventDefault();_pr=e;G('ibtn').style.display='flex';
+function G(id){
+return document.getElementById(id);
+}
+
+function saveKey(v){
+localStorage.setItem('grok_key',v);
+}
+
+function getKey(){
+return localStorage.getItem('grok_key') || '';
+}
+
+function addMsg(type,text){
+
+const d = document.createElement('div');
+
+d.className = 'msg ' + (type === 'user' ? 'u' : 'b');
+
+d.textContent = text;
+
+G('feed').appendChild(d);
+
+G('feed').scrollTop = G('feed').scrollHeight;
+
+return d;
+}
+
+function fmt(v){
+
+if(v >= 10000){
+return '$' + v.toLocaleString('en',{
+maximumFractionDigits:0
 });
-G('ibtn').onclick=function(){
-  if(_pr){_pr.prompt();_pr.userChoice.then(function(){_pr=null;G('ibtn').style.display='none';})}
-};
-window.addEventListener('appinstalled',function(){G('ibtn').style.display='none'});
-
-// ══ SETUP ══
-G('sbtn').onclick=saveKey;
-G('kin').addEventListener('keydown',function(e){if(e.key==='Enter')saveKey()});
-
-function saveKey(){
-  var v=(G('kin').value||'').trim();
-  G('errMsg').textContent='';
-  if(!v||v.length<10){G('errMsg').textContent='Введите API ключ Grok';return}
-  setKey(v);
-  G('setup').style.display='none';
-  G('app').style.display='flex';
-  startApp();
-}
-G('kbtn').onclick=function(){
-  G('setup').style.display='flex';
-  G('app').style.display='none';
-  G('kin').value=getKey();
-};
-
-// ══ STARS ══
-function mkStars(){
-  var c=G('stars');
-  for(var i=0;i<55;i++){
-    var s=document.createElement('div');s.className='st';
-    var z=(Math.random()*2+.4).toFixed(1);
-    s.style.cssText='left:'+(Math.random()*100).toFixed(1)+'%;top:'+(Math.random()*100).toFixed(1)+'%;width:'+z+'px;height:'+z+'px;opacity:'+(Math.random()*.45+.1).toFixed(2)+';animation:tw '+(2+Math.random()*3).toFixed(1)+'s ease-in-out '+(Math.random()*5).toFixed(2)+'s infinite';
-    c.appendChild(s);
-  }
 }
 
-// ══ SWIRL ══
-function mkSwirl(cx,cy,col){
-  var L=G('swl');
-  var w=document.createElement('div');
-  w.style.cssText='position:absolute;left:'+cx+'px;top:'+cy+'px;pointer-events:none';
-  // flash
-  var fl=document.createElement('div');
-  fl.style.cssText='position:absolute;width:46px;height:46px;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,#fff 0%,'+col+' 55%,transparent 80%);box-shadow:0 0 36px '+col+';transition:opacity .3s';
-  w.appendChild(fl);
-  // rings
-  for(var r=0;r<3;r++){
-    var rg=document.createElement('div');var rs=22+r*26;
-    rg.style.cssText='position:absolute;width:'+rs+'px;height:'+rs+'px;border-radius:50%;border:1.5px solid '+col+'88;transform:translate(-50%,-50%) scale(1);opacity:.65;transition:transform '+(460+r*90)+'ms cubic-bezier(.2,.8,.3,1) '+(r*45)+'ms,opacity 320ms ease '+(r*45)+'ms';
-    w.appendChild(rg);
-    (function(el){setTimeout(function(){el.style.transform='translate(-50%,-50%) scale(2.7)';el.style.opacity='0'},18)})(rg);
-  }
-  // particles
-  for(var i=0;i<18;i++){
-    var a=(i/18)*Math.PI*2+(Math.random()-.5)*.8;
-    var dist=46+Math.random()*32;
-    var tx=(Math.cos(a)*dist).toFixed(1)+'px',ty=(Math.sin(a)*dist).toFixed(1)+'px';
-    var ps=(4+Math.random()*5).toFixed(1);
-    var pt=document.createElement('div');
-    pt.style.cssText='position:absolute;width:'+ps+'px;height:'+ps+'px;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,#fff 0%,'+col+' 55%);box-shadow:0 0 '+(+ps*2)+'px '+col+';transition:transform 580ms cubic-bezier(.15,.85,.3,1) '+(i*20)+'ms,opacity 360ms ease 170ms';
-    w.appendChild(pt);
-    (function(el,tx,ty){setTimeout(function(){el.style.transform='translate(calc(-50% + '+tx+'),calc(-50% + '+ty+')) scale(.3)';el.style.opacity='0'},18)})(pt,tx,ty);
-  }
-  L.appendChild(w);
-  setTimeout(function(){fl.style.opacity='0'},250);
-  setTimeout(function(){if(w.parentNode)w.parentNode.removeChild(w)},1050);
+if(v >= 1){
+return '$' + v.toFixed(2);
 }
 
-// ══ GROK AI ══
-function callAI(prompt, onOk, onErr, attempt){
-  attempt=attempt||1;
-  if(aiCache[prompt]){onOk(aiCache[prompt]);return}
-  var k=getKey();
-  if(!k){onErr('❌ Нет API ключа. Нажмите 🔑 Ключ.');return}
-
-  fetch('https://api.x.ai/v1/chat/completions',{
-    method:'POST',
-    headers:{'Content-Type':'application/json','Authorization':'Bearer '+k},
-    body:JSON.stringify({
-      model:'grok-3-mini-fast',
-      max_tokens:900,
-      messages:[
-        {role:'system',content:'Ты Крипто Нострадамус, мистический аналитик. Отвечай ТОЛЬКО на русском языке. Давай конкретные цифры.'},
-        {role:'user',content:prompt}
-      ]
-    })
-  })
-  .then(function(r){
-    if(r.status===401||r.status===403){onErr('❌ Неверный ключ Grok. Нажмите 🔑 Ключ и введите правильный.');return null}
-    if(r.status===402){onErr('❌ Нет средств на балансе xAI. Пополните на console.x.ai');return null}
-    if(r.status===400){onErr('❌ Ошибка запроса (400). Проверьте ключ на console.x.ai');return null}
-    if(r.status===429){
-      if(attempt<=4){
-        var wait=attempt*18;
-        _tick(wait,onErr,function(){callAI(prompt,onOk,onErr,attempt+1)});
-      }else{
-        onErr('❌ Лимит Grok исчерпан. Подождите минуту.');
-      }
-      return null;
-    }
-    if(!r.ok){onErr('❌ Ошибка API: '+r.status+'. Попробуйте ещё раз.');return null}
-    return r.json();
-  })
-  .then(function(d){
-    if(!d)return;
-    if(d.error){
-      if(d.error.code==='rate_limit_exceeded'&&attempt<=4){
-        _tick(attempt*18,onErr,function(){callAI(prompt,onOk,onErr,attempt+1)});
-        return;
-      }
-      onErr('❌ Grok: '+(d.error.message||'Ошибка'));return;
-    }
-    var txt=d.choices&&d.choices[0]&&d.choices[0].message&&d.choices[0].message.content;
-    if(txt&&txt.trim()){aiCache[prompt]=txt;onOk(txt)}
-    else{onErr('❌ Пустой ответ. Попробуйте ещё раз.')}
-  })
-  .catch(function(){
-    if(attempt<=3){
-      _tick(8,onErr,function(){callAI(prompt,onOk,onErr,attempt+1)});
-    }else{
-      onErr('❌ Ошибка сети. Проверьте интернет.');
-    }
-  });
+return '$' + v.toFixed(4);
 }
 
-function _tick(secs,onErr,done){
-  var n=secs;
-  onErr('⏳ Повтор через '+n+' сек...');
-  var iv=setInterval(function(){
-    n--;
-    if(n<=0){clearInterval(iv);done()}
-    else{onErr('⏳ Повтор через '+n+' сек...')}
-  },1000);
+/* =========================
+   COINGECKO
+========================= */
+
+async function loadPrices(){
+
+try{
+
+const ids = COINS.map(c => c.id).join(',');
+
+const r = await fetch(
+'https://api.coingecko.com/api/v3/simple/price?ids='
++ ids +
+'&vs_currencies=usd&include_24hr_change=true'
+);
+
+const data = await r.json();
+
+prices = data;
+
+renderPrices();
+
+}catch(e){
+console.log(e);
 }
 
-// ══ PRICES ══
-function fetchPrices(){
-  var syms=encodeURIComponent(JSON.stringify(COINS.map(function(c){return c.id})));
-  fetch('https://api.binance.com/api/v3/ticker/24hr?symbols='+syms)
-  .then(function(r){return r.ok?r.json():null})
-  .then(function(arr){
-    if(!arr||!arr.length)return;
-    prices={};
-    arr.forEach(function(t){
-      prices[t.symbol]={
-        usd:parseFloat(t.lastPrice),
-        ch:parseFloat(t.priceChangePercent),
-        h:parseFloat(t.highPrice),
-        l:parseFloat(t.lowPrice)
-      };
-    });
-    renderPrices();
-    var t=new Date();
-    G('ltm').innerHTML='<span style="color:#22c55e;font-size:8px">⟳ live</span><br>'+t.toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'});
-  })
-  .catch(function(){});
-}
-
-function fmtPrice(v){
-  if(!v)return'—';
-  if(v>=10000)return'$'+v.toLocaleString('en',{maximumFractionDigits:0});
-  if(v>=1000) return'$'+v.toLocaleString('en',{maximumFractionDigits:1});
-  if(v>=1)    return'$'+v.toFixed(2);
-  return'$'+v.toFixed(4);
 }
 
 function renderPrices(){
-  var row=G('prow');row.innerHTML='';
-  COINS.forEach(function(c){
-    var p=prices[c.id];
-    var ch=p?p.ch:null;
-    var up=ch!==null&&ch>=0;
-    var isS=signCoin&&c.id===signCoin.id;
-    var el=document.createElement('div');
-    el.className='pc'+(isS?' act':'');
-    el.style.setProperty('--bg','linear-gradient(135deg,'+c.glow+',rgba(255,255,255,.02))');
-    el.style.setProperty('--bd',isS?c.col:c.col+'33');
-    el.style.setProperty('--gl',c.glow);
-    el.innerHTML=
-      '<div class="psym" style="color:'+c.col+'">'+c.sym+(isS?'<span style="font-size:7px;animation:pu 1.5s infinite"> ✦</span>':'')+'</div>'+
-      '<div class="pval">'+(p?fmtPrice(p.usd):'—')+'</div>'+
-      (ch!==null?'<div class="pchg" style="color:'+(up?'#22c55e':'#ef4444')+'">'+(up?'▲':'▼')+Math.abs(ch).toFixed(1)+'%</div>':'');
-    row.appendChild(el);
-  });
+
+const wrap = G('prices');
+
+wrap.innerHTML = '';
+
+COINS.forEach(c => {
+
+const p = prices[c.id];
+
+const price = p?.usd || 0;
+
+const ch = p?.usd_24h_change || 0;
+
+const el = document.createElement('div');
+
+el.className = 'pc';
+
+el.innerHTML =
+'<div style="font-weight:700">' + c.sym + '</div>' +
+'<div style="margin-top:4px">' + fmt(price) + '</div>' +
+'<div style="margin-top:4px;color:' +
+(ch >= 0 ? '#22c55e' : '#ef4444') +
+'">' +
+(ch >= 0 ? '▲ ' : '▼ ') +
+Math.abs(ch).toFixed(2) +
+'%</div>';
+
+wrap.appendChild(el);
+
+});
+
 }
 
-// ══ DAILY SIGN ══
-function fetchSign(){
-  signCoin=getSignCoin();
-  G('sgnl').textContent='✨ Знак дня — '+signCoin.icon+' '+signCoin.name;
-  G('sgnl').style.color=signCoin.col;
-  G('sgn').style.background='linear-gradient(135deg,'+signCoin.glow+',rgba(109,40,217,.04))';
-  G('sgn').style.borderBottom='1px solid '+signCoin.col+'33';
-  renderPrices();
-  var d=new Date().toLocaleDateString('ru',{day:'numeric',month:'long'});
-  var signPrompt = 'Знак дня ' + d + ' это ' + signCoin.name + ' (' + signCoin.sym + '). Напиши 1-2 предложения почему ' + signCoin.sym + ' является знаком сегодняшнего дня. Упомяни рыночный сигнал или событие. Только русский язык.';
-  callAI(signPrompt,
-    function(tx){
-      var sd=G('sgnd');sd.textContent=tx;sd.style.color='#c4b5fd';sd.style.fontFamily='Georgia,serif';sd.style.fontSize='11px';
-    },
-    function(){G('sgnd').textContent='Рыночные звёзды указывают на эту монету как на доминирующую силу дня.'}
-  );
+/* =========================
+   FIXED AI REQUEST
+========================= */
+
+async function callAI(prompt){
+
+const key = getKey();
+
+if(!key){
+throw new Error('Нет API ключа');
 }
 
-// ══ CHAT ══
-function addMsg(type,text,loading){
-  var feed=G('feed');
-  var row=document.createElement('div');row.className='msg'+(type==='user'?' u':'');
-  if(type==='bot'){var av=document.createElement('div');av.className='bav';av.textContent='🔮';row.appendChild(av)}
-  var b=document.createElement('div');b.className='bbl '+(type==='user'?'u':'b');
-  if(loading){b.innerHTML='<div class="dts"><div class="dt"></div><div class="dt"></div><div class="dt"></div><span class="dtx">Нострадамус вещает...</span></div>'}
-  else{b.textContent=text}
-  row.appendChild(b);feed.appendChild(row);
-  feed.scrollTop=feed.scrollHeight;
-  return b;
+/*
+  ОСНОВНОЙ FIX:
+
+  Было:
+  model:'grok-3-mini-fast'
+
+  На дешёвых ключах / free tier
+  часто вызывает 400.
+
+  Используем:
+  grok-2-1212
+*/
+
+const body = {
+messages:[
+{
+role:'system',
+content:
+'Ты Крипто Нострадамус. Отвечай только на русском языке. Давай краткий криптоанализ.'
+},
+{
+role:'user',
+content:prompt
+}
+],
+
+model:'grok-2-1212',
+
+temperature:0.7,
+
+max_tokens:500
+};
+
+const r = await fetch(
+'https://api.x.ai/v1/chat/completions',
+{
+method:'POST',
+headers:{
+'Content-Type':'application/json',
+'Authorization':'Bearer ' + key
+},
+body:JSON.stringify(body)
+}
+);
+
+/*
+  FIX ERROR 400
+*/
+
+if(r.status === 400){
+
+const txt = await r.text();
+
+console.log(txt);
+
+throw new Error(
+'Ошибка 400. Скорее всего модель недоступна для этого ключа.'
+);
 }
 
-// ══ COINS ══
-function mkCoins(){
-  var row=G('cbtns');row.innerHTML='';
-  COINS.forEach(function(c){
-    (function(c){
-      var btn=document.createElement('button');btn.className='cb';
-      btn.style.setProperty('--bd',c.col+'55');
-      btn.style.setProperty('--bg','linear-gradient(135deg,'+c.glow+',rgba(255,255,255,.03))');
-      btn.innerHTML='<span class="ci">'+c.icon+'</span><span class="cs">'+c.sym+'</span>';
-      btn.onclick=function(){
-        if(btn._ld)return;
-        var r=btn.getBoundingClientRect();
-        mkSwirl(r.left+r.width/2,r.top+r.height/2,c.col);
-        doAnalyze(c,btn);
-      };
-      row.appendChild(btn);
-    })(c);
-  });
+if(r.status === 401){
+throw new Error('Неверный API ключ');
 }
 
-function doAnalyze(c,btn){
-  if(btn._ld)return;
-  btn._ld=true;btn.style.opacity='.5';
-  var p=prices[c.id];
-  var ps=p?fmtPrice(p.usd)+' (24ч: '+(p.ch>=0?'+':'')+p.ch.toFixed(2)+'%, H:'+fmtPrice(p.h)+' L:'+fmtPrice(p.l)+')':'нет данных';
-  addMsg('user','🔍 Анализ '+c.name+' ('+c.sym+')');
-  var lb=addMsg('bot','',true);
-
-  var coinPrompt = [
-    'Монета: ' + c.name + ' (' + c.sym + ').',
-    'Текущая цена: ' + ps + '.',
-    'Составь технический криптоанализ.',
-    'Структура ответа:',
-    'ПРОРОЧЕСТВО ДЛЯ ' + c.sym + ':',
-    'ОЦЕНКА: напиши СИЛЬНАЯ или УМЕРЕННАЯ или НЕСТАБИЛЬНАЯ с двумя предложениями обоснования.',
-    'ИНДИКАТОРЫ: RSI14 с числовым значением и сигналом, MACD сигнал, позиция относительно MA50 и MA200, объём.',
-    'УРОВНИ: конкретные значения поддержки и сопротивления в долларах.',
-    'ПОКУПАТЬ: условие входа, конкретная цена входа, уровень стоп-лосса.',
-    'ПРОДАВАТЬ: первая цель с процентом прибыли, вторая цель с процентом прибыли.',
-    'СОБЫТИЯ: три ближайших события на 2-3 недели влияющих на цену.',
-    'ПРИГОВОР: ПОКУПАТЬ или ПРОДАВАТЬ или НЕ ТОРГОВАТЬ и итоговый вывод.',
-    'Если монета нестабильная — давай совет НЕ ТОРГОВАТЬ.',
-    'Отвечай только на русском языке.'
-  ].join(' ');
-  callAI(coinPrompt,
-    function(tx){
-      lb.innerHTML='';lb.textContent=tx;
-      btn._ld=false;btn.style.opacity='1';
-      G('feed').scrollTop=9999;
-    },
-    function(e){
-      lb.innerHTML='';lb.textContent=e;
-      if(e.indexOf('⏳')<0){btn._ld=false;btn.style.opacity='1'}
-      if(e.indexOf('ключ')>=0||e.indexOf('Ключ')>=0){setTimeout(function(){G('kbtn').onclick()},600)}
-    }
-  );
+if(r.status === 429){
+throw new Error('Лимит запросов исчерпан');
 }
 
-// ══ MODALS ══
-G('zbtn').onclick=function(){G('zmdl').style.display='flex';mkZod()};
-G('rbtn').onclick=function(){G('rmdl').style.display='flex';mkRune()};
-G('zx').onclick=function(){G('zmdl').style.display='none'};
-G('rx').onclick=function(){G('rmdl').style.display='none'};
-
-// ══ ZODIAC ══
-function mkZod(){
-  var b=G('zbdy');b.innerHTML='';
-  G('zsub').textContent='Выберите знак зодиака';
-  var gr=document.createElement('div');gr.id='zgrd';
-  ZOD.forEach(function(s){
-    var btn=document.createElement('button');btn.className='zb';
-    btn.innerHTML='<span class="ze">'+s.e+'</span><span class="zn">'+s.n+'</span><span class="zd">'+s.d+'</span>';
-    btn.onclick=function(){doZod(s)};
-    gr.appendChild(btn);
-  });
-  b.appendChild(gr);
+if(!r.ok){
+throw new Error('Ошибка API: ' + r.status);
 }
 
-function doZod(s){
-  var b=G('zbdy');
-  G('zsub').textContent=s.e+' '+s.n;
-  b.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:44px 16px;gap:14px"><span style="font-size:44px;display:inline-block;animation:sp 3s linear infinite">🔮</span><p style="color:#a78bfa;font-size:12px;text-align:center;line-height:1.6">Звёзды открывают тайны для '+s.e+' '+s.n+'...</p><div style="display:flex;gap:5px"><div class="dt"></div><div class="dt"></div><div class="dt"></div></div></div>';
-  var dt=new Date().toLocaleDateString('ru',{day:'numeric',month:'long',year:'numeric'});
-  var ps=COINS.map(function(c){var p=prices[c.id];return p?c.sym+': '+fmtPrice(p.usd):''}).filter(Boolean).join(', ');
+const data = await r.json();
 
-  var zodPrompt = [
-    'Сегодня: ' + dt + '.',
-    'Текущие цены: ' + ps + '.',
-    'Знак зодиака пользователя: ' + s.n + '.',
-    'Составь криптогороскоп на сегодня для знака ' + s.n + '.',
-    'Структура ответа:',
-    '1. ЭНЕРГИЯ ДНЯ: 1-2 предложения о рыночной энергии для этого знака.',
-    '2. РЕКОМЕНДУЕТСЯ ТОРГОВАТЬ: две монеты с конкретным обоснованием.',
-    '3. НЕ РЕКОМЕНДУЕТСЯ: одна монета и причина почему.',
-    '4. ВОЗМОЖНОСТЬ ЗАРАБОТКА: конкретная с примерным процентом прибыли.',
-    '5. РИСК ДНЯ: главный риск для этого знака сегодня.',
-    '6. СОВЕТ НОСТРАДАМУСА: одно конкретное действие.',
-    'Гороскоп должен быть уникальным для знака ' + s.n + '.',
-    'Используй эмодзи. Отвечай только на русском языке.'
-  ].join(' ');
-  callAI(zodPrompt,
-    function(tx){
-      b.innerHTML='<div class="zres">'+tx+'</div><button class="bkb" onclick="mkZod()">← Другой знак</button>';
-    },
-    function(e){
-      if(e.indexOf('⏳')>=0){
-        b.innerHTML='<div class="zres" style="text-align:center;padding:28px 10px;font-size:14px">'+e+'</div>';
-      }else{
-        b.innerHTML='<div class="zres">❌ '+e+'</div><button class="bkb" onclick="mkZod()">← Назад</button>';
-      }
-    }
-  );
+if(
+!data ||
+!data.choices ||
+!data.choices[0]
+){
+throw new Error('Пустой ответ');
 }
 
-// ══ RUNE ══
-function mkRune(){
-  var b=G('rbdy');b.innerHTML='';
-  var td=today();
-  var used=false;try{used=localStorage.getItem('rnd')===td}catch(e){}
-  var rune=RUNES[dh(42)%RUNES.length];
+return data.choices[0].message.content.trim();
 
-  var sc=document.createElement('div');sc.id='rscn';
-  var cd=document.createElement('div');cd.id='rcrd';
-  if(used)cd.classList.add('fl');
-  cd.innerHTML=
-    '<div class="rf" id="rfr">'+
-      '<span style="font-size:46px">🎒</span>'+
-      '<span style="color:#7c3aed;font-size:9px;font-family:monospace;letter-spacing:2px">ВЫТЯНИ РУНУ</span>'+
-      '<div style="display:flex;gap:7px;font-size:14px;color:#4c1d95;margin-top:3px">'+
-        ['ᚠ','ᛊ','ᚹ','ᛞ','ᚢ'].map(function(r,i){return'<span style="opacity:'+(0.3+i*0.12)+';display:inline-block;animation:bn 2s ease-in-out '+(i*0.3)+'s infinite">'+r+'</span>'}).join('')+
-      '</div>'+
-    '</div>'+
-    '<div class="rf" id="rbk" style="border:2px solid '+rune.c+';box-shadow:0 0 36px '+rune.c+'44,inset 0 0 18px rgba(0,0,0,.6)">'+
-      '<span class="rsm" style="color:'+rune.c+';text-shadow:0 0 18px '+rune.c+',0 0 44px '+rune.c+'66">'+rune.s+'</span>'+
-      '<span class="rnm">'+rune.n+'</span>'+
-      '<span class="rnrg" style="color:'+rune.c+'">'+rune.g+'</span>'+
-      '<span class="rmn">'+rune.m+'</span>'+
-    '</div>';
-  sc.appendChild(cd);b.appendChild(sc);
-
-  var hint=document.createElement('p');
-  hint.style.cssText='color:#a78bfa;font-size:12px;text-align:center;line-height:1.6;max-width:280px';
-  hint.textContent=used?'Ты уже вопрошал руны сегодня. Приходи завтра, странник...':'Закрой глаза. Сосредоточься. Опусти руку в мешочек...';
-  b.appendChild(hint);
-
-  if(!used){
-    var btn=document.createElement('button');btn.className='drw';btn.textContent='🎲 Вытянуть руну';
-    btn.onclick=function(){
-      cd.classList.add('fl');
-      try{localStorage.setItem('rnd',td)}catch(e){}
-      hint.textContent='';btn.remove();
-      setTimeout(function(){
-        var info=document.createElement('div');info.className='rtxt';
-        info.style.cssText='background:linear-gradient(135deg,rgba(18,6,44,.9),rgba(10,3,26,.9));border:1px solid '+rune.c+'33;box-shadow:0 0 16px '+rune.c+'1a';
-        info.innerHTML='<div style="font-size:10px;color:'+rune.c+';font-family:monospace;letter-spacing:1px;margin-bottom:6px;font-weight:700">'+rune.s+' '+rune.n+' — '+rune.m+'</div><p>'+rune.t+'</p>';
-        b.appendChild(info);
-      },660);
-    };
-    b.appendChild(btn);
-  }else{
-    var inf=document.createElement('div');inf.className='rtxt';
-    inf.style.cssText='background:linear-gradient(135deg,rgba(18,6,44,.9),rgba(10,3,26,.9));border:1px solid '+rune.c+'33;opacity:.5';
-    inf.innerHTML='<div style="font-size:10px;color:'+rune.c+';font-family:monospace;margin-bottom:5px">'+rune.s+' '+rune.n+' — сегодняшняя руна</div><p style="font-size:11px">'+rune.t+'</p>';
-    b.appendChild(inf);
-  }
 }
 
-// ══ WELCOME ══
-function mkWelcome(){
-  var lines=['🔮 Добро пожаловать в Крипто Нострадамус!','','Анализирую рынок через технические индикаторы, паттерны графиков и ожидаемые новости.','','• Нажмите монету → получите пророчество ✨','• ⭐ Криптогороскоп → прогноз по знаку зодиака','• 🎲 Мешочек Рун → гадание (1 раз в день)','','⚠️ Только для информации. Не финансовый совет.'];
-  addMsg('bot',lines.join('\n'));
+/* =========================
+   ANALYZE
+========================= */
+
+async function analyzeCoin(c){
+
+if(busy)return;
+
+busy = true;
+
+addMsg(
+'user',
+'🔍 Анализ ' + c.name
+);
+
+const bot = addMsg(
+'bot',
+'⏳ Нострадамус смотрит в графики...'
+);
+
+try{
+
+const p = prices[c.id];
+
+const txt = await callAI(
+`
+Монета: ${c.name} (${c.sym})
+
+Цена:
+${p?.usd || 'нет данных'} USD
+
+Изменение за 24ч:
+${(p?.usd_24h_change || 0).toFixed(2)}%
+
+Сделай краткий криптоанализ.
+
+Структура:
+
+1. Тренд
+2. Поддержка
+3. Сопротивление
+4. Риск
+5. Вердикт
+
+Максимум 120 слов.
+`
+);
+
+bot.textContent = txt;
+
+}catch(e){
+
+bot.textContent =
+'❌ ' + e.message;
+
 }
 
-// ══ START ══
-function startApp(){
-  mkStars();
-  mkCoins();
-  mkWelcome();
-  fetchPrices();
-  fetchSign();
-  setInterval(fetchPrices,15000);
+busy = false;
+
 }
 
-// ══ AUTO-START IF KEY EXISTS ══
+/* =========================
+   COIN BUTTONS
+========================= */
+
+function renderCoins(){
+
+const wrap = G('coins');
+
+wrap.innerHTML = '';
+
+COINS.forEach(c => {
+
+const b = document.createElement('button');
+
+b.className = 'cb';
+
+b.innerHTML =
+'<div style="font-size:18px">' +
+c.icon +
+'</div>' +
+'<div style="margin-top:6px">' +
+c.sym +
+'</div>';
+
+b.onclick = () => analyzeCoin(c);
+
+wrap.appendChild(b);
+
+});
+
+}
+
+/* =========================
+   START
+========================= */
+
+function start(){
+
+G('setup').style.display = 'none';
+
+G('app').style.display = 'flex';
+
+renderCoins();
+
+loadPrices();
+
+setInterval(loadPrices,30000);
+
+addMsg(
+'bot',
+'🔮 Добро пожаловать.\n\nВыберите монету для пророчества.'
+);
+
+}
+
+/* =========================
+   EVENTS
+========================= */
+
+G('saveBtn').onclick = () => {
+
+const v =
+G('keyInput').value.trim();
+
+if(v.length < 10){
+
+G('err').textContent =
+'Введите API ключ';
+
+return;
+}
+
+saveKey(v);
+
+start();
+
+};
+
+G('changeKey').onclick = () => {
+
+G('setup').style.display = 'flex';
+
+G('app').style.display = 'none';
+
+G('keyInput').value = getKey();
+
+};
+
 if(getKey()){
-  G('setup').style.display='none';
-  G('app').style.display='flex';
-  startApp();
+
+start();
+
+}
+
+/* =========================
+   PWA
+========================= */
+
+if('serviceWorker' in navigator){
+
+navigator.serviceWorker.register('./sw.js');
+
 }
 </script>
+
 </body>
 </html>
