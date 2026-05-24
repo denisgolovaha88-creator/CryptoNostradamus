@@ -976,10 +976,10 @@ const data=await r.json();
 
 console.log(data);
 
-if(data.error){
+if (!r.ok) {
 
 throw new Error(
-data.error.message || 'API_ERROR'
+data?.error?.message || 'API_ERROR'
 );
 
 }
