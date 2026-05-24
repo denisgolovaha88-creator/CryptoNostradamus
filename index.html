@@ -1365,7 +1365,31 @@ document.getElementById('closeRuneRoom').onclick=()=>{
 modal.remove();
 };
 
+
 const grid=document.getElementById('runeRoomGrid');
+
+grid.innerHTML=`
+
+<button id="drawRuneBtn"
+style="
+width:100%;
+height:120px;
+border:none;
+border-radius:28px;
+font-size:22px;
+cursor:pointer;
+color:#fff;
+background:
+linear-gradient(135deg,
+rgba(91,33,182,.45),
+rgba(17,24,39,.95));
+border:1px solid rgba(168,85,247,.35);
+box-shadow:0 0 30px rgba(168,85,247,.25);
+">
+🎲 ВЫТЯНУТЬ РУНУ
+</button>
+
+`;
 
 const today=new Date().toDateString();
 
@@ -1373,48 +1397,19 @@ const pulled=localStorage.getItem('daily_rune_day');
 
 const saved=localStorage.getItem('daily_rune_data');
 
-FULL_RUNES.forEach((r,index)=>{
-
-const b=document.createElement('button');
-
-b.style.cssText=`
-height:74px;
-border:none;
-border-radius:20px;
-font-size:32px;
-cursor:pointer;
-color:#fff;
-background:
-linear-gradient(135deg,
-rgba(91,33,182,.35),
-rgba(17,24,39,.92));
-border:1px solid rgba(168,85,247,.25);
-box-shadow:0 0 18px rgba(0,0,0,.35);
-`;
-
-b.innerHTML='❖';
+document.getElementById('drawRuneBtn').onclick=()=>{
 
 if(pulled===today && saved){
 
 const data=JSON.parse(saved);
 
-if(data.index===index){
+showRuneResult(data.rune);
 
-b.innerHTML=r[0];
+return;
 
 }
 
-b.onclick=()=>{
-
-showRuneResult(data.rune);
-
-};
-
-}else{
-
-b.onclick=()=>{
-
-const randomRune =
+const randomRune=
 FULL_RUNES[
 Math.floor(Math.random()*FULL_RUNES.length)
 ];
@@ -1426,23 +1421,14 @@ today
 
 localStorage.setItem(
 'daily_rune_data',
-JSON.stringify(data)
+JSON.stringify({
+rune:randomRune
+})
 );
 
-showRuneResult(r);
-
-b.innerHTML=r[0];
+showRuneResult(randomRune);
 
 };
-
-}
-
-grid.appendChild(b);
-
-});
-
-function showRuneResult(r){
-
 document.getElementById(
 'runeResultBox'
 ).style.display='block';
