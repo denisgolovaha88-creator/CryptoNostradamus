@@ -939,9 +939,16 @@ wrap.appendChild(el);
 }
 
 async function askAI(prompt){
+
 const key=getKey();
 
-const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+if(!key){
+throw new Error('NO_KEY');
+}
+
+const r=await fetch(
+'https://api.groq.com/openai/v1/chat/completions',
+{
 method:'POST',
 headers:{
 'Content-Type':'application/json',
@@ -962,7 +969,38 @@ content:prompt
 temperature:.8,
 max_tokens:500
 })
-});
+}
+);
+
+const data=await r.json();
+
+console.log(data);
+
+if(data.error){
+
+throw new Error(
+data.error.message || 'API_ERROR'
+);
+
+}
+
+if(
+!data.choices ||
+!data.choices[0] ||
+!data.choices[0].message
+){
+
+throw new Error('BAD_RESPONSE');
+
+}
+
+return data
+.choices[0]
+.message
+.content
+.trim();
+
+}
 
 const data=await r.json();
 
