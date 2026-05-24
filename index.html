@@ -1002,15 +1002,6 @@ return data
 
 }
 
-const data=await r.json();
-
-if(data.error){
-throw new Error(data.error.message);
-}
-
-return data.choices[0].message.content.trim();
-}
-
 async function analyze(c){
 if(busy)return;
 busy=true;
