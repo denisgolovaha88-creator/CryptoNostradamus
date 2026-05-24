@@ -1414,10 +1414,10 @@ showRuneResult(data.rune);
 
 b.onclick=()=>{
 
-const data={
-index:index,
-rune:r
-};
+const randomRune =
+FULL_RUNES[
+Math.floor(Math.random()*FULL_RUNES.length)
+];
 
 localStorage.setItem(
 'daily_rune_day',
