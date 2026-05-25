@@ -1447,9 +1447,12 @@ document.getElementById(
 'bigRune'
 ).textContent=r[0];
 
-document.getElementById(
-'bigRuneName'
-).textContent=r[1];
+const runeEl = document.getElementById('bigRune');
+
+runeEl.style.fontFamily =
+'"Segoe UI Symbol","Noto Sans Runic","Symbola",serif';
+
+runeEl.textContent = r[0];
 
 document.getElementById(
 'bigRuneTitle'
