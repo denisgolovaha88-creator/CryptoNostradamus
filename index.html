@@ -1114,6 +1114,12 @@ getCloses(ohlc);
 const rsi =
 calculateRSI(closes);
 
+  const ema9 =
+calculateEMA(closes, 9);
+
+const ema21 =
+calculateEMA(closes, 21);
+
 const ema50 =
 calculateEMA(
 closes.slice(-50),
