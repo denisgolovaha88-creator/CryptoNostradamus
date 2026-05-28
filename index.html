@@ -958,57 +958,6 @@ losses += Math.abs(diff);
 
 }
 
-    function getSignalByRSI(rsi){
-
-if(rsi < 30){
-
-return {
-signal:'BULLISH',
-text:'Рынок перепродан'
-};
-
-}
-
-if(rsi > 70){
-
-return {
-signal:'BEARISH',
-text:'Рынок перегрет'
-};
-
-}
-
-return {
-signal:'NEUTRAL',
-text:'Рынок в равновесии'
-};
-
-}
-
-    async function getSpiritSignal(c){
-
-const ohlc =
-await loadOHLC(c.id);
-
-const closes =
-getCloses(ohlc);
-
-const rsi =
-calculateRSI(closes);
-
-const signal =
-getSignalByRSI(rsi);
-
-return {
-
-rsi,
-signal:signal.signal,
-text:signal.text
-
-};
-
-}
-
 let avgGain = gains / period;
 let avgLoss = losses / period;
 
@@ -1058,7 +1007,66 @@ return (
 
 }
 
+  return (
+100 -
+(100 / (1 + rs))
+).toFixed(2);
+
+}
+
+function getSignalByRSI(rsi){
+
+if(rsi < 30){
+
+return {
+signal:'BULLISH',
+text:'Рынок перепродан'
+};
+
+}
+
+if(rsi > 70){
+
+return {
+signal:'BEARISH',
+text:'Рынок перегрет'
+};
+
+}
+
+return {
+signal:'NEUTRAL',
+text:'Рынок в равновесии'
+};
+
+}
+
+async function getSpiritSignal(c){
+
+const ohlc =
+await loadOHLC(c.id);
+
+const closes =
+getCloses(ohlc);
+
+const rsi =
+calculateRSI(closes);
+
+const signal =
+getSignalByRSI(rsi);
+
+return {
+
+rsi,
+signal:signal.signal,
+text:signal.text
+
+};
+
+}
+
 function renderPrices(){
+  
 const wrap=G('prices');
 wrap.innerHTML='';
 
