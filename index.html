@@ -1114,14 +1114,92 @@ getCloses(ohlc);
 const rsi =
 calculateRSI(closes);
 
-const signal =
-getSignalByRSI(rsi);
+const ema50 =
+calculateEMA(
+closes.slice(-50),
+50
+);
+
+const ema200 =
+calculateEMA(
+closes.slice(-200),
+200
+);
+
+const macd =
+calculateMACD(closes);
+
+const atr =
+calculateATR(ohlc);
+
+const current =
+closes[closes.length - 1];
+
+let trend = 'SIDEWAYS';
+
+if(current > ema50 && ema50 > ema200){
+trend = 'BULLISH';
+}
+
+if(current < ema50 && ema50 < ema200){
+trend = 'BEARISH';
+}
+
+let signal = 'NEUTRAL';
+
+if(
+rsi < 35 &&
+macd > 0 &&
+trend === 'BULLISH'
+){
+signal = 'STRONG BUY';
+}
+
+else if(
+rsi > 70 &&
+macd < 0
+){
+signal = 'SELL';
+}
+
+const entry =
+(current - atr * 0.3)
+.toFixed(2);
+
+const stop =
+(current - atr * 1.5)
+.toFixed(2);
+
+const take =
+(current + atr * 3)
+.toFixed(2);
+
+let probability = 50;
+
+if(signal === 'STRONG BUY'){
+probability = 78;
+}
+
+if(signal === 'SELL'){
+probability = 72;
+}
 
 return {
 
 rsi,
-signal:signal.signal,
-text:signal.text
+macd:macd.toFixed(2),
+ema50:ema50.toFixed(2),
+ema200:ema200.toFixed(2),
+atr:atr.toFixed(2),
+
+trend,
+signal,
+
+entry,
+stop,
+take,
+
+probability
 
 };
 
