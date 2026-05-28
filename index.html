@@ -1343,17 +1343,11 @@ try{
 const sig =
 await getSpiritSignal(c);
 
-const price =
-prices[c.id]?.usd || 0;
+const entry = sig.entry;
 
-let entry =
-(price * 0.995).toFixed(2);
+const stop = sig.stop;
 
-let stop =
-(price * 0.97).toFixed(2);
-
-let take =
-(price * 1.05).toFixed(2);
+const take = sig.take;
 
 const prophecy = await askAI(`
 
@@ -1384,13 +1378,19 @@ addMsg(
 
 '\n\n📊 Сигнал: ' + sig.signal +
 
-'\n🌀 ' + sig.text +
+'\n📈 Тренд: ' + sig.trend +
+
+'\n🎯 Вероятность: ' + sig.probability + '%' +
+
+'\n🧠 RSI: ' + sig.rsi +
+
+'\n⚡ MACD: ' + sig.macd +
 
 '\n\n💰 Вход: $' + entry +
 
 '\n🛑 Стоп: $' + stop +
 
-'\n🎯 Цель: $' + take +
+'\n🎯 Тейк: $' + take +
 
 '\n\n🔮 ' + prophecy
 
