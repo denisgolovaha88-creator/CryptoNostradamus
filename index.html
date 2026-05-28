@@ -916,6 +916,148 @@ renderPrices();
 }catch(e){}
 }
 
+  async function loadOHLC(coinId){
+
+const r = await fetch(
+
+'https://api.coingecko.com/api/v3/coins/' +
+coinId +
+'/ohlc?vs_currency=usd&days=1'
+
+);
+
+return await r.json();
+
+}
+
+  function getCloses(data){
+
+return data.map(c => c[4]);
+
+}
+
+  function calculateRSI(closes, period = 14){
+
+if(closes.length < period + 1){
+return null;
+}
+
+let gains = 0;
+let losses = 0;
+
+for(let i = 1; i <= period; i++){
+
+const diff =
+closes[i] - closes[i - 1];
+
+if(diff >= 0){
+gains += diff;
+}else{
+losses += Math.abs(diff);
+}
+
+}
+
+    function getSignalByRSI(rsi){
+
+if(rsi < 30){
+
+return {
+signal:'BULLISH',
+text:'Рынок перепродан'
+};
+
+}
+
+if(rsi > 70){
+
+return {
+signal:'BEARISH',
+text:'Рынок перегрет'
+};
+
+}
+
+return {
+signal:'NEUTRAL',
+text:'Рынок в равновесии'
+};
+
+}
+
+    async function getSpiritSignal(c){
+
+const ohlc =
+await loadOHLC(c.id);
+
+const closes =
+getCloses(ohlc);
+
+const rsi =
+calculateRSI(closes);
+
+const signal =
+getSignalByRSI(rsi);
+
+return {
+
+rsi,
+signal:signal.signal,
+text:signal.text
+
+};
+
+}
+
+let avgGain = gains / period;
+let avgLoss = losses / period;
+
+for(let i = period + 1; i < closes.length; i++){
+
+const diff =
+closes[i] - closes[i - 1];
+
+if(diff >= 0){
+
+avgGain =
+(avgGain * (period - 1) + diff)
+/
+period;
+
+avgLoss =
+(avgLoss * (period - 1))
+/
+period;
+
+}else{
+
+avgGain =
+(avgGain * (period - 1))
+/
+period;
+
+avgLoss =
+(avgLoss * (period - 1) + Math.abs(diff))
+/
+period;
+
+}
+
+}
+
+if(avgLoss === 0){
+return 100;
+}
+
+const rs = avgGain / avgLoss;
+
+return (
+100 -
+(100 / (1 + rs))
+).toFixed(2);
+
+}
+
 function renderPrices(){
 const wrap=G('prices');
 wrap.innerHTML='';
