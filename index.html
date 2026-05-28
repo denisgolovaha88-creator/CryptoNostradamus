@@ -721,7 +721,13 @@ color:#e9d5ff;
 
 <div id="actions">
 <button class="abtn" id="horoscopeBtn">⭐ Криптогороскоп</button>
+  
 <button class="abtn" id="runeBtn">🎲 Мешочек Рун</button>
+  
+  <button class="abtn" id="spiritBtn">
+👁 Дух Монеты
+</button>
+  
 </div>
 
 <div id="coinsWrap">
@@ -1176,6 +1182,96 @@ const txt=await askAI(`
 `);
 
 bot.textContent=txt;
+
+  const spiritBtn = document.createElement('button');
+
+spiritBtn.className = 'abtn';
+
+spiritBtn.style.marginTop = '10px';
+
+spiritBtn.textContent = '👁 Дух Монеты';
+
+spiritBtn.onclick = async()=>{
+
+spiritBtn.disabled = true;
+
+spiritBtn.textContent =
+'⏳ Дух монеты изучает часовой график...';
+
+try{
+
+const sig =
+await getSpiritSignal(c);
+
+const price =
+prices[c.id]?.usd || 0;
+
+let entry =
+(price * 0.995).toFixed(2);
+
+let stop =
+(price * 0.97).toFixed(2);
+
+let take =
+(price * 1.05).toFixed(2);
+
+const prophecy = await askAI(`
+
+Монета: ${c.name}
+
+RSI: ${sig.rsi}
+
+Сигнал: ${sig.signal}
+
+Сделай мистическое пророчество трейдера.
+
+Напиши:
+- настроение рынка
+- силу движения
+- вероятность роста
+
+Стиль:
+магический,
+загадочный,
+как древний оракул.
+
+`);
+
+addMsg(
+'bot',
+
+'👁 ДУХ МОНЕТЫ: ' + c.name +
+
+'\n\n📊 Сигнал: ' + sig.signal +
+
+'\n🌀 ' + sig.text +
+
+'\n\n💰 Вход: $' + entry +
+
+'\n🛑 Стоп: $' + stop +
+
+'\n🎯 Цель: $' + take +
+
+'\n\n🔮 ' + prophecy
+
+);
+
+}catch(e){
+
+addMsg(
+'bot',
+'❌ Дух монеты не смог прочитать график'
+);
+
+}
+
+spiritBtn.disabled = false;
+
+spiritBtn.textContent = '👁 Дух Монеты';
+
+};
+
+bot.appendChild(spiritBtn);
 
 }catch(e){
 console.log(e);
