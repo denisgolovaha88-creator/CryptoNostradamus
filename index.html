@@ -1013,6 +1013,69 @@ return (
 
 }
 
+  function calculateEMA(data, period){
+
+const k = 2 / (period + 1);
+
+let ema = data[0];
+
+for(let i = 1; i < data.length; i++){
+
+ema =
+data[i] * k +
+ema * (1 - k);
+
+}
+
+return ema;
+
+}
+
+function calculateMACD(closes){
+
+const ema12 =
+calculateEMA(closes,12);
+
+const ema26 =
+calculateEMA(closes,26);
+
+return ema12 - ema26;
+
+}
+
+function calculateATR(data, period = 14){
+
+if(data.length < period + 1){
+return null;
+}
+
+let trs = [];
+
+for(let i = 1; i < data.length; i++){
+
+const high = data[i][1];
+const low = data[i][2];
+const prevClose = data[i - 1][4];
+
+const tr = Math.max(
+high - low,
+Math.abs(high - prevClose),
+Math.abs(low - prevClose)
+);
+
+trs.push(tr);
+
+}
+
+const atr =
+trs.slice(-period)
+.reduce((a,b)=>a+b,0)
+/ period;
+
+return atr;
+
+}
+
 function getSignalByRSI(rsi){
 
 if(rsi < 30){
