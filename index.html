@@ -1506,23 +1506,21 @@ addMsg(
 addMsg(
 'bot',
 
-'🦉 СИГНАЛ ПРЕДСКАЗАНИЯ: ' + c.name +
+'📊 ' + sig.signal +
+' | 🎯 ' + sig.probability + '%' +
 
-'\n\n📊 Сигнал: ' + sig.signal +
+'\n📈 ' + sig.trend +
 
-'\n📈 Тренд: ' + sig.trend +
+'\n💰 ' + entry +
+' | 🛑 ' + stop +
+' | 🎯 ' + take
+);
 
-'\n🎯 Вероятность: ' + sig.probability + '%' +
+addMsg(
+'bot',
 
-'\n🧠 RSI: ' + sig.rsi +
-
-'\n⚡ MACD: ' + sig.macd +
-
-'\n\n💰 Вход: $' + entry +
-
-'\n🛑 Стоп: $' + stop +
-
-'\n🎯 Тейк: $' + take
+'🔮 ПРОРОЧЕСТВО\n\n' +
+prophecy
 );
 
 addMsg(
