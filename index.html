@@ -246,6 +246,7 @@ position:relative;
 z-index:2;
 flex:1;
 overflow-y:auto;
+overflow-x:hidden;
 padding:10px;
 display:flex;
 flex-direction:column;
@@ -254,13 +255,15 @@ min-height:0;
 }
 
 .msg{
-max-width:88%;
+max-width:100%;
+width:100%;
 padding:12px;
 border-radius:20px;
 line-height:1.6;
 font-size:13px;
 white-space:pre-wrap;
 word-break:break-word;
+overflow-wrap:anywhere;
 }
 
 .user{
