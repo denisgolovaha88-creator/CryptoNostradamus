@@ -1506,14 +1506,17 @@ addMsg(
 addMsg(
 'bot',
 
-'📊 ' + sig.signal +
-' | 🎯 ' + sig.probability + '%' +
+'📊 Сигнал: ' + sig.signal +
 
-'\n📈 ' + sig.trend +
+'\n📈 Тренд: ' + sig.trend +
 
-'\n💰 ' + entry +
-' | 🛑 ' + stop +
-' | 🎯 ' + take
+'\n🎯 Вероятность: ' + sig.probability + '%' +
+
+'\n\n💰 Вход: ' + entry +
+
+'\n🛑 Стоп: ' + stop +
+
+'\n🎯 Тейк: ' + take
 );
 
 addMsg(
@@ -1521,11 +1524,6 @@ addMsg(
 
 '🔮 ПРОРОЧЕСТВО\n\n' +
 prophecy
-);
-
-addMsg(
-'bot',
-'🔮 ПРОРОЧЕСТВО\n\n' + prophecy
 );
 
 }
