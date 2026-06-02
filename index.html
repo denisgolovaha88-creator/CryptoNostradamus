@@ -2005,6 +2005,42 @@ predictionSignalEnabled
 
 updatePredictionButton();
 
+  async function checkPredictionSignals(){
+
+if(!predictionSignalEnabled) return;
+
+for(const c of COINS){
+
+try{
+
+const sig = await getSpiritSignal(c);
+
+if(
+sig.signal === 'STRONG BUY' &&
+sig.probability >= 75
+){
+
+new Notification(
+'🦉 Сигнал Предсказания',
+{
+body:
+c.sym +
+' • ' +
+sig.signal +
+' • Вероятность ' +
+sig.probability +
+'%'
+}
+);
+
+}
+
+}catch(e){}
+
+}
+
+}
+
 G('notifyBtn').onclick = ()=>{
 
 predictionSignalEnabled =
