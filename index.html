@@ -727,6 +727,10 @@ color:#e9d5ff;
   <button class="abtn" id="spiritBtn">
 👁 Дух Монеты
 </button>
+
+  <button class="abtn" id="notifyBtn">
+🔔 Пророчества
+</button>
   
 </div>
 
@@ -1887,6 +1891,28 @@ document.getElementById(
 }
 
 G('runeBtn').onclick=openRuneRoom;
+
+  G('notifyBtn').onclick = async()=>{
+
+const result =
+await Notification.requestPermission();
+
+if(result === 'granted'){
+
+alert(
+'🔔 Дух Монеты получил разрешение на пророчества'
+);
+
+}else{
+
+alert(
+'❌ Разрешение не выдано'
+);
+
+}
+
+};
+  
 if(getKey()){
 start();
 }
