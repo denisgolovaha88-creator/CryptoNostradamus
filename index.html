@@ -1665,6 +1665,10 @@ function start(){
 G('setup').style.display='none';
 G('app').style.display='flex';
 
+  if(Notification.permission === 'default'){
+Notification.requestPermission();
+}
+
 renderCoins();
 renderZodiac();
 renderSign();
