@@ -1206,17 +1206,38 @@ macd < 0
 signal = 'SHORT WATCH';
 }
 
-const entry =
-(current - atr * 0.3)
-.toFixed(2);
+let entry;
+let stop;
+let take;
 
-const stop =
-(current - atr * 1.5)
-.toFixed(2);
+if(
+signal === 'SHORT' ||
+signal === 'SHORT WATCH'
+){
 
-const take =
-(current + atr * 3)
-.toFixed(2);
+entry = current.toFixed(2);
+
+stop = (
+current + atr * 1.5
+).toFixed(2);
+
+take = (
+current - atr * 3
+).toFixed(2);
+
+}else{
+
+entry = current.toFixed(2);
+
+stop = (
+current - atr * 1.5
+).toFixed(2);
+
+take = (
+current + atr * 3
+).toFixed(2);
+
+}
 
 let probability = 50;
 
