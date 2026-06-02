@@ -1168,6 +1168,8 @@ trend = 'BEARISH';
 
 let signal = 'NO SIGNAL';
 
+/* сильный LONG */
+
 if(
 rsi < 35 &&
 macd > 0 &&
@@ -1176,12 +1178,32 @@ trend === 'BULLISH'
 signal = 'LONG';
 }
 
+/* сильный SHORT */
+
 else if(
 rsi > 65 &&
 macd < 0 &&
 trend === 'BEARISH'
 ){
 signal = 'SHORT';
+}
+
+/* наблюдение за LONG */
+
+else if(
+trend === 'BULLISH' &&
+macd > 0
+){
+signal = 'LONG WATCH';
+}
+
+/* наблюдение за SHORT */
+
+else if(
+trend === 'BEARISH' &&
+macd < 0
+){
+signal = 'SHORT WATCH';
 }
 
 const entry =
