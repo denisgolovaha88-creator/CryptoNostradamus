@@ -900,6 +900,8 @@ let prices={};
 let busy=false;
 let deferredPrompt=null;
 
+let currentCoin = null
+
 let signalWatcher = false;
 let signalTimer = null;
 
@@ -1405,6 +1407,9 @@ return data
 }
 
 async function analyze(c){
+
+currentCoin = c;
+  
 if(busy)return;
 busy=true;
 
@@ -1429,121 +1434,6 @@ const txt=await askAI(`
 `);
 
 bot.textContent=txt;
-
-  const spiritBtn = document.createElement('button');
-
-spiritBtn.className = 'abtn';
-
-spiritBtn.style.marginTop = '10px';
-
-spiritBtn.textContent = '👁 Дух Монеты';
-
-spiritBtn.onclick = async()=>{
-
-spiritBtn.disabled = true;
-
-spiritBtn.textContent =
-'⏳ Дух монеты изучает часовой график...';
-
-try{
-
-const sig =
-await getSpiritSignal(c);
-
-const entry = sig.entry;
-
-const stop = sig.stop;
-
-const take = sig.take;
-
-const prophecy = await askAI(`
-
-Монета: ${c.name}
-
-RSI: ${sig.rsi}
-
-Сигнал: ${sig.signal}
-
-Сделай мистическое пророчество трейдера.
-
-Напиши:
-- настроение рынка
-- силу движения
-- вероятность роста
-
-Стиль:
-магический,
-загадочный,
-как древний оракул.
-
-`);
-
-if(sig.signal === 'NO SIGNAL'){
-
-addMsg(
-'bot',
-
-'🦉 СИГНАЛ ПРЕДСКАЗАНИЯ: ' + c.name +
-
-'\n\n⚪ Сигнал отсутствует' +
-
-'\n📈 Тренд: ' + sig.trend +
-
-'\n🎯 Вероятность: ' + sig.probability + '%' +
-
-'\n🧠 RSI: ' + sig.rsi +
-
-'\n⚡ MACD: ' + sig.macd +
-
-'\n\n🔮 Рынок нестабилен.' +
-
-'\nОракул рекомендует наблюдение.'
-
-);
-
-}else{
-
-addMsg(
-'bot',
-
-'📊 Сигнал: ' + sig.signal +
-
-'\n📈 Тренд: ' + sig.trend +
-
-'\n🎯 Вероятность: ' + sig.probability + '%' +
-
-'\n\n💰 Вход: ' + entry +
-
-'\n🛑 Стоп: ' + stop +
-
-'\n🎯 Тейк: ' + take
-);
-
-addMsg(
-'bot',
-
-'🔮 ПРОРОЧЕСТВО\n\n' +
-prophecy
-);
-
-}
-
-}catch(e){
-
-addMsg(
-'bot',
-'❌ Дух монеты не смог прочитать график'
-);
-
-}
-
-spiritBtn.disabled = false;
-
-spiritBtn.textContent = '👁 Дух Монеты';
-
-};
-
-bot.appendChild(spiritBtn);
 
 }catch(e){
 console.log(e);
@@ -2149,6 +2039,84 @@ console.log('Ошибка SW', err);
 });
 
 }
+
+  G('spiritBtn').onclick = async()=>{
+
+if(!currentCoin){
+
+addMsg(
+'bot',
+'🔮 Сначала выберите монету'
+);
+
+return;
+}
+
+try{
+
+const sig =
+await getSpiritSignal(currentCoin);
+
+const prophecy = await askAI(`
+
+Монета: ${currentCoin.name}
+
+RSI: ${sig.rsi}
+
+Сигнал: ${sig.signal}
+
+Сделай мистическое пророчество трейдера.
+
+`);
+
+if(sig.signal === 'NO SIGNAL'){
+
+addMsg(
+'bot',
+
+'⚪ Сигнал отсутствует' +
+
+'\n📈 Тренд: ' + sig.trend +
+
+'\n🎯 Вероятность: ' + sig.probability + '%'
+);
+
+return;
+}
+
+addMsg(
+'bot',
+
+'📊 Сигнал: ' + sig.signal +
+
+'\n📈 Тренд: ' + sig.trend +
+
+'\n🎯 Вероятность: ' + sig.probability + '%' +
+
+'\n\n💰 Вход: ' + sig.entry +
+
+'\n🛑 Стоп: ' + sig.stop +
+
+'\n🎯 Тейк: ' + sig.take
+);
+
+addMsg(
+'bot',
+
+'🔮 ПРОРОЧЕСТВО\n\n' +
+prophecy
+);
+
+}catch(e){
+
+addMsg(
+'bot',
+'❌ Дух монеты не смог прочитать график'
+);
+
+}
+
+};
   
 if(getKey()){
 start();
