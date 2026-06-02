@@ -1,26 +1,34 @@
-const CACHE='nostradamus-v1';
+self.addEventListener('push', event => {
 
-self.addEventListener('install',e=>{
+const data = event.data
+? event.data.json()
+: {
+title:'Крипто Нострадамус',
+body:'Новое пророчество готово'
+};
 
-e.waitUntil(
+event.waitUntil(
 
-caches.open(CACHE).then(cache=>{
-
-return cache.addAll([
-'./'
-]);
-
-})
+self.registration.showNotification(
+data.title,
+{
+body:data.body,
+icon:'icon-192.png',
+badge:'icon-192.png'
+}
+)
 
 );
 
 });
 
-self.addEventListener('fetch',e=>{
+self.addEventListener('notificationclick', event => {
 
-e.respondWith(
+event.notification.close();
 
-fetch(e.request).catch(()=>caches.match('./'))
+event.waitUntil(
+
+clients.openWindow('./')
 
 );
 
