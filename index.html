@@ -731,7 +731,7 @@ color:#e9d5ff;
 </button>
 
   <button class="abtn" id="notifyBtn">
-🔔 Пророчества
+🦉 Сигнал предсказания: ВЫКЛ
 </button>
   
 </div>
@@ -1157,21 +1157,22 @@ if(current < ema50 && ema50 < ema200){
 trend = 'BEARISH';
 }
 
-let signal = 'NEUTRAL';
+let signal = 'NO SIGNAL';
 
 if(
 rsi < 35 &&
 macd > 0 &&
 trend === 'BULLISH'
 ){
-signal = 'STRONG BUY';
+signal = 'LONG';
 }
 
 else if(
-rsi > 70 &&
-macd < 0
+rsi > 65 &&
+macd < 0 &&
+trend === 'BEARISH'
 ){
-signal = 'SELL';
+signal = 'SHORT';
 }
 
 const entry =
@@ -1186,14 +1187,71 @@ const take =
 (current + atr * 3)
 .toFixed(2);
 
-let probability = 50;
+  if(
+signal === 'NO SIGNAL' ||
+probability < 65
+){
 
-if(signal === 'STRONG BUY'){
-probability = 78;
+return {
+
+rsi,
+macd:macd.toFixed(2),
+ema50:ema50.toFixed(2),
+ema200:ema200.toFixed(2),
+atr:atr.toFixed(2),
+
+trend,
+
+signal:'NO SIGNAL',
+
+entry:'-',
+stop:'-',
+take:'-',
+
+probability
+
+};
+
 }
 
-if(signal === 'SELL'){
-probability = 72;
+let probability = 50;
+
+if(signal === 'LONG'){
+
+probability =
+60 +
+Math.min(
+20,
+Math.round(
+(Math.abs(macd) * 2) +
+((35 - rsi) * 0.5)
+)
+);
+
+}
+
+else if(signal === 'SHORT'){
+
+probability =
+60 +
+Math.min(
+20,
+Math.round(
+(Math.abs(macd) * 2) +
+((rsi - 65) * 0.5)
+)
+);
+
+}
+
+else{
+
+probability =
+40 +
+Math.round(
+Math.random() * 15
+);
+
 }
 
 return {
@@ -1377,10 +1435,35 @@ RSI: ${sig.rsi}
 
 `);
 
+if(sig.signal === 'NO SIGNAL'){
+
 addMsg(
 'bot',
 
-'👁 ДУХ МОНЕТЫ: ' + c.name +
+'🦉 СИГНАЛ ПРЕДСКАЗАНИЯ: ' + c.name +
+
+'\n\n⚪ Сигнал отсутствует' +
+
+'\n📈 Тренд: ' + sig.trend +
+
+'\n🎯 Вероятность: ' + sig.probability + '%' +
+
+'\n🧠 RSI: ' + sig.rsi +
+
+'\n⚡ MACD: ' + sig.macd +
+
+'\n\n🔮 Рынок нестабилен.' +
+
+'\nОракул рекомендует наблюдение.'
+
+);
+
+}else{
+
+addMsg(
+'bot',
+
+'🦉 СИГНАЛ ПРЕДСКАЗАНИЯ: ' + c.name +
 
 '\n\n📊 Сигнал: ' + sig.signal +
 
@@ -1401,6 +1484,8 @@ addMsg(
 '\n\n🔮 ' + prophecy
 
 );
+
+}
 
 }catch(e){
 
@@ -1587,6 +1672,11 @@ loadRune();
 loadPrices();
 
 setInterval(loadPrices,30000);
+
+  setInterval(
+checkPredictionSignals,
+300000
+);
 
 addMsg('bot','🔮 Добро пожаловать в Крипто Нострадамус.\n\nВыберите монету для пророчества.');
 }
@@ -1894,26 +1984,112 @@ document.getElementById(
 
 G('runeBtn').onclick=openRuneRoom;
 
-  G('notifyBtn').onclick = async()=>{
+  let predictionSignalEnabled =
+localStorage.getItem('prediction_signal') === 'on';
 
-const result =
-await Notification.requestPermission();
+function updatePredictionButton(){
 
-if(result === 'granted'){
+G('notifyBtn').textContent =
+predictionSignalEnabled
+? '🦉 Сигнал предсказания: ВКЛ'
+: '🦉 Сигнал предсказания: ВЫКЛ';
+
+}
+
+updatePredictionButton();
+
+G('notifyBtn').onclick = ()=>{
+
+predictionSignalEnabled =
+!predictionSignalEnabled;
+
+localStorage.setItem(
+'prediction_signal',
+predictionSignalEnabled
+? 'on'
+: 'off'
+);
+
+updatePredictionButton();
+
+if(predictionSignalEnabled){
 
 alert(
-'🔔 Дух Монеты получил разрешение на пророчества'
+'🦉 Сигнал предсказания включён'
 );
 
 }else{
 
 alert(
-'❌ Разрешение не выдано'
+'🦉 Сигнал предсказания выключен'
 );
 
 }
 
 };
+
+  async function checkPredictionSignals(){
+
+if(!predictionSignalEnabled){
+return;
+}
+
+for(const coin of COINS){
+
+try{
+
+const sig =
+await getSpiritSignal(coin);
+
+if(
+(sig.signal === 'STRONG BUY' ||
+ sig.signal === 'SELL')
+&&
+sig.probability >= 70
+){
+
+const title =
+'🦉 Сигнал предсказания';
+
+const body =
+coin.sym +
+' • ' +
+sig.signal +
+' • ' +
+sig.probability +
+'%';
+
+addMsg(
+'bot',
+title +
+'\n\n' +
+body
+);
+
+if(
+Notification.permission === 'granted'
+){
+
+new Notification(
+title,
+{
+body: body
+}
+);
+
+}
+
+}
+
+}catch(e){
+
+console.log(e);
+
+}
+
+}
+
+}
 
   if('serviceWorker' in navigator){
 
