@@ -1196,33 +1196,6 @@ const take =
 (current + atr * 3)
 .toFixed(2);
 
-  if(
-signal === 'NO SIGNAL' ||
-probability < 65
-){
-
-return {
-
-rsi,
-macd:macd.toFixed(2),
-ema50:ema50.toFixed(2),
-ema200:ema200.toFixed(2),
-atr:atr.toFixed(2),
-
-trend,
-
-signal:'NO SIGNAL',
-
-entry:'-',
-stop:'-',
-take:'-',
-
-probability
-
-};
-
-}
-
 let probability = 50;
 
 if(signal === 'LONG'){
@@ -2001,48 +1974,12 @@ function updatePredictionButton(){
 
 G('notifyBtn').textContent =
 predictionSignalEnabled
-? '🦉 Сигнал предсказания: ВКЛ'
-: '🦉 Сигнал предсказания: ВЫКЛ';
+? '🦉 ВКЛ'
+: '🦉 ВЫКЛ';
 
 }
 
 updatePredictionButton();
-
-  async function checkPredictionSignals(){
-
-if(!predictionSignalEnabled) return;
-
-for(const c of COINS){
-
-try{
-
-const sig = await getSpiritSignal(c);
-
-if(
-sig.signal === 'STRONG BUY' &&
-sig.probability >= 75
-){
-
-new Notification(
-'🦉 Сигнал Предсказания',
-{
-body:
-c.sym +
-' • ' +
-sig.signal +
-' • Вероятность ' +
-sig.probability +
-'%'
-}
-);
-
-}
-
-}catch(e){}
-
-}
-
-}
 
 G('notifyBtn').onclick = ()=>{
 
@@ -2088,11 +2025,11 @@ const sig =
 await getSpiritSignal(coin);
 
 if(
-(sig.signal === 'STRONG BUY' ||
- sig.signal === 'SELL')
+(sig.signal === 'LONG' ||
+ sig.signal === 'SHORT')
 &&
 sig.probability >= 70
-){
+)
 
 const title =
 '🦉 Сигнал предсказания';
