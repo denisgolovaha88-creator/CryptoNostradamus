@@ -843,6 +843,50 @@ Fehu
 
 </div>
 
+<div class="modal" id="calendarModal">
+
+<div class="mtop">
+
+<div>
+
+<div style="font-size:20px">
+📅 Магические Даты
+</div>
+
+<div style="font-size:12px;color:#a855f7;margin-top:4px">
+Календарь влияния на крипторынок
+</div>
+
+</div>
+
+<button class="close" id="closeCalendar">
+✕
+</button>
+
+</div>
+
+<div class="mbody">
+
+<div id="calendarContent">
+
+<div style="
+padding:20px;
+border-radius:20px;
+background:rgba(255,255,255,.04);
+border:1px solid rgba(168,85,247,.18);
+text-align:center;
+">
+
+📅 Здесь появится волшебный календарь
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 <script>
 'use strict';
 
@@ -1579,6 +1623,14 @@ G('horoscopeBtn').onclick=()=>{
 G('horoscopeModal').style.display='flex';
 G('zodiacResult').style.display='none';
 G('zodiacGrid').style.display='grid';
+};
+
+G('calendarBtn').onclick=()=>{
+G('calendarModal').style.display='flex';
+};
+
+G('closeCalendar').onclick=()=>{
+G('calendarModal').style.display='none';
 };
 
 G('closeHoroscope').onclick=()=>{
