@@ -1711,7 +1711,10 @@ d.style.color='#fff';
 d.style.background=
 'rgba(91,33,182,.25)';
 
-d.textContent=day;
+d.innerHTML =
+day +
+'<br>' +
+(events[day] || '');
 
 grid.appendChild(d);
 
