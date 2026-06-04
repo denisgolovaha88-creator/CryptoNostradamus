@@ -1905,13 +1905,7 @@ d.style.color='#fff';
 d.style.background=
 'rgba(91,33,182,.25)';
 
-const dateKey =
-year + '-' +
-String(month + 1).padStart(2,'0') + '-' +
-String(day).padStart(2,'0');
-
-const event =
-MAGIC_EVENTS[dateKey];
+const event = MAGIC_EVENTS[day];
 
 if(event){
 
