@@ -1685,7 +1685,41 @@ G('zodiacGrid').style.display='grid';
 };
 
 G('calendarBtn').onclick=()=>{
+
 G('calendarModal').style.display='flex';
+
+renderMagicCalendar();
+
+};
+
+G('calendarPrev').onclick = ()=>{
+
+calendarMonth--;
+
+if(calendarMonth < 0){
+
+calendarMonth = 11;
+calendarYear--;
+
+}
+
+renderMagicCalendar();
+
+};
+
+G('calendarNext').onclick = ()=>{
+
+calendarMonth++;
+
+if(calendarMonth > 11){
+
+calendarMonth = 0;
+calendarYear++;
+
+}
+
+renderMagicCalendar();
+
 };
 
 G('closeCalendar').onclick=()=>{
