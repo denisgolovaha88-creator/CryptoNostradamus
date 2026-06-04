@@ -1661,6 +1661,14 @@ G('closeRune').onclick=()=>{
 G('runeModal').style.display='none';
 };
 
+let calendarDate = new Date();
+
+let calendarMonth =
+calendarDate.getMonth();
+
+let calendarYear =
+calendarDate.getFullYear();
+
 function renderMagicCalendar(){
 
 const grid =
@@ -1668,11 +1676,9 @@ G('calendarGrid');
 
 grid.innerHTML='';
 
-const now = new Date();
+const year = calendarYear;
 
-const year = now.getFullYear();
-
-const month = now.getMonth();
+const month = calendarMonth;
 
 const monthNames = [
 'Январь',
