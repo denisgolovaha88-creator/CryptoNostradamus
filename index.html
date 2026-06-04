@@ -1723,36 +1723,6 @@ renderMagicCalendar();
 
 };
 
-G('calendarPrev').onclick = ()=>{
-
-calendarMonth--;
-
-if(calendarMonth < 0){
-
-calendarMonth = 11;
-calendarYear--;
-
-}
-
-renderMagicCalendar();
-
-};
-
-G('calendarNext').onclick = ()=>{
-
-calendarMonth++;
-
-if(calendarMonth > 11){
-
-calendarMonth = 0;
-calendarYear++;
-
-}
-
-renderMagicCalendar();
-
-};
-
 G('closeCalendar').onclick=()=>{
 G('calendarModal').style.display='none';
 };
