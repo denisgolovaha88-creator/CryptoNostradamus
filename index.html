@@ -1820,6 +1820,21 @@ monthNames[month] +
 ' ' +
 year;
 
+const forecastBox =
+G('todayMarketForecast');
+
+forecastBox.textContent =
+
+'📊 Сегодняшний фон рынка\n\n' +
+
+'BTC: умеренно бычий настрой\n' +
+
+'ETH: накопление энергии\n' +
+
+'SOL: повышенная активность\n\n' +
+
+'🔮 Оракул видит вероятность роста рынка.';
+
 const daysInMonth =
 new Date(
 year,
