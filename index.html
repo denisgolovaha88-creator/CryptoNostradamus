@@ -1890,6 +1890,13 @@ for(let day=1; day<=daysInMonth; day++){
 const d =
 document.createElement('button');
 
+const today = new Date();
+
+const isToday =
+day === today.getDate() &&
+month === today.getMonth() &&
+year === today.getFullYear();
+
 d.style.padding='12px 4px';
 d.style.border='none';
 d.style.borderRadius='12px';
@@ -1929,6 +1936,16 @@ else{
 d.style.background =
 'rgba(168,85,247,.35)';
 }
+
+}
+
+if(isToday){
+
+d.style.border =
+'2px solid #facc15';
+
+d.style.boxShadow =
+'0 0 15px rgba(250,204,21,.8)';
 
 }
 
