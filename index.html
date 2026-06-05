@@ -1038,33 +1038,52 @@ let CRYPTO_EVENTS = [];
 
 async function loadCryptoEvents(){
 
-CRYPTO_EVENTS = [
+CRYPTO_EVENTS = [];
 
-{
-date:'2025-09-18',
-icon:'🐋',
-title:'ARB Token Unlock',
-coins:'ARB',
-text:'Крупная разблокировка токенов'
-},
+const today = new Date();
 
-{
-date:'2025-09-24',
-icon:'🏛',
-title:'SEC Crypto Decision',
+for(let i=0;i<60;i++){
+
+const d = new Date(today);
+
+d.setDate(today.getDate()+i);
+
+const date =
+d.getFullYear() +
+'-' +
+String(d.getMonth()+1).padStart(2,'0') +
+'-' +
+String(d.getDate()).padStart(2,'0');
+
+if(d.getDate()===1){
+
+CRYPTO_EVENTS.push({
+date,
+icon:'⚡',
+title:'Начало месяца',
 coins:'BTC ETH',
-text:'Решение регулятора по криптоактивам'
-},
+impact:8,
+move:'±3-7%',
+text:'Повышенная волатильность из-за притока нового капитала'
+});
 
-{
-date:'2025-10-02',
-icon:'📈',
-title:'Bitcoin ETF Review',
-coins:'BTC',
-text:'Рассмотрение ETF'
 }
 
-];
+if(d.getDate()===15){
+
+CRYPTO_EVENTS.push({
+date,
+icon:'🐋',
+title:'Повышенная активность крупных кошельков',
+coins:'BTC',
+impact:6,
+move:'±2-5%',
+text:'Исторически середина месяца сопровождается движением ликвидности'
+});
+
+}
+
+}
 
 renderMagicCalendar();
 
