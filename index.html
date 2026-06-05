@@ -1036,35 +1036,58 @@ const ZODIAC=[
 
 // ===== КРИПТО СОБЫТИЯ =====
 
-let CRYPTO_EVENTS = [];
+CRYPTO_EVENTS = [];
 
-async function loadCryptoEvents(){
+function addEvent(date,type,title,coins,impact){
 
-CRYPTO_EVENTS = [
+CRYPTO_EVENTS.push({
 
-{
-date:'2026-06-05',
-icon:'🟢',
-title:'Позитивное движение BTC',
-coins:'BTC: +2% ... +5%\nETH: +1% ... +3%',
-text:'Рост рынка после позитивного отчета.'
-},
+date,
 
-{
-date:'2026-06-08',
-icon:'🟣',
-title:'Отчёт CPI США',
-coins:'BTC: -4% ... +6%\nETH: -5% ... +7%\nSOL: -6% ... +9%',
-text:'Публикация данных по инфляции США.'
-},
+icon:{
+bullish:'🟢',
+bearish:'🔴',
+volatility:'⚡',
+macro:'🟣',
+whale:'🐋',
+regulation:'🏛',
+project:'🚀',
+hack:'🔓'
+}[type] || '',
 
-{
-date:'2026-06-15',
-icon:'🐋',
-title:'Активность китов',
-coins:'BTC: +3% ... +6%\nETH: +2% ... +5%',
-text:'Обнаружено накопление крупными адресами.'
+title,
+
+coins,
+
+text:impact
+
+});
+
 }
+
+addEvent(
+'2026-06-05',
+'bullish',
+'Позитивное движение BTC',
+'BTC: +2% ... +5%\nETH: +1% ... +3%',
+'Рост рынка после отчета'
+);
+
+addEvent(
+'2026-06-08',
+'macro',
+'Отчёт CPI США',
+'BTC: -4% ... +6%\nETH: -5% ... +7%\nSOL: -6% ... +9%',
+'Публикация инфляционных данных США'
+);
+
+addEvent(
+'2026-06-15',
+'whale',
+'Активность китов',
+'BTC: +3% ... +6%\nETH: +2% ... +5%',
+'Замечено накопление крупными адресами'
+);
 
 ];
 
