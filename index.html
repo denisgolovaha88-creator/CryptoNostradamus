@@ -1919,7 +1919,7 @@ String(day).padStart(2,'0');
 d.innerHTML =
 day +
 '<br>' +
-(MAGIC_EVENTS[dateKey]?.icon || '');
+(CRYPTO_EVENTS.find(e => e.date === dateKey)?.icon || '');
 
 d.onclick = ()=>{
 
