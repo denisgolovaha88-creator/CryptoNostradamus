@@ -1067,6 +1067,40 @@ text:impact
 
 async function loadCryptoEvents(){
 
+
+// ===== КРИПТО СОБЫТИЯ =====
+
+CRYPTO_EVENTS = [];
+
+function addEvent(date,type,title,coins,impact){
+
+CRYPTO_EVENTS.push({
+
+date,
+
+icon:{
+bullish:'🟢',
+bearish:'🔴',
+volatility:'⚡',
+macro:'🟣',
+whale:'🐋',
+regulation:'🏛',
+project:'🚀',
+hack:'🔓'
+}[type] || '',
+
+title,
+
+coins,
+
+text:impact
+
+});
+
+}
+
+async function loadCryptoEvents(){
+
     CRYPTO_EVENTS = [];
 
     const coinIds = COINS.map(c=>c.id).join(',');
@@ -1110,6 +1144,50 @@ setInterval(async ()=>{
 ];
 
 }
+
+let prices={};
+let busy=false;
+let deferredPrompt=null;
+
+let currentCoin = null
+
+let signalWatcher = false;
+let signalTimer = null;
+
+function G(id){
+return document.getElementById(id);
+}
+
+function saveKey(v){
+localStorage.setItem('groq_key',v);
+}
+
+function getKey(){
+return localStorage.getItem('groq_key')||'';
+}
+
+function addMsg(type,text){
+const d=document.createElement('div');
+d.className='msg '+(type==='user'?'user':'bot');
+d.textContent=text;
+G('feed').appendChild(d);
+G('feed').scrollTop=G('feed').scrollHeight;
+}
+
+window.addEventListener('beforeinstallprompt',(e)=>{
+e.preventDefault();
+deferredPrompt=e;
+});
+
+G('installBtn').onclick=async()=>{
+if(!deferredPrompt){
+alert('Установка пока недоступна');
+return;
+}
+deferredPrompt.prompt();
+};
+
+async function loadPrices
 
 let prices={};
 let busy=false;
