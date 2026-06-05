@@ -1036,6 +1036,40 @@ const ZODIAC=[
 
 let CRYPTO_EVENTS = [];
 
+async function loadCryptoEvents(){
+
+CRYPTO_EVENTS = [
+
+{
+date:'2025-09-18',
+icon:'🐋',
+title:'ARB Token Unlock',
+coins:'ARB',
+text:'Крупная разблокировка токенов'
+},
+
+{
+date:'2025-09-24',
+icon:'🏛',
+title:'SEC Crypto Decision',
+coins:'BTC ETH',
+text:'Решение регулятора по криптоактивам'
+},
+
+{
+date:'2025-10-02',
+icon:'📈',
+title:'Bitcoin ETF Review',
+coins:'BTC',
+text:'Рассмотрение ETF'
+}
+
+];
+
+renderMagicCalendar();
+
+}
+
 let prices={};
 let busy=false;
 let deferredPrompt=null;
