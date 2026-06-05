@@ -1036,65 +1036,6 @@ const ZODIAC=[
 
 let CRYPTO_EVENTS = [];
 
-function addEvent(date,type,title,coins,impact){
-    CRYPTO_EVENTS.push({
-        date,
-        icon:{
-            bullish:'🟢',
-            bearish:'🔴',
-            volatility:'⚡',
-            macro:'🟣',
-            whale:'🐋',
-            regulation:'🏛',
-            project:'🚀',
-            hack:'🔓'
-        }[type] || '',
-        title,
-        coins,
-        text:impact
-    });
-}
-
-async function loadCryptoEvents(){
-    CRYPTO_EVENTS = [];
-
-    const coinIds = COINS.map(c=>c.id).join(',');
-    let prices = {};
-    try{
-        const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids='+coinIds+'&vs_currencies=usd&include_24hr_change=true');
-        prices = await r.json();
-    }catch(e){}
-
-    for(const c of COINS){
-        try{
-            const txt = await askAI(`
-Монета: ${c.name}
-Цена: $${prices[c.id]?.usd || 0}
-Изменение 24ч: ${(prices[c.id]?.usd_24h_change || 0).toFixed(2)}%
-
-Сделай мистический анализ и предсказание влияния на крипторынок. Формат:
-- Иконка события (🟢 🔴 ⚡ 🟣 🐋 🏛 🚀 🔓)
-- Название события
-- Монеты
-- Прогнозный рост/падение в процентах
-- Вероятность влияния
-`);
-            const lines = txt.split('\n');
-            const date = new Date().toISOString().split('T')[0];
-            const title = lines[1] || 'Мистическое событие';
-            const coinsTxt = lines[2] || c.sym;
-            const impact = lines.slice(3).join('\n') || 'Событие влияет на рынок';
-            addEvent(date,'project',title,coinsTxt,impact);
-        }catch(e){}
-    }
-
-    renderMagicCalendar();
-}
-
-setInterval(async ()=>{
-    await loadCryptoEvents();
-},30*60*1000);
-
 let prices={};
 let busy=false;
 let deferredPrompt=null;
