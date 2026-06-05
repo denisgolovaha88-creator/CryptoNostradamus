@@ -1977,7 +1977,7 @@ G('signText').textContent=
 'Звёзды усиливают энергию '+coin.sym+'. Магические потоки указывают на пробуждение волатильности.';
 }
 
-function start(){
+async function start(){
 G('setup').style.display='none';
 G('app').style.display='flex';
 
@@ -1988,7 +1988,7 @@ Notification.requestPermission();
 renderCoins();
 renderZodiac();
 renderSign();
-renderMagicCalendar();
+await loadCryptoEvents();
 loadRune();
 loadPrices();
 
