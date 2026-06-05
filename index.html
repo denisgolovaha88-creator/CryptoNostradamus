@@ -942,22 +942,6 @@ cursor:pointer;
 
 </div>
 
-<button
-id="calendarNext"
-style="
-padding:8px 12px;
-border:none;
-border-radius:12px;
-background:#5b21b6;
-color:#fff;
-cursor:pointer;
-"
->
-▶
-</button>
-
-</div>
-
 <div id="calendarGrid"
 style="
 display:grid;
@@ -1781,6 +1765,36 @@ calendarDate.getMonth();
 
 let calendarYear =
 calendarDate.getFullYear();
+
+G('calendarPrev').onclick = () => {
+
+calendarMonth--;
+
+if(calendarMonth < 0){
+
+calendarMonth = 11;
+calendarYear--;
+
+}
+
+renderMagicCalendar();
+
+};
+
+G('calendarNext').onclick = () => {
+
+calendarMonth++;
+
+if(calendarMonth > 11){
+
+calendarMonth = 0;
+calendarYear++;
+
+}
+
+renderMagicCalendar();
+
+};
 
 function renderMagicCalendar(){
 
