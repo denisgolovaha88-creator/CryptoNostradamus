@@ -9,7 +9,7 @@ const now = new Date();
 events.push({
 date: now.toISOString().split('T')[0],
 icon:'🟣',
-title:'API работает',
+title:'ПРОВЕРКА 123'
 coins:'BTC ETH',
 impact:10,
 move:'0%',
