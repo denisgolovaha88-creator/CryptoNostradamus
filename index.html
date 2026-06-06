@@ -1036,18 +1036,23 @@ const ZODIAC=[
 
 let CRYPTO_EVENTS = [];
 
+
 async function loadCryptoEvents(){
 
 try{
 
-const r = await fetch('/api/events');
+const res = await fetch(
+'https://crypto-nostradamus-html-fj5x4fe2k.vercel.app/api/events'
+);
 
-CRYPTO_EVENTS = await r.json();
+CRYPTO_EVENTS = await res.json();
+
+console.log('Получено событий:',CRYPTO_EVENTS.length);
 
 }
 catch(e){
 
-console.log('Ошибка загрузки событий',e);
+console.log(e);
 
 CRYPTO_EVENTS = [];
 
@@ -1056,7 +1061,6 @@ CRYPTO_EVENTS = [];
 renderMagicCalendar();
 
 }
-
 let prices={};
 let busy=false;
 let deferredPrompt=null;
