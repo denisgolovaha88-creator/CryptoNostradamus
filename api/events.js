@@ -7,7 +7,7 @@ try {
 const now = new Date();
 
 events.push({
-date:'2026-06-06',
+date: now.toISOString().split('T')[0],
 icon:'🟣',
 title:'API работает',
 coins:'BTC ETH',
