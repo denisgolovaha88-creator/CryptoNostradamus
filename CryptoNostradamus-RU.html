@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="ru" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="google" content="notranslate">
+<meta name="theme-color" content="#6d28d9">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CryptoNost">
+<title>Крипто Нострадамус</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;overflow:hidden;background:#040712;font-family:Georgia,serif;color:#fff}
+body{display:flex;justify-content:center;align-items:center}
+
+#app{
+  position:relative;width:100%;height:100dvh;overflow:hidden;
+  display:none;flex-direction:column;
+  background:radial-gradient(circle at top,#1d1040 0%,#050810 40%,#02040c 100%);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+#stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.star{position:absolute;background:#fff;border-radius:50%;animation:twinkle 4s infinite;opacity:.3}
+@keyframes twinkle{0%,100%{opacity:.1}50%{opacity:.9}}
+
+/* SETUP */
+#setup{
+  position:fixed;inset:0;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;padding:24px;
+  background:radial-gradient(circle at top,#1f1144 0%,#050810 55%);
+  z-index:50;text-align:center;overflow-y:auto;gap:10px;
+}
+#setup h2{font-size:28px;margin-top:8px}
+#setup p{font-size:13px;line-height:1.8;color:#c084fc;max-width:340px}
+.setupGuide{
+  margin-top:6px;padding:14px;border-radius:18px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(168,85,247,.18);
+  max-width:340px;font-size:12px;line-height:1.9;text-align:left;color:#ddd6fe;
+}
+.inp{
+  width:100%;max-width:340px;padding:14px;border-radius:16px;
+  border:1px solid rgba(168,85,247,.35);background:rgba(255,255,255,.05);
+  color:#fff;font-size:15px;outline:none;
+}
+.inp:focus{border-color:#a855f7}
+.btn{
+  width:100%;max-width:340px;padding:14px;border:none;border-radius:16px;
+  background:linear-gradient(135deg,#5b21b6,#7c3aed);color:#fff;
+  font-size:15px;cursor:pointer;box-shadow:0 0 24px rgba(124,58,237,.35);
+}
+.btn:active{opacity:.8}
+#err{font-size:12px;color:#ef4444;min-height:16px}
+
+/* TOP */
+#top{
+  position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;
+  padding:max(12px,env(safe-area-inset-top)) 12px 8px;
+  background:rgba(5,8,16,.85);backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;
+}
+#logo{display:flex;gap:10px;align-items:center}
+#orb{
+  width:44px;height:44px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:20px;
+  background:linear-gradient(135deg,#6d28d9,#9333ea);
+  box-shadow:0 0 20px rgba(168,85,247,.45);flex-shrink:0;
+}
+#ttl{font-size:13px;font-weight:700}
+#sub{font-size:9px;letter-spacing:2px;color:#a855f7;margin-top:2px}
+#topBtns{display:flex;gap:7px}
+.sbtn{
+  width:40px;height:40px;border:none;border-radius:50%;
+  background:linear-gradient(135deg,#5b21b6,#7c3aed);
+  color:#fff;font-size:15px;cursor:pointer;
+  box-shadow:0 0 16px rgba(168,85,247,.35);flex-shrink:0;
+}
+.sbtn:active{opacity:.8}
+
+/* FEAR & GREED BAR */
+#fngBar{
+  position:relative;z-index:2;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:5px 10px;
+  background:rgba(0,0,0,.3);
+  border-bottom:1px solid rgba(255,255,255,.05);
+  flex-shrink:0;font-size:11px;
+}
+#fngLabel{color:#a855f7;letter-spacing:1px;font-size:9px;text-transform:uppercase}
+#fngValue{font-weight:700;font-size:14px}
+#fngText{font-size:11px;color:#ddd6fe}
+.fngBar{
+  flex:1;max-width:120px;height:6px;border-radius:3px;
+  background:linear-gradient(90deg,#ef4444,#eab308,#22c55e);
+  position:relative;overflow:visible;
+}
+.fngDot{
+  position:absolute;top:-3px;width:12px;height:12px;
+  background:#fff;border-radius:50%;transform:translateX(-50%);
+  box-shadow:0 0 6px rgba(255,255,255,.6);
+  transition:left .5s ease;
+}
+
+/* PRICES */
+#prices{
+  position:relative;z-index:2;display:flex;gap:5px;
+  overflow-x:auto;padding:7px 8px;scrollbar-width:none;flex-shrink:0;
+}
+#prices::-webkit-scrollbar{display:none}
+.pc{
+  min-width:76px;padding:7px 6px;border-radius:12px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(168,85,247,.15);
+  flex-shrink:0;
+}
+.ps{font-size:10px;font-weight:700}
+.pp{margin-top:3px;font-size:12px}
+.pch{margin-top:2px;font-size:10px}
+
+/* SIGN */
+#sign{
+  position:relative;z-index:2;margin:4px 8px 0;padding:8px 10px;
+  border-radius:12px;flex-shrink:0;
+  background:linear-gradient(135deg,rgba(109,40,217,.16),rgba(76,29,149,.06));
+  border:1px solid rgba(168,85,247,.18);
+}
+#signTitle{font-size:9px;letter-spacing:2px;color:#c084fc}
+#signText{margin-top:3px;font-size:11px;line-height:1.5;color:#ddd6fe}
+
+/* FEED */
+#feed{
+  position:relative;z-index:2;flex:1;overflow-y:auto;overflow-x:hidden;
+  padding:8px;display:flex;flex-direction:column;gap:8px;min-height:0;
+  scrollbar-width:none;
+}
+#feed::-webkit-scrollbar{display:none}
+.msg{
+  max-width:100%;padding:10px 12px;border-radius:18px;
+  line-height:1.6;font-size:12.5px;white-space:pre-wrap;word-break:break-word;
+}
+.user{align-self:flex-end;background:linear-gradient(135deg,#6d28d9,#7c3aed)}
+.bot{
+  align-self:flex-start;
+  background:linear-gradient(135deg,rgba(30,41,59,.9),rgba(17,24,39,.95));
+  border:1px solid rgba(255,255,255,.06);
+}
+
+/* ACTIONS */
+#actions{
+  position:relative;z-index:2;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:0 8px 6px;
+  flex-shrink:0;
+}
+.abtn{
+  padding:7px 4px;font-size:10px;min-height:52px;border-radius:12px;
+  border:1px solid rgba(168,85,247,.2);cursor:pointer;color:#fff;
+  background:linear-gradient(135deg,rgba(91,33,182,.16),rgba(30,41,59,.25));
+}
+.abtn:active{opacity:.8;transform:scale(.97)}
+
+/* COINS */
+#coinsWrap{position:relative;z-index:2;padding:6px 8px 8px;border-top:1px solid rgba(255,255,255,.05);flex-shrink:0}
+#coinsTitle{font-size:9px;text-align:center;letter-spacing:2px;color:#9333ea;margin-bottom:6px}
+#coins{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.cb{
+  padding:7px 4px;border-radius:10px;border:1px solid rgba(168,85,247,.18);
+  background:linear-gradient(135deg,rgba(91,33,182,.18),rgba(17,24,39,.65));
+  color:#fff;cursor:pointer;min-height:52px;
+}
+.cb:active{transform:scale(.96)}
+.ci{font-size:14px}.cs{margin-top:3px;font-size:9px;font-weight:700}
+
+/* MODALS */
+.modal{
+  position:fixed;inset:0;background:rgba(2,4,12,.95);
+  backdrop-filter:blur(18px);z-index:90;display:none;flex-direction:column;
+}
+.mtop{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:max(14px,env(safe-area-inset-top)) 14px 12px;flex-shrink:0;
+}
+.mbody{flex:1;overflow-y:auto;padding:12px}
+.close{
+  width:36px;height:36px;border-radius:50%;border:none;
+  background:rgba(255,255,255,.08);color:#fff;font-size:17px;cursor:pointer;flex-shrink:0;
+}
+
+/* ZODIAC */
+#zodiacGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.zb{
+  padding:12px 5px;border-radius:16px;cursor:pointer;text-align:center;
+  background:linear-gradient(135deg,rgba(91,33,182,.18),rgba(17,24,39,.72));
+  border:1px solid rgba(168,85,247,.15);color:#fff;
+}
+.zb:active{transform:scale(.95)}
+#zodiacResult{display:none}
+#backZodiac{
+  margin-bottom:12px;padding:9px 14px;border:none;
+  border-radius:12px;background:#5b21b6;color:#fff;cursor:pointer;
+}
+
+/* NEWS MODAL */
+.newsCard{
+  margin-bottom:10px;padding:12px;border-radius:14px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(168,85,247,.14);
+  cursor:pointer;
+}
+.newsCard:active{opacity:.8}
+.newsTitle{font-size:13px;font-weight:700;line-height:1.4;margin-bottom:6px}
+.newsMeta{font-size:10px;color:#a855f7;display:flex;gap:8px;flex-wrap:wrap}
+.newsTag{
+  padding:2px 7px;border-radius:8px;
+  background:rgba(168,85,247,.15);font-size:9px;
+}
+.newsAnalysis{
+  margin-top:8px;padding:8px 10px;border-radius:10px;
+  background:rgba(109,40,217,.12);border:1px solid rgba(168,85,247,.2);
+  font-size:11px;line-height:1.6;color:#ddd6fe;
+}
+
+/* CALENDAR EVENTS */
+.eventCard{
+  margin-bottom:8px;padding:11px;border-radius:12px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(168,85,247,.14);
+}
+.eventDate{font-size:9px;color:#a855f7;letter-spacing:1px;margin-bottom:4px}
+.eventTitle{font-size:12.5px;font-weight:700;margin-bottom:4px}
+.eventCoins{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:5px}
+.eventCoin{
+  padding:2px 6px;border-radius:6px;font-size:9px;font-weight:700;
+  background:rgba(168,85,247,.2);color:#e9d5ff;
+}
+.eventImpact{font-size:10px;color:#ddd6fe;line-height:1.5}
+
+/* RUNE ROOM */
+.runeTemple{
+  position:relative;width:100%;max-width:420px;margin:0 auto;
+  padding:20px;border-radius:24px;overflow:hidden;
+  background:linear-gradient(180deg,rgba(14,8,26,.95),rgba(3,2,10,.96));
+  border:1px solid rgba(168,85,247,.2);box-shadow:0 0 60px rgba(124,58,237,.2);
+}
+.fog{position:absolute;inset:0;background:radial-gradient(circle,rgba(168,85,247,.12),transparent 70%);filter:blur(35px);pointer-events:none}
+.candle{position:absolute;bottom:16px;width:16px;height:80px;border-radius:8px;background:linear-gradient(180deg,#f8e7c5,#a18458)}
+.candle::before{content:'';position:absolute;top:-14px;left:50%;transform:translateX(-50%);width:14px;height:22px;border-radius:50%;background:radial-gradient(circle,#ffd166 0%,#ff7b00 70%,transparent 100%);filter:blur(2px);animation:fire 1.6s infinite alternate}
+.left{left:14px}.right{right:14px}
+@keyframes fire{from{transform:translateX(-50%) scale(1)}to{transform:translateX(-50%) scale(1.12)}}
+#bigRuneWrap{
+  position:relative;margin:20px auto 0;width:200px;height:250px;
+  display:flex;justify-content:center;align-items:center;
+  background:radial-gradient(circle at top,#342416 0%,#18110d 50%,#070707 100%);
+  clip-path:polygon(30% 0%,70% 0%,100% 24%,95% 78%,68% 100%,32% 100%,5% 78%,0% 24%);
+  box-shadow:0 0 50px rgba(168,85,247,.28);
+}
+#bigRune{font-size:100px;color:#ffd166;text-shadow:0 0 15px rgba(255,209,102,.9),0 0 40px rgba(255,209,102,.4)}
+#runeNameBig{margin-top:14px;text-align:center;font-size:32px;font-weight:700;color:#f8d58d}
+#runeDescBig{margin-top:12px;line-height:1.8;font-size:14px;color:#ddd6fe;padding:14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(168,85,247,.12)}
+#pullRuneBtn{width:100%;margin-top:14px;padding:14px;border:none;border-radius:16px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;background:linear-gradient(135deg,#6d28d9,#9333ea);box-shadow:0 0 24px rgba(168,85,247,.35)}
+#pullRuneBtn:active{opacity:.8}
+#allRunesGrid{margin-top:20px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.smallRune{padding:10px 4px;border-radius:12px;text-align:center;background:linear-gradient(135deg,rgba(91,33,182,.14),rgba(17,24,39,.7));border:1px solid rgba(168,85,247,.12);font-size:22px;color:#e9d5ff}
+
+/* CALENDAR */
+#calendarGrid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.calDay{padding:10px 3px;border:none;border-radius:10px;cursor:pointer;color:#fff;font-size:11px;background:rgba(91,33,182,.2)}
+
+/* LOADING */
+.loading{display:flex;gap:5px;align-items:center;justify-content:center;padding:16px}
+.ldot{width:8px;height:8px;border-radius:50%;background:#a855f7;animation:bn 1s ease-in-out infinite}
+.ldot:nth-child(2){animation-delay:.2s}.ldot:nth-child(3){animation-delay:.4s}
+@keyframes bn{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+
+/* DIGEST CARD */
+.digestCard{
+  padding:14px;border-radius:16px;margin-bottom:10px;
+  background:linear-gradient(135deg,rgba(91,33,182,.2),rgba(17,24,39,.85));
+  border:1px solid rgba(168,85,247,.22);
+}
+.digestTitle{font-size:11px;color:#a855f7;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.digestText{font-size:12.5px;line-height:1.7;color:#e9d5ff;white-space:pre-wrap}
+</style>
+</head>
+<body translate="no">
+<div id="stars"></div>
+
+<!-- SETUP -->
+<div id="setup">
+  <div style="font-size:64px">🔮</div>
+  <h2>Крипто Нострадамус</h2>
+  <p>Введите API ключ Groq.<br>Ключ начинается с <b>gsk_</b></p>
+  <input id="keyInput" class="inp" placeholder="gsk_..." type="password">
+  <div id="err"></div>
+  <button class="btn" id="saveBtn">✦ Войти в Оракул</button>
+  <div class="setupGuide">
+    🔑 Где взять ключ Groq (бесплатно):<br><br>
+    1. console.groq.com<br>
+    2. Войти через Google/GitHub<br>
+    3. API Keys → Create API Key<br>
+    4. Скопировать ключ gsk_...<br><br>
+    ✨ Бесплатно, без карты<br>
+    ⚡ 14 400 запросов в день бесплатно
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div id="top">
+    <div id="logo">
+      <div id="orb">🔮</div>
+      <div>
+        <div id="ttl">Крипто Нострадамус</div>
+        <div id="sub">ОНЛАЙН • ПРОРОЧЕСТВА</div>
+      </div>
+    </div>
+    <div id="topBtns">
+      <button class="sbtn" id="digestBtn" title="Дайджест">📰</button>
+      <button class="sbtn" id="shareTop" title="Поделиться">📤</button>
+      <button class="sbtn" id="installBtn" title="Установить">📲</button>
+      <button class="sbtn" id="changeKey" title="Сменить ключ">🔑</button>
+    </div>
+  </div>
+
+  <!-- Fear & Greed -->
+  <div id="fngBar">
+    <span id="fngLabel">Страх/Жадность</span>
+    <span id="fngValue">—</span>
+    <div class="fngBar"><div class="fngDot" id="fngDot" style="left:50%"></div></div>
+    <span id="fngText">Загрузка...</span>
+  </div>
+
+  <div id="prices"></div>
+
+  <div id="sign">
+    <div id="signTitle">✨ ЗНАК ДНЯ</div>
+    <div id="signText">Нострадамус изучает движение звёзд...</div>
+  </div>
+
+  <div id="feed"></div>
+
+  <div id="actions">
+    <button class="abtn" id="horoscopeBtn">⭐<br>Гороскоп</button>
+    <button class="abtn" id="runeBtn">🎲<br>Руны</button>
+    <button class="abtn" id="spiritBtn">👁<br>Дух монеты</button>
+    <button class="abtn" id="newsBtn">📡<br>Новости</button>
+    <button class="abtn" id="calendarBtn">📅<br>Календарь</button>
+    <button class="abtn" id="notifyBtn">🦉<br>Сигнал: ВЫКЛ</button>
+  </div>
+
+  <div id="coinsWrap">
+    <div id="coinsTitle">✦ ВЫБЕРИТЕ МОНЕТУ ✦</div>
+    <div id="coins"></div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<!-- Zodiac -->
+<div class="modal" id="horoscopeModal">
+  <div class="mtop">
+    <div><div style="font-size:19px">⭐ Криптогороскоп</div><div style="font-size:11px;color:#a855f7;margin-top:3px">Выберите знак</div></div>
+    <button class="close" id="closeHoroscope">✕</button>
+  </div>
+  <div class="mbody">
+    <div id="zodiacGrid"></div>
+    <div id="zodiacResult">
+      <button id="backZodiac">← Назад к знакам</button>
+      <div id="zodiacText"></div>
+    </div>
+  </div>
+</div>
+
+<!-- News -->
+<div class="modal" id="newsModal">
+  <div class="mtop">
+    <div><div style="font-size:19px">📡 Крипто Новости</div><div style="font-size:11px;color:#a855f7;margin-top:3px" id="newsSubtitle">Актуальные события рынка</div></div>
+    <button class="close" id="closeNews">✕</button>
+  </div>
+  <div class="mbody" id="newsList"></div>
+</div>
+
+<!-- Calendar -->
+<div class="modal" id="calendarModal">
+  <div class="mtop">
+    <div><div style="font-size:19px">📅 Крипто Календарь</div><div style="font-size:11px;color:#a855f7;margin-top:3px" id="calendarSubtitle">Важные события рынка</div></div>
+    <button class="close" id="closeCalendar">✕</button>
+  </div>
+
+  <!-- KEY INPUT SCREEN -->
+  <div id="calKeyScreen" style="display:none;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:24px;gap:14px;text-align:center">
+    <div style="font-size:48px">📅</div>
+    <div style="font-size:16px;font-weight:700">Реальные события рынка</div>
+    <div style="font-size:12px;color:#c084fc;line-height:1.7;max-width:320px">Введите API ключ CoinMarketCal для загрузки реальных крипто-событий: листинги, форки, экспирации, конференции.</div>
+    <input id="calKeyInput" class="inp" placeholder="Ключ CoinMarketCal..." type="password" style="max-width:320px">
+    <div id="calKeyErr" style="font-size:12px;color:#ef4444;min-height:16px"></div>
+    <button class="btn" id="calKeySave" style="max-width:320px">✦ Подключить календарь</button>
+    <div class="setupGuide" style="max-width:320px;font-size:11px">
+      🔑 Как получить ключ (бесплатно):<br><br>
+      1. coinmarketcal.com<br>
+      2. Sign Up → войти через Google<br>
+      3. Меню профиля → API<br>
+      4. Скопировать Public Key<br><br>
+      ✨ Бесплатно · 10 000 запросов/месяц
+    </div>
+    <button id="calKeySkip" style="background:none;border:none;color:#6b7280;font-size:12px;cursor:pointer;margin-top:-6px">Пропустить → использовать базовые события</button>
+  </div>
+
+  <!-- EVENTS SCREEN -->
+  <div class="mbody" id="calendarBody" style="display:none"></div>
+</div>
+
+<!-- Digest -->
+<div class="modal" id="digestModal">
+  <div class="mtop">
+    <div><div style="font-size:19px">📰 Дайджест Нострадамуса</div><div style="font-size:11px;color:#a855f7;margin-top:3px">AI-анализ рынка прямо сейчас</div></div>
+    <button class="close" id="closeDigest">✕</button>
+  </div>
+  <div class="mbody" id="digestBody"></div>
+</div>
+
+<!-- Rune -->
+<div class="modal" id="runeModal">
+  <div class="mtop">
+    <div><div style="font-size:19px">🎲 Мешочек Рун</div><div style="font-size:11px;color:#a855f7;margin-top:3px">24 скандинавские руны</div></div>
+    <button class="close" id="closeRune">✕</button>
+  </div>
+  <div class="mbody" style="display:flex;justify-content:center;padding:10px">
+    <div class="runeTemple">
+      <div class="fog"></div>
+      <div class="candle left"></div>
+      <div class="candle right"></div>
+      <div id="bigRuneWrap"><div id="bigRune">ᚠ</div></div>
+      <div id="runeNameBig">Феху</div>
+      <div id="runeDescBig">Вытащите руну, чтобы узнать послание дня.</div>
+      <div id="runeTimer" style="margin-top:10px;text-align:center;font-size:12px;color:#c084fc"></div>
+      <button id="pullRuneBtn">🎲 ВЫТАЩИТЬ РУНУ</button>
+      <div id="allRunesGrid"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ══ STARS ══
+for(let i=0;i<55;i++){
+  const s=document.createElement('div');s.className='star';
+  const sz=Math.random()*2+.8;
+  s.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'%;top:'+Math.random()*100+'%;animation-delay:'+Math.random()*5+'s';
+  document.getElementById('stars').appendChild(s);
+}
+
+// ══ DATA ══
+const COINS=[
+  {id:'BTCUSDT',cg:'bitcoin',    sym:'BTC',name:'Bitcoin',  icon:'₿'},
+  {id:'ETHUSDT',cg:'ethereum',   sym:'ETH',name:'Ethereum', icon:'Ξ'},
+  {id:'SOLUSDT',cg:'solana',     sym:'SOL',name:'Solana',   icon:'◎'},
+  {id:'XRPUSDT',cg:'ripple',     sym:'XRP',name:'XRP',      icon:'✕'},
+  {id:'LTCUSDT',cg:'litecoin',   sym:'LTC',name:'Litecoin', icon:'Ł'},
+  {id:'BNBUSDT',cg:'binancecoin',sym:'BNB',name:'BNB',      icon:'◆'},
+];
+
+const ZODIAC=['♈ Овен','♉ Телец','♊ Близнецы','♋ Рак','♌ Лев','♍ Дева','♎ Весы','♏ Скорпион','♐ Стрелец','♑ Козерог','♒ Водолей','♓ Рыбы'];
+
+const FULL_RUNES=[
+  ['ᚠ','Феху','Богатство','Денежный поток усиливается. Рынок готов одарить тех, кто действует смело.'],
+  ['ᚢ','Уруз','Сила','Скрытая энергия готовит мощный рывок. Импульс нарастает.'],
+  ['ᚦ','Турисаз','Прорыв','Опасность и возможность идут рядом. Будь готов к резкому движению.'],
+  ['ᚨ','Ансуз','Знание','Информация станет главным оружием. Читай между строк новостей.'],
+  ['ᚱ','Райдо','Путь','Тренд меняет направление. Следи за разворотными сигналами.'],
+  ['ᚲ','Кеназ','Огонь','Рынок раскрывает скрытый потенциал. Возможности в малоизвестных монетах.'],
+  ['ᚷ','Гебо','Дар','Появится неожиданная возможность для прибыли.'],
+  ['ᚹ','Вуньо','Радость','Удача сопровождает сделки. Высокая вероятность успешных входов.'],
+  ['ᚺ','Хагалаз','Хаос','Волатильность разрушит слабые позиции. Используй стоп-лоссы.'],
+  ['ᚾ','Наутиз','Нужда','Нужно терпение перед ростом. Не торопись с входом.'],
+  ['ᛁ','Иса','Лёд','Рынок временно замирает. Идеальное время для накопления.'],
+  ['ᛃ','Йера','Урожай','Старые позиции принесут плоды. Время собирать прибыль.'],
+  ['ᛇ','Эйваз','Защита','Избегай эмоциональных решений. Защити капитал.'],
+  ['ᛈ','Перт','Тайна','Скрытый сигнал скоро проявится. Следи за объёмами.'],
+  ['ᛉ','Альгиз','Щит','Высшие силы оберегают капитал. Консервативный подход.'],
+  ['ᛋ','Соулу','Солнце','Энергия роста усиливается. Бычий импульс набирает силу.'],
+  ['ᛏ','Тейваз','Победа','Смелость приведёт к результату. Действуй по плану.'],
+  ['ᛒ','Беркана','Рост','Начинается новый цикл прибыли. Формируй позиции.'],
+  ['ᛖ','Эваз','Движение','Изменения уже близко. Готовься к смене тренда.'],
+  ['ᛗ','Манназ','Разум','Доверяй холодному анализу. Эмоции — враг трейдера.'],
+  ['ᛚ','Лагуз','Поток','Интуиция сейчас особенно сильна. Прислушайся к ней.'],
+  ['ᛜ','Ингваз','Завершение','Один цикл заканчивается, другой начинается.'],
+  ['ᛞ','Дагаз','Свет','Наступает переломный момент. Рассвет нового тренда.'],
+  ['ᛟ','Одал','Наследие','Долгосрочные активы снова станут ценными.']
+];
+
+// ══ STATE ══
+let prices={}, busy=false, currentCoin=null, deferredPrompt=null;
+let predictionSignalEnabled=localStorage.getItem('prediction_signal')==='on';
+let fngData={value:50,text:'Neutral'};
+let newsCache=null, calendarCache=null;
+
+// ══ UTILS ══
+const G=id=>document.getElementById(id);
+const getKey=()=>localStorage.getItem('groq_key')||'';
+const saveKey=v=>localStorage.setItem('groq_key',v);
+function addMsg(type,text){
+  const d=document.createElement('div');d.className='msg '+(type==='user'?'user':'bot');
+  d.textContent=text;G('feed').appendChild(d);
+  G('feed').scrollTop=G('feed').scrollHeight;
+  return d;
+}
+function showLoading(container){
+  container.innerHTML='<div class="loading"><div class="ldot"></div><div class="ldot"></div><div class="ldot"></div></div>';
+}
+
+// ══ PWA ══
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e});
+G('installBtn').onclick=async()=>{if(!deferredPrompt){return}deferredPrompt.prompt()};
+G('shareTop').onclick=()=>navigator.share&&navigator.share({title:'Крипто Нострадамус',url:location.href}).catch(()=>{});
+
+// ══ GROQ AI ══
+async function askAI(prompt,maxTokens=600){
+  const key=getKey();
+  if(!key)throw new Error('Groq ключ не найден. Нажмите 🔑 и введите ключ заново.');
+  const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'Authorization':'Bearer '+key
+    },
+    body:JSON.stringify({
+      model:'llama-3.1-8b-instant',
+      messages:[
+        {role:'system',content:'Ты Крипто Нострадамус — мистический аналитик криптовалют. Давай конкретные полезные советы на русском языке. Используй магическую терминологию и эмодзи. Будь краток и информативен.'},
+        {role:'user',content:prompt}
+      ],
+      temperature:0.8,
+      max_tokens:maxTokens
+    })
+  });
+  const data=await r.json();
+  if(!r.ok){
+    const msg=data?.error?.message||'API_ERROR';
+    if(msg.includes('model'))throw new Error('Модель недоступна. Проверьте ключ Groq.');
+    throw new Error(msg);
+  }
+  return data.choices[0].message.content.trim();
+}
+
+// ══ PRICES (Binance) ══
+async function loadPrices(){
+  try{
+    // Try CoinGecko (reliable, no CORS issues)
+    const ids=COINS.map(c=>c.cg).join(',');
+    const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids='+ids+'&vs_currencies=usd&include_24hr_change=true');
+    const d=await r.json();
+    prices={};
+    COINS.forEach(c=>{
+      const p=d[c.cg];
+      if(p)prices[c.id]={usd:p.usd,usd_24h_change:p.usd_24h_change||0};
+    });
+    renderPrices();
+  }catch(e){
+    // Fallback: Binance via allorigins proxy
+    try{
+      const syms=encodeURIComponent(JSON.stringify(COINS.map(c=>c.id)));
+      const url='https://api.binance.com/api/v3/ticker/24hr?symbols='+syms;
+      const r2=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent(url));
+      const w=await r2.json();
+      const arr=JSON.parse(w.contents);
+      prices={};
+      arr.forEach(t=>{prices[t.symbol]={usd:parseFloat(t.lastPrice),usd_24h_change:parseFloat(t.priceChangePercent)};});
+      renderPrices();
+    }catch(e2){console.error('Prices failed:',e2)}
+  }
+}
+
+function renderPrices(){
+  const wrap=G('prices');wrap.innerHTML='';
+  COINS.forEach(c=>{
+    const p=prices[c.id];
+    const price=p?.usd||0;const ch=p?.usd_24h_change||0;
+    const el=document.createElement('div');el.className='pc';
+    const fmtP=price>=1000?'$'+price.toLocaleString('en',{maximumFractionDigits:0}):'$'+price.toFixed(price>=1?2:4);
+    el.innerHTML='<div class="ps">'+c.sym+'</div><div class="pp">'+fmtP+'</div><div class="pch" style="color:'+(ch>=0?'#22c55e':'#ef4444')+'">'+(ch>=0?'▲ ':'▼ ')+Math.abs(ch).toFixed(2)+'%</div>';
+    wrap.appendChild(el);
+  });
+}
+
+// ══ FEAR & GREED INDEX ══
+async function loadFearGreed(){
+  try{
+    let item;
+    try{
+      const r=await fetch('https://api.alternative.me/fng/?limit=1');
+      const d=await r.json();
+      item=d.data[0];
+    }catch(e1){
+      // proxy fallback
+      const url='https://api.alternative.me/fng/?limit=1';
+      const r2=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent(url));
+      const w=await r2.json();
+      const d=JSON.parse(w.contents);
+      item=d.data[0];
+    }
+    const val=parseInt(item.value);
+    const cls=item.value_classification;
+    fngData={value:val,text:cls};
+    G('fngValue').textContent=val;
+    const colors={'Extreme Fear':'#ef4444','Fear':'#f97316','Neutral':'#eab308','Greed':'#84cc16','Extreme Greed':'#22c55e'};
+    G('fngValue').style.color=colors[cls]||'#fff';
+    const ruLabels={'Extreme Fear':'Крайний страх','Fear':'Страх','Neutral':'Нейтрально','Greed':'Жадность','Extreme Greed':'Крайняя жадность'};
+    G('fngText').textContent=ruLabels[cls]||cls;
+    G('fngDot').style.left=val+'%';
+  }catch(e){G('fngText').textContent='Нет данных'}
+}
+
+// ══ NEWS ══
+async function loadNews(){
+  if(newsCache&&Date.now()-newsCache.time<300000)return newsCache.data;
+  try{
+    // Use CryptoCompare via allorigins CORS proxy
+    const url='https://min-api.cryptocompare.com/data/v2/news/?lang=EN&sortOrder=latest&limit=15';
+    const r=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent(url));
+    const wrapper=await r.json();
+    const d=JSON.parse(wrapper.contents);
+    const news=(d.Data||[]).map(n=>({
+      id:n.id,
+      title:n.title,
+      body:n.body?.slice(0,200)||'',
+      source:n.source_info?.name||n.source||'CryptoNews',
+      url:n.url,
+      time:n.published_on,
+      tags:(n.categories||'').split('|').filter(t=>t).slice(0,3),
+    }));
+    if(news.length===0)throw new Error('empty');
+    // Translate titles to Russian via Groq
+    const key=getKey();
+    if(key){
+      try{
+        const titles=news.map((n,i)=>i+'. '+n.title).join('|SPLIT|');
+        const tr=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+          method:'POST',
+          headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+          body:JSON.stringify({
+            model:'llama-3.1-8b-instant',
+            messages:[
+              {role:'system',content:'Переводи заголовки крипто-новостей на русский. Отвечай ТОЛЬКО строками разделёнными |SPLIT|, без нумерации, без пояснений.'},
+              {role:'user',content:'Переведи каждый заголовок на русский:\n'+titles}
+            ],
+            temperature:0.1,max_tokens:1000
+          })
+        });
+        if(tr.ok){
+          const td=await tr.json();
+          const translated=td.choices[0].message.content.trim().split('|SPLIT|');
+          news.forEach((n,i)=>{if(translated[i]&&translated[i].trim())n.title=translated[i].trim();});
+        }
+      }catch(e){/* keep English */}
+    }
+    newsCache={data:news,time:Date.now()};
+    return news;
+  }catch(e){
+    // Fallback: RSS через allorigins
+    try{
+      const rssUrl='https://cointelegraph.com/rss';
+      const r2=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent(rssUrl));
+      const w2=await r2.json();
+      const parser=new DOMParser();
+      const xml=parser.parseFromString(w2.contents,'text/xml');
+      const items=Array.from(xml.querySelectorAll('item')).slice(0,15);
+      const news=items.map((item,i)=>({
+        id:String(i),
+        title:item.querySelector('title')?.textContent||'',
+        body:item.querySelector('description')?.textContent?.replace(/<[^>]+>/g,'').slice(0,200)||'',
+        source:'CoinTelegraph',
+        url:item.querySelector('link')?.textContent||'',
+        time:Math.floor(new Date(item.querySelector('pubDate')?.textContent||Date.now()).getTime()/1000),
+        tags:['Crypto'],
+      })).filter(n=>n.title);
+      // Translate RSS titles too
+      const key2=getKey();
+      if(key2){
+        try{
+          const titles=news.map((n,i)=>i+'. '+n.title).join('|SPLIT|');
+          const tr=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+            method:'POST',
+            headers:{'Content-Type':'application/json','Authorization':'Bearer '+key2},
+            body:JSON.stringify({
+              model:'llama-3.1-8b-instant',
+              messages:[
+                {role:'system',content:'Переводи заголовки крипто-новостей на русский. Отвечай ТОЛЬКО строками разделёнными |SPLIT|, без нумерации, без пояснений.'},
+                {role:'user',content:'Переведи каждый заголовок на русский:\n'+titles}
+              ],
+              temperature:0.1,max_tokens:1000
+            })
+          });
+          if(tr.ok){
+            const td=await tr.json();
+            const translated=td.choices[0].message.content.trim().split('|SPLIT|');
+            news.forEach((n,i)=>{if(translated[i]&&translated[i].trim())n.title=translated[i].trim();});
+          }
+        }catch(e){/* keep English */}
+      }
+      newsCache={data:news,time:Date.now()};
+      return news;
+    }catch(e2){return[]}
+  }
+}
+
+// ══ COINMARKETCAL EVENTS (deterministic by date, not random each open) ══
+function getUpcomingEvents(){
+  // Seeded pseudo-random based on current date — same result all day
+  const now=new Date();
+  const seed=now.getFullYear()*10000+(now.getMonth()+1)*100+now.getDate();
+  function seededRand(n){let x=Math.sin(seed+n)*10000;return x-Math.floor(x);}
+
+  const events=[];
+  const eventTypes=[
+    {type:'fork',coins:['BTC','ETH'],title:'Обновление протокола',impact:'Высокая',color:'#8b5cf6',icon:'🔧'},
+    {type:'listing',coins:['SOL','BNB'],title:'Новые листинги на биржах',impact:'Средняя',color:'#3b82f6',icon:'📈'},
+    {type:'unlock',coins:['XRP','LTC'],title:'Разблокировка токенов',impact:'Высокая',color:'#ef4444',icon:'🔓'},
+    {type:'report',coins:['BTC'],title:'Отчёт по CPI (инфляция США)',impact:'Критическая',color:'#f59e0b',icon:'📊'},
+    {type:'conference',coins:['ETH','SOL'],title:'Крипто конференция',impact:'Средняя',color:'#10b981',icon:'🎪'},
+    {type:'options',coins:['BTC','ETH'],title:'Экспирация опционов',impact:'Высокая',color:'#f59e0b',icon:'⚡'},
+    {type:'halving',coins:['LTC'],title:'Халвинг / полхалвинг',impact:'Критическая',color:'#22c55e',icon:'🚀'},
+  ];
+  for(let i=1;i<=14;i++){
+    if(seededRand(i*7)>0.5){
+      const d=new Date(now);d.setDate(d.getDate()+i);
+      const evIdx=Math.floor(seededRand(i*13)*eventTypes.length);
+      const ev=eventTypes[evIdx];
+      events.push({
+        date:d.toISOString().slice(0,10),
+        title:ev.title,coins:ev.coins,
+        impact:ev.impact,icon:ev.icon,color:ev.color,type:ev.type
+      });
+    }
+  }
+  return events.sort((a,b)=>a.date.localeCompare(b.date));
+}
+
+// ══ OPEN NEWS MODAL ══
+G('newsBtn').onclick=async()=>{
+  G('newsModal').style.display='flex';
+  const list=G('newsList');
+  showLoading(list);
+  G('newsSubtitle').textContent='Загрузка...';
+  const news=await loadNews();
+  if(!news.length){
+    list.innerHTML='<div style="text-align:center;padding:30px;color:#a855f7">⚠️ Не удалось загрузить новости</div>';
+    return;
+  }
+  G('newsSubtitle').textContent=news.length+' актуальных событий';
+  list.innerHTML='';
+  news.forEach(n=>{
+    const card=document.createElement('div');card.className='newsCard';
+    const date=new Date(n.time*1000).toLocaleString('ru',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+    card.innerHTML=
+      '<div class="newsTitle">'+n.title+'</div>'+
+      '<div class="newsMeta">'+
+        '<span>'+date+'</span>'+
+        '<span>'+n.source+'</span>'+
+        n.tags.map(t=>'<span class="newsTag">'+t+'</span>').join('')+
+      '</div>';
+    // AI analysis on click
+    card.onclick=async()=>{
+      let analysis=card.querySelector('.newsAnalysis');
+      if(analysis){analysis.remove();return}
+      analysis=document.createElement('div');analysis.className='newsAnalysis';
+      analysis.textContent='🔮 Нострадамус анализирует...';
+      card.appendChild(analysis);
+      try{
+        const txt=await askAI(
+          'Новость: '+n.title+'\n'+n.body+'\n\nДай краткий анализ влияния этой новости на крипторынок в 2-3 предложениях. Укажи какие монеты затронуты и как отреагирует цена. Только русский язык.',
+          200
+        );
+        analysis.textContent=txt;
+      }catch(e){analysis.textContent='❌ Ошибка анализа: '+e.message}
+    };
+    list.appendChild(card);
+  });
+};
+G('closeNews').onclick=()=>G('newsModal').style.display='none';
+
+// ══ CALENDAR KEY ══
+const getCalKey=()=>localStorage.getItem('cmc_key')||'';
+const saveCalKey=v=>localStorage.setItem('cmc_key',v);
+
+// ══ COINMARKETCAL API ══
+async function loadRealEvents(key){
+  const today=new Date().toISOString().slice(0,10);
+  const future=new Date(Date.now()+14*86400000).toISOString().slice(0,10);
+  const url='https://developers.coinmarketcal.com/v1/events?dateRangeStart='+today+'&dateRangeEnd='+future+'&coins=BTC,ETH,SOL,XRP,LTC,BNB&page=1&max=20';
+  const r=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent(url),{
+    headers:{'x-api-key':key,'Accept':'application/json'}
+  });
+  const wrapper=await r.json();
+  const d=JSON.parse(wrapper.contents);
+  if(d.statusCode&&d.statusCode!==200)throw new Error(d.message||'API error');
+  return (d.body||[]).map(ev=>({
+    date:ev.date_event?.slice(0,10)||today,
+    title:ev.title?.en||ev.title||'Событие',
+    coins:(ev.coins||[]).map(c=>c.symbol).slice(0,4),
+    impact:ev.percentage?Math.round(ev.percentage)+'% достоверность':'—',
+    icon:'📌',
+    color:'#8b5cf6',
+    type:'real',
+    description:ev.description?.en||''
+  }));
+}
+
+// ══ RENDER CALENDAR EVENTS ══
+async function renderCalendarEvents(useRealKey){
+  const body=G('calendarBody');
+  G('calKeyScreen').style.display='none';
+  body.style.display='block';
+  showLoading(body);
+
+  let events=[];
+  let isReal=false;
+
+  if(useRealKey){
+    try{
+      events=await loadRealEvents(getCalKey());
+      isReal=true;
+      G('calendarSubtitle').textContent='Реальные события • CoinMarketCal';
+    }catch(e){
+      G('calKeyErr').textContent='Ошибка: '+(e.message||'проверьте ключ');
+      body.style.display='none';
+      G('calKeyScreen').style.display='flex';
+      return;
+    }
+  } else {
+    events=getUpcomingEvents();
+    G('calendarSubtitle').textContent='Базовые события';
+  }
+
+  body.innerHTML='';
+
+  // Reset key button
+  if(isReal){
+    const resetWrap=document.createElement('div');
+    resetWrap.style.cssText='text-align:right;margin-bottom:8px';
+    const resetBtn=document.createElement('button');
+    resetBtn.style.cssText='background:none;border:none;color:#6b7280;font-size:11px;cursor:pointer';
+    resetBtn.textContent='🔑 Сменить ключ';
+    resetBtn.onclick=()=>{
+      body.style.display='none';
+      G('calKeyScreen').style.display='flex';
+      G('calKeyInput').value='';G('calKeyErr').textContent='';
+    };
+    resetWrap.appendChild(resetBtn);
+    body.appendChild(resetWrap);
+  }
+
+  const brief=document.createElement('div');
+  brief.className='digestCard';
+  brief.innerHTML='<div class="digestTitle">📅 БЛИЖАЙШИЕ СОБЫТИЯ</div>';
+  body.appendChild(brief);
+
+  if(events.length===0){
+    brief.innerHTML+='<div style="color:#a855f7;font-size:12px;padding:10px 0">Нет данных о предстоящих событиях</div>';
+  } else {
+    events.forEach(ev=>{
+      const card=document.createElement('div');card.className='eventCard';
+      const d=new Date(ev.date);
+      const dateStr=d.toLocaleDateString('ru',{weekday:'short',day:'numeric',month:'short'});
+      card.innerHTML=
+        '<div class="eventDate">'+ev.icon+' '+dateStr+' • '+ev.impact+'</div>'+
+        '<div class="eventTitle">'+ev.title+'</div>'+
+        '<div class="eventCoins">'+ev.coins.map(c=>'<span class="eventCoin">'+c+'</span>').join('')+'</div>';
+      card.onclick=async()=>{
+        let existing=card.querySelector('.eventImpact');
+        if(existing){existing.remove();return}
+        const imp=document.createElement('div');imp.className='eventImpact';
+        imp.textContent='🔮 Анализирую событие...';
+        card.appendChild(imp);
+        try{
+          const txt=await askAI(
+            'Крипто событие: '+ev.title+(ev.description?'\nОписание: '+ev.description:'')+'\nМонеты: '+ev.coins.join(',')+'. Дата: '+ev.date+'.\nДай мистический прогноз: как это событие повлияет на цены? Что делать трейдеру? 2-3 предложения, только русский язык.',
+            200
+          );
+          imp.textContent=txt;
+        }catch(e){imp.textContent='❌ '+e.message}
+      };
+      body.appendChild(card);
+    });
+  }
+}
+
+// ══ CALENDAR MODAL ══
+G('calendarBtn').onclick=()=>{
+  G('calendarModal').style.display='flex';
+  const key=getCalKey();
+  if(key){
+    renderCalendarEvents(true);
+  } else {
+    G('calendarBody').style.display='none';
+    G('calKeyScreen').style.display='flex';
+    G('calKeyInput').value='';
+    G('calKeyErr').textContent='';
+    G('calendarSubtitle').textContent='Важные события рынка';
+  }
+};
+
+G('calKeySave').onclick=()=>{
+  const v=G('calKeyInput').value.trim();
+  if(!v){G('calKeyErr').textContent='Введите ключ';return}
+  G('calKeyErr').textContent='';
+  saveCalKey(v);
+  renderCalendarEvents(true);
+};
+
+G('calKeySkip').onclick=()=>renderCalendarEvents(false);
+G('closeCalendar').onclick=()=>G('calendarModal').style.display='none';
+
+// ══ DIGEST (главная фишка) ══
+G('digestBtn').onclick=async()=>{
+  G('digestModal').style.display='flex';
+  const body=G('digestBody');
+  showLoading(body);
+
+  try{
+    // Gather all data
+    const news=await loadNews();
+    const events=getUpcomingEvents().slice(0,3);
+    const priceLines=COINS.map(c=>{
+      const p=prices[c.id];
+      return p?c.sym+': $'+p.usd.toFixed(2)+' ('+p.usd_24h_change.toFixed(2)+'%)':'';
+    }).filter(Boolean).join(', ');
+    const topNews=news.length?news.slice(0,5).map(n=>n.title).join('\n'):'Новости временно недоступны';
+    const evLines=events.map(e=>e.title+' ('+e.coins.join(',')+'): '+e.impact).join('\n');
+    const fng='Индекс страха/жадности: '+fngData.value+' — '+fngData.text;
+
+    const prompt=
+      'Ты Крипто Нострадамус. Составь краткий ДАЙДЖЕСТ рынка на сегодня.\n\n'+
+      'ЦЕНЫ:\n'+priceLines+'\n\n'+
+      fng+'\n\n'+
+      'ТОП НОВОСТИ:\n'+topNews+'\n\n'+
+      'ПРЕДСТОЯЩИЕ СОБЫТИЯ:\n'+evLines+'\n\n'+
+      'Структура дайджеста:\n'+
+      '🌍 НАСТРОЕНИЕ РЫНКА: одно предложение\n'+
+      '📊 ТОП-2 МОНЕТЫ ДНЯ: с кратким обоснованием\n'+
+      '⚠️ РИСКИ: главный риск сегодня\n'+
+      '🔮 ПРОГНОЗ НОСТРАДАМУСА: на ближайшие 24 часа\n'+
+      '✅ ЧТО ДЕЛАТЬ: одно конкретное действие\n\n'+
+      'Будь кратким, конкретным, мистическим. Только русский язык.';
+
+    const txt=await askAI(prompt,500);
+
+    body.innerHTML='';
+    const card=document.createElement('div');card.className='digestCard';
+    card.innerHTML=
+      '<div class="digestTitle">🔮 ДАЙДЖЕСТ · '+new Date().toLocaleDateString('ru',{day:'numeric',month:'long'})+'</div>'+
+      '<div class="digestText">'+txt+'</div>';
+    body.appendChild(card);
+
+    // Add FNG card
+    const fngCard=document.createElement('div');fngCard.className='digestCard';
+    fngCard.innerHTML=
+      '<div class="digestTitle">😱 ИНДЕКС СТРАХА / ЖАДНОСТИ</div>'+
+      '<div style="font-size:36px;font-weight:700;text-align:center;margin:10px 0;color:'+(fngData.value>60?'#22c55e':fngData.value<40?'#ef4444':'#eab308')+'">'+fngData.value+' — '+G('fngText').textContent+'</div>'+
+      '<div style="font-size:11px;color:#ddd6fe;line-height:1.6">Значения 0-24: Крайний страх 🔴 | 25-49: Страх 🟠 | 50: Нейтрально | 51-74: Жадность 🟢 | 75-100: Крайняя жадность 🟢</div>';
+    body.appendChild(fngCard);
+
+    // Top news cards
+    const newsCard=document.createElement('div');newsCard.className='digestCard';
+    newsCard.innerHTML='<div class="digestTitle">📡 ГЛАВНЫЕ НОВОСТИ</div>'+
+      news.slice(0,4).map(n=>'<div style="padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:11.5px;line-height:1.5">'+n.title+'<div style="font-size:9px;color:#a855f7;margin-top:3px">'+n.source+'</div></div>').join('');
+    body.appendChild(newsCard);
+
+  }catch(e){
+    body.innerHTML='<div style="padding:20px;color:#ef4444;text-align:center">❌ Ошибка: '+e.message+'<br><br><small>Проверьте API ключ Groq</small></div>';
+  }
+};
+G('closeDigest').onclick=()=>G('digestModal').style.display='none';
+
+// ══ ZODIAC ══
+function renderZodiac(){
+  const wrap=G('zodiacGrid');wrap.innerHTML='';
+  ZODIAC.forEach(z=>{
+    const b=document.createElement('button');b.className='zb';b.textContent=z;
+    b.onclick=async()=>{
+      G('zodiacGrid').style.display='none';G('zodiacResult').style.display='block';
+      G('zodiacText').innerHTML='<div class="loading"><div class="ldot"></div><div class="ldot"></div><div class="ldot"></div></div>';
+      try{
+        const news=await loadNews();
+        const topNews=news.length?news.slice(0,3).map(n=>n.title).join('; '):'актуальные данные загружаются';
+        const priceLines=COINS.slice(0,4).map(c=>{const p=prices[c.id];return p?c.sym+': $'+p.usd.toFixed(0):'';}).filter(Boolean).join(', ')||'данные загружаются';
+        const txt=await askAI(
+          'Создай КРИПТОГОРОСКОП для знака '+z+'.\n'+
+          'Текущие цены: '+priceLines+'.\n'+
+          'Последние новости: '+topNews+'.\n\n'+
+          'Формат:\n♇ Настроение рынка для этого знака:\n₿ Главная монета дня:\n📈 Где возможен рост:\n⚠ Что сегодня опасно:\n✨ Энергия прибыли:\n🔮 Совет трейдеру:\n\n'+
+          'Пиши как древний крипто-оракул. Только русский язык.',
+          400
+        );
+        G('zodiacText').innerHTML='<div style="line-height:1.8;font-size:12.5px">'+txt.replace(/\n/g,'<br>')+'</div>';
+      }catch(e){G('zodiacText').innerHTML='❌ '+e.message}
+    };
+    wrap.appendChild(b);
+  });
+}
+G('backZodiac').onclick=()=>{G('zodiacResult').style.display='none';G('zodiacGrid').style.display='grid'};
+G('horoscopeBtn').onclick=()=>{G('horoscopeModal').style.display='flex';G('zodiacResult').style.display='none';G('zodiacGrid').style.display='grid'};
+G('closeHoroscope').onclick=()=>G('horoscopeModal').style.display='none';
+
+// ══ RUNE ══
+function renderAllRunes(){
+  const grid=G('allRunesGrid');grid.innerHTML='';
+  FULL_RUNES.forEach(r=>{const d=document.createElement('div');d.className='smallRune';d.textContent=r[0];grid.appendChild(d)});
+}
+G('runeBtn').onclick=()=>{G('runeModal').style.display='flex';renderAllRunes()};
+G('closeRune').onclick=()=>G('runeModal').style.display='none';
+G('pullRuneBtn').onclick=()=>{
+  const today=new Date().toDateString();
+  const pulled=localStorage.getItem('daily_rune_day');
+  const saved=localStorage.getItem('daily_rune_data');
+  let rune;
+  if(pulled===today&&saved){rune=JSON.parse(saved).rune}
+  else{
+    rune=FULL_RUNES[Math.floor(Math.random()*FULL_RUNES.length)];
+    localStorage.setItem('daily_rune_day',today);
+    localStorage.setItem('daily_rune_data',JSON.stringify({rune}));
+  }
+  G('bigRune').textContent=rune[0];G('runeNameBig').textContent=rune[1];
+  G('runeDescBig').textContent=rune[3];
+  G('runeTimer').textContent=pulled===today&&saved?'Руна уже вытащена сегодня':'✅ Новая руна определена';
+  renderAllRunes();
+};
+
+// ══ TECHNICAL ANALYSIS ══
+function calcRSI(closes,p=14){
+  if(closes.length<p+1)return null;
+  let g=0,l=0;
+  for(let i=1;i<=p;i++){const d=closes[i]-closes[i-1];d>=0?g+=d:l+=Math.abs(d)}
+  let ag=g/p,al=l/p;
+  for(let i=p+1;i<closes.length;i++){
+    const d=closes[i]-closes[i-1];
+    if(d>=0){ag=(ag*(p-1)+d)/p;al=(al*(p-1))/p}
+    else{ag=(ag*(p-1))/p;al=(al*(p-1)+Math.abs(d))/p}
+  }
+  return al===0?100:(100-(100/(1+ag/al))).toFixed(2);
+}
+function calcEMA(data,p){const k=2/(p+1);let e=data[0];for(let i=1;i<data.length;i++)e=data[i]*k+e*(1-k);return e}
+function calcMACD(c){return calcEMA(c,12)-calcEMA(c,26)}
+function calcATR(data,p=14){
+  if(data.length<p+1)return null;
+  const trs=[];
+  for(let i=1;i<data.length;i++){
+    const h=data[i][1],l=data[i][2],pc=data[i-1][4];
+    trs.push(Math.max(h-l,Math.abs(h-pc),Math.abs(l-pc)));
+  }
+  return trs.slice(-p).reduce((a,b)=>a+b,0)/p;
+}
+
+async function getSpiritSignal(c){
+  const r=await fetch('https://api.binance.com/api/v3/klines?symbol='+c.id+'&interval=1h&limit=100');
+  const data=await r.json();
+  const closes=data.map(d=>parseFloat(d[4]));
+  const ohlc=data.map(d=>[parseFloat(d[1]),parseFloat(d[2]),parseFloat(d[3]),parseFloat(d[4]),parseFloat(d[4])]);
+  const rsi=calcRSI(closes);
+  const e50=calcEMA(closes,50),e200=calcEMA(closes,200);
+  const macd=calcMACD(closes);
+  const atr=calcATR(ohlc);
+  const cur=closes[closes.length-1];
+  let trend=cur>e50&&e50>e200?'BULLISH':cur<e50&&e50<e200?'BEARISH':'SIDEWAYS';
+  let signal='NO SIGNAL';
+  if(rsi<35&&macd>0&&trend==='BULLISH')signal='LONG';
+  else if(rsi>65&&macd<0&&trend==='BEARISH')signal='SHORT';
+  else if(trend==='BULLISH'&&macd>0)signal='LONG WATCH';
+  else if(trend==='BEARISH'&&macd<0)signal='SHORT WATCH';
+  const entry=cur.toFixed(2);
+  const stop=signal.includes('SHORT')?(cur+atr*1.5).toFixed(2):(cur-atr*1.5).toFixed(2);
+  const take=signal.includes('SHORT')?(cur-atr*3).toFixed(2):(cur+atr*3).toFixed(2);
+  return{rsi,macd:macd.toFixed(2),e50:e50.toFixed(2),e200:e200.toFixed(2),atr:atr?.toFixed(2),trend,signal,entry,stop,take};
+}
+
+// ══ COIN ANALYSIS ══
+function renderCoins(){
+  const wrap=G('coins');wrap.innerHTML='';
+  COINS.forEach(c=>{
+    const b=document.createElement('button');b.className='cb';
+    b.innerHTML='<div class="ci">'+c.icon+'</div><div class="cs">'+c.sym+'</div>';
+    b.onclick=()=>{currentCoin=c;analyze(c)};
+    wrap.appendChild(b);
+  });
+}
+
+async function analyze(c){
+  if(busy)return;busy=true;
+  addMsg('user','🔍 Пророчество для '+c.name);
+  const bot=addMsg('bot','⏳ Нострадамус изучает движение звёзд...');
+  try{
+    const p=prices[c.id];
+    const news=await loadNews();
+    const coinNews=news.filter(n=>n.title.toUpperCase().includes(c.sym)||n.tags.some(t=>t.toUpperCase().includes(c.sym)));
+    const newsCtx=coinNews.slice(0,2).map(n=>n.title).join('; ')||'свежих новостей нет';
+    const txt=await askAI(
+      'Монета: '+c.name+' ('+c.sym+')\nЦена: $'+p?.usd?.toFixed(2)+'\nИзменение 24ч: '+(p?.usd_24h_change?.toFixed(2)||0)+'%\nСвежие новости: '+newsCtx+'\n\nДай мистический криптоанализ. Укажи:\n1. Оценку (Сильная/Нейтральная/Слабая)\n2. Лучшее время для покупки и цену\n3. Цель продажи\n4. Уровень стоп-лосса\n5. Пророчество Нострадамуса\n\nЕсли монета слабая — предупреди НЕ ТОРГОВАТЬ.',
+      400
+    );
+    bot.textContent=txt;
+  }catch(e){bot.textContent='❌ '+e.message}
+  busy=false;
+}
+
+// ══ SPIRIT OF COIN ══
+G('spiritBtn').onclick=async()=>{
+  if(!currentCoin){addMsg('bot','🔮 Сначала выберите монету для анализа');return}
+  if(busy)return;busy=true;
+  addMsg('user','👁 Дух монеты: '+currentCoin.name);
+  const bot=addMsg('bot','⏳ Считываю технические сигналы...');
+  try{
+    const sig=await getSpiritSignal(currentCoin);
+    const prophecy=await askAI(
+      'Монета: '+currentCoin.name+'\nRSI: '+sig.rsi+'\nMACD: '+sig.macd+'\nТренд: '+sig.trend+'\nСигнал: '+sig.signal+'\nDай мистическое пророчество трейдера на основе этих данных.',200
+    );
+    bot.textContent=
+      '📊 Сигнал: '+sig.signal+'\n📈 Тренд: '+sig.trend+
+      '\nRSI: '+sig.rsi+' | MACD: '+sig.macd+
+      '\n\n💰 Вход: $'+sig.entry+'\n🛑 Стоп: $'+sig.stop+'\n🎯 Тейк: $'+sig.take+
+      '\n\n🔮 ПРОРОЧЕСТВО\n\n'+prophecy;
+  }catch(e){bot.textContent='❌ '+e.message}
+  busy=false;
+};
+
+// ══ SIGNAL NOTIFICATION ══
+function updateNotifyBtn(){G('notifyBtn').textContent=predictionSignalEnabled?'🦉\nСигнал: ВКЛ':'🦉\nСигнал: ВЫКЛ'}
+updateNotifyBtn();
+G('notifyBtn').onclick=()=>{
+  predictionSignalEnabled=!predictionSignalEnabled;
+  localStorage.setItem('prediction_signal',predictionSignalEnabled?'on':'off');
+  updateNotifyBtn();
+};
+
+// ══ SIGN OF DAY ══
+function renderSign(){
+  const coin=COINS[Math.floor(Math.random()*COINS.length)];
+  G('signText').textContent='Звёзды усиливают энергию '+coin.sym+'. Магические потоки указывают на пробуждение волатильности.';
+}
+
+// ══ SETUP & START ══
+G('saveBtn').onclick=()=>{
+  const v=G('keyInput').value.trim();
+  if(!v.startsWith('gsk_')){G('err').textContent='Ключ должен начинаться с gsk_';return}
+  G('err').textContent='';
+  saveKey(v);start();
+};
+G('changeKey').onclick=()=>{G('setup').style.display='flex';G('app').style.display='none'};
+
+async function start(){
+  G('setup').style.display='none';
+  G('app').style.display='flex';
+  if(Notification.permission==='default')Notification.requestPermission().catch(()=>{});
+  renderCoins();renderZodiac();renderSign();renderAllRunes();
+  await Promise.all([loadPrices(),loadFearGreed()]);
+  setInterval(loadPrices,30000);
+  setInterval(loadFearGreed,300000);
+  addMsg('bot','🔮 Добро пожаловать в Крипто Нострадамус.\n\n📰 Нажмите кнопку [Дайджест] для полного анализа рынка с новостями и событиями.\n\nВыберите монету для персонального пророчества.');
+}
+
+if(getKey())start();
+</script>
+</body>
+</html>
